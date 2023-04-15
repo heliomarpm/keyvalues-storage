@@ -1,0 +1,7 @@
+docs
+src
+.eslintrc.js
+.travis.yml
+tsconfig.json
+typedoc.json
+
