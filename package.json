@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.194",
     "@types/write-file-atomic": "^4.0.0",
-    "electron": "^11.5.0",
+    "electron": "^18.3.7",
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
