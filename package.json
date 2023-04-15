@@ -1,6 +1,6 @@
 {
   "name": "electron-keyvalue-settings",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A simple and robust settings management library for Electron.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

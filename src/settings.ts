@@ -12,13 +12,11 @@ const defaultOptions: Options = {
 };
 
 export class Settings {
-  /** @internal */
-  options: Options = {
+  private options: Options = {
     ...defaultOptions,
   };
 
-  /** @internal */
-  utils!: Utils;
+  private utils!: Utils;
 
 
   /**
