@@ -32,7 +32,7 @@ export class Utils {
             // compatible with verson <= 11.5.0
             return electron.app.getPath('userData'); 
         } catch (error) {
-            return join(homedir(), ".electron-keyvalues");
+            return join(homedir(), ".config/@heliomarpm/electron-keyvalues");
         } 
     }
 
