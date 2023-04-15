@@ -1,5 +1,5 @@
-import electron from 'electron';
-import { app } from '@electron/remote';
+import { app } from 'electron';
+// import { app } from '@electron/remote';
 import { join } from 'node:path';
 import fs from 'node:fs';
 import writeFileAtomic from 'write-file-atomic';
@@ -14,7 +14,7 @@ export class Utils {
     constructor(options: Options) {
         this.options = options;
     }
-  
+
     /**
      * Returns the path to the keyvalues directory. The path
      * may be customized by the developer by using

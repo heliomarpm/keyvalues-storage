@@ -5,7 +5,8 @@
     "forceConsistentCasingInFileNames": true, 
     "target": "ES5",
     "module": "CommonJS",
-    "outDir": "dist",
+    "outDir": "./lib",
+    "rootDir": "./src",
     "declaration": true,
     "sourceMap": true,
     "esModuleInterop": true,
@@ -15,6 +16,6 @@
     "src/**/*"
   ],
   "exclude": [
-    "**/*.test.ts"
+    "**/*.test.ts", "**/*.spec.ts"
   ]
 }
