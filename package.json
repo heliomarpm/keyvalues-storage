@@ -30,12 +30,12 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.9",
     "lodash": "^4.17.21",
     "mkdirp": "^3.0.0",
     "write-file-atomic": "^5.0.0"
   },
   "devDependencies": {
+    "@electron/remote": "^2.0.9",
     "@types/lodash": "^4.14.194",
     "@types/write-file-atomic": "^4.0.0",
     "electron": "^24.1.2",
