@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import electron from 'electron';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import fs from 'node:fs';
@@ -30,7 +30,7 @@ export class Utils {
     private getUserDataPath(): string {
         try {
             // compatible with verson <= 11.5.0
-            return app.getPath('userData'); 
+            return electron.app.getPath('userData'); 
         } catch (error) {
             return join(homedir(), ".electron-keyvalues");
         } 
