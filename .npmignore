@@ -1,5 +1,5 @@
 docs
-src
+#src
 .eslintrc.js
 .travis.yml
 tsconfig.json
