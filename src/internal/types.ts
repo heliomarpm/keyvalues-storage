@@ -1,8 +1,9 @@
 
 /**
- * `Config` types contain all the configuration options for
- * Electron Settings that can be set using
- * [[configure|configure()]].
+ * `Options` types contain all the configuration options for
+ * Options that can be set in the constructor of KeyValues Class
+ * Example:
+ *  new KeyValues({fileName: 'config.json'})
  */
 type Options = {
     /**
@@ -41,7 +42,7 @@ type Options = {
 };
 
 type KeyPath = string | Array<string | number>;
-type SettingsValue = null | boolean | string | number | SettingsObject | SettingsValue[];
-type SettingsObject = {
-    [key: string]: SettingsValue;
+type KeyValue = null | boolean | string | number | ValueObject | KeyValue[];
+type ValueObject = {
+    [key: string]: KeyValue;
 }

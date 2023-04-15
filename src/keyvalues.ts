@@ -1,17 +1,17 @@
 import { get as _get, set as _set, has as _has, unset as _unset } from 'lodash';
 
-import './types';
-import { Utils } from './utils'
+import './internal/types';
+import { Utils } from './internal/utils'
 
 /** @internal */
 const defaultOptions: Options = {
   atomicSave: true,
-  fileName: 'settings.json',
+  fileName: 'keyvalues.json',
   prettify: false,
   numSpaces: 2,
 };
 
-export class Settings {
+export class KeyValues {
   private options: Options = {
     ...defaultOptions,
   };
@@ -20,14 +20,13 @@ export class Settings {
 
 
   /**
- * Sets the configuration for Electron Settings. To reset
+ * Sets the configuration for Electron KeyValues. To reset
  * to defaults, use [[reset|reset()]].
  *
  * Defaults:
- *
  *     {
  *       atomicSave: true,
- *       fileName: 'settings.json',
+ *       fileName: 'keyvalues.json',
  *       numSpaces: 2,
  *       prettify: false
  *     }
@@ -35,11 +34,11 @@ export class Settings {
  * @param customConfig The custom configuration to use.
  * @example
  *
- * Update the filename to `cool-settings.json` and prettify
+ * Update the filename to `config.json` and prettify
  * the output.
  *
- *     new Settings({
- *       fileName: 'cool-settings.json',
+ *     new KeyValues({
+ *       fileName: 'config.json',
  *       prettify: true
  *     });
  */
@@ -51,10 +50,10 @@ export class Settings {
   }
 
   /**
-   * Returns the path to the settings file.
+   * Returns the path to the json file.
    *
-   * In general, the settings file is stored in your app's
-   * user data directory in a file called `settings.json`.
+   * In general, the json file is stored in your app's
+   * user data directory in a file called `keyvalues.json`.
    * The default user data directory varies by system.
    *
    * - **macOS** - `~/Library/Application\ Support/<Your App>`
@@ -63,29 +62,29 @@ export class Settings {
    * `~/.config/<Your App>`
    *
    * Although it is not recommended, you may change the name
-   * or location of the settings file using
+   * or location of the keyvalues file using
    * [[configure|configure()]].
    *
-   * @returns The path to the settings file.
+   * @returns The path to the keyvalues file.
    * @example
    *
-   * Get the path to the settings file.
+   * Get the path to the keyvalues file.
    *
-   *     settings.file();
-   *     // => /home/nathan/.config/MyApp/settings.json
+   *     keyValues.file();
+   *     // => /home/nathan/.config/MyApp/keyvalues.json
    */
   file(): string {
-    return this.utils.getSettingsFilePath();
+    return this.utils.getJsonFilePath();
   }
 
   /**
-   * Resets the Electron Settings configuration to defaults.
+   * Resets the Electron KeyValues configuration to defaults.
    *
    * @example
    *
    * Reset configuration to defaults.
    *
-   *     settings.reset();
+   *     keyValues.reset();
    */
   reset(): void {
     this.options = { ...defaultOptions };
@@ -115,7 +114,7 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     const exists = await settings.has('color.name');
+   *     const exists = await keyValues.has('color.name');
    *     // => true
    *
    * @example
@@ -123,18 +122,18 @@ export class Settings {
    * Check if the value at `color.hue` exists.
    *
    *     const h = 'hue';
-   *     const exists = await settings.has(['color', h]);
+   *     const exists = await keyValues.has(['color', h]);
    *     // => false
    *
    *  @example
    *
    * Check if the value at `color.code.rgb[1]` exists.
    *
-   *     const exists = await settings.has(color.code.rgb[1]);
+   *     const exists = await keyValues.has(color.code.rgb[1]);
    *     // => true
    */
   async has(keyPath: KeyPath): Promise<boolean> {
-    const obj = await this.utils.loadSettings();
+    const obj = await this.utils.loadKeyValues();
 
     return _has(obj, keyPath);
   }
@@ -162,7 +161,7 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     const exists = settings.hasSync('color.name');
+   *     const exists = keyValues.hasSync('color.name');
    *     // => true
    *
    * @example
@@ -170,35 +169,35 @@ export class Settings {
    * Check if the value at `color.hue` exists.
    *
    *     const h = 'hue';
-   *     const exists = settings.hasSync(['color', h]);
+   *     const exists = keyValues.hasSync(['color', h]);
    *     // => false
    *
    * @example
    *
    * Check if the value at `color.code.rgb[1]` exists.
    *
-   *     const exists = settings.hasSync(color.code.rgb[1]);
+   *     const exists = keyValues.hasSync(color.code.rgb[1]);
    *     // => true
    */
   hasSync(keyPath: KeyPath): boolean {
-    const obj = this.utils.loadSettingsSync();
+    const obj = this.utils.loadKeyValuesSync();
 
     return _has(obj, keyPath);
   }
 
   /**
-   * Gets all settings. For sync, use
+   * Gets all key values. For sync, use
    * [[getSync|getSync()]].
    *
    * @category Core
-   * @returns A promise which resolves with all settings.
+   * @returns A promise which resolves with all key values.
    * @example
    *
-   * Gets all settings.
+   * Gets all key values.
    *
    *     const obj = await get();
    */
-  async get(): Promise<SettingsObject>;
+  async get(): Promise<ValueObject>;
 
   /**
    * Gets the value at the given key path. For sync,
@@ -224,7 +223,7 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     const value = await settings.get('color.name');
+   *     const value = await keyValues.get('color.name');
    *     // => "cerulean"
    *
    * @example
@@ -232,7 +231,7 @@ export class Settings {
    * Get the value at `color.hue`.
    *
    *     const h = 'hue';
-   *     const value = await settings.get(['color', h]);
+   *     const value = await keyValues.get(['color', h]);
    *     // => undefined
    *
    * @example
@@ -240,13 +239,13 @@ export class Settings {
    * Get the value at `color.code.rgb[1]`.
    *
    *     const h = 'hue';
-   *     const value = await settings.get('color.code.rgb[1]');
+   *     const value = await keyValues.get('color.code.rgb[1]');
    *     // => 179
    */
-  async get(keyPath: KeyPath): Promise<SettingsValue>;
+  async get(keyPath: KeyPath): Promise<KeyValue>;
 
-  async get(keyPath?: KeyPath): Promise<SettingsObject | SettingsValue> {
-    const obj = await this.utils.loadSettings();
+  async get(keyPath?: KeyPath): Promise<ValueObject | KeyValue> {
+    const obj = await this.utils.loadKeyValues();
 
     if (keyPath) {
       return _get(obj, keyPath);
@@ -256,17 +255,17 @@ export class Settings {
   }
 
   /**
-   * Gets all settings. For async, use [[get|get()]].
+   * Gets all key values. For async, use [[get|get()]].
    *
    * @category Core
-   * @returns All settings.
+   * @returns All key values.
    * @example
    *
-   * Gets all settings.
+   * Gets all key values.
    *
    *     const obj = getSync();
    */
-  getSync(): SettingsObject;
+  getSync(): ValueObject;
 
   /**
    * Gets the value at the given key path. For async,
@@ -291,7 +290,7 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     const value = settings.getSync('color.name');
+   *     const value = keyValues.getSync('color.name');
    *     // => "cerulean"
    *
    * @example
@@ -299,7 +298,7 @@ export class Settings {
    * Get the value at `color.hue`.
    *
    *     const h = 'hue';
-   *     const value = settings.getSync(['color', h]);
+   *     const value = keyValues.getSync(['color', h]);
    *     // => undefined
    *
    * @example
@@ -307,13 +306,13 @@ export class Settings {
    * Get the value at `color.code.rgb[1]`.
    *
    *     const h = 'hue';
-   *     const value = settings.getSync('color.code.rgb[1]');
+   *     const value = keyValues.getSync('color.code.rgb[1]');
    *     // => 179
    */
-  getSync(keyPath: KeyPath): SettingsValue;
+  getSync(keyPath: KeyPath): KeyValue;
 
-  getSync(keyPath?: KeyPath): SettingsValue {
-    const obj = this.utils.loadSettingsSync();
+  getSync(keyPath?: KeyPath): KeyValue {
+    const obj = this.utils.loadKeyValuesSync();
 
     if (keyPath) {
       return _get(obj, keyPath);
@@ -323,19 +322,19 @@ export class Settings {
   }
 
   /**
-   * Sets all settings. For sync, use [[setSync|setSync()]].
+   * Sets all key values. For sync, use [[setSync|setSync()]].
    *
    * @category Core
-   * @param obj The new settings.
-   * @returns A promise which resolves when the settings have
+   * @param obj The new key value.
+   * @returns A promise which resolves when the value have
    * been set.
    * @example
    *
-   * Set all settings.
+   * Set all key values.
    *
-   *     await settings.set({ aqpw: 'nice' });
+   *     await keyValues.set({ aqpw: 'nice' });
    */
-  async set(obj: SettingsObject): Promise<void>;
+  async set(obj: ValueObject): Promise<void>;
 
   /**
    * Sets the value at the given key path. For sync,
@@ -362,53 +361,53 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     await settings.set('color.name', 'sapphire');
+   *     await keyValues.set('color.name', 'sapphire');
    *
    * @example
    *
    * Set the value of `color.hue` to `blue-ish`.
    *
    *     const h = 'hue';
-   *     await settings.set(['color', h], 'blue-ish);
+   *     await keyValues.set(['color', h], 'blue-ish);
    *
    * @example
    *
    * Change the value of `color.code`.
    *
-   *     await settings.set('color.code', {
+   *     await keyValues.set('color.code', {
    *       rgb: [16, 31, 134],
    *       hex: '#101F86'
    *     });
    */
-  async set(keyPath: KeyPath, obj: SettingsValue): Promise<void>;
+  async set(keyPath: KeyPath, obj: KeyValue): Promise<void>;
 
-  async set(...args: [SettingsObject] | [KeyPath, SettingsValue]): Promise<void> {
+  async set(...args: [ValueObject] | [KeyPath, KeyValue]): Promise<void> {
     if (args.length === 1) {
       const [value] = args;
 
-      return this.utils.saveSettings(value);
+      return this.utils.saveKeyValues(value);
     } else {
       const [keyPath, value] = args;
-      const obj = await this.utils.loadSettings();
+      const obj = await this.utils.loadKeyValues();
 
       _set(obj, keyPath, value);
 
-      return this.utils.saveSettings(obj);
+      return this.utils.saveKeyValues(obj);
     }
   }
 
   /**
-   * Sets all settings. For async, use [[set|set()]].
+   * Sets all key values. For async, use [[set|set()]].
    *
    * @category Core
-   * @param obj The new settings.
+   * @param obj The new key values.
    * @example
    *
-   * Set all settings.
+   * Set all key values.
    *
-   *     settings.setSync({ aqpw: 'nice' });
+   *     keyValues.setSync({ aqpw: 'nice' });
    */
-  setSync(obj: SettingsObject): void;
+  setSync(obj: ValueObject): void;
 
   /**
    * Sets the value at the given key path. For async,
@@ -433,52 +432,52 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     settings.setSync('color.name', 'sapphire');
+   *     keyValues.setSync('color.name', 'sapphire');
    *
    * @example
    *
    * Set the value of `color.hue` to `blue-ish`.
    *
    *     const h = 'hue';
-   *     settings.setSync(['color', h], 'blue-ish);
+   *     keyValues.setSync(['color', h], 'blue-ish);
    *
    * @example
    *
    * Change the value of `color.code`.
    *
-   *     settings.setSync('color.code', {
+   *     keyValues.setSync('color.code', {
    *       rgb: [16, 31, 134],
    *       hex: '#101F86'
    *     });
    */
-  setSync(keyPath: KeyPath, value: SettingsValue): void;
+  setSync(keyPath: KeyPath, value: KeyValue): void;
 
-  setSync(...args: [SettingsObject] | [KeyPath, SettingsValue]): void {
+  setSync(...args: [ValueObject] | [KeyPath, KeyValue]): void {
     if (args.length === 1) {
       const [value] = args;
 
-      this.utils.saveSettingsSync(value);
+      this.utils.saveKeyValuesSync(value);
     } else {
       const [keyPath, value] = args;
-      const obj = this.utils.loadSettingsSync();
+      const obj = this.utils.loadKeyValuesSync();
 
       _set(obj, keyPath, value);
 
-      this.utils.saveSettingsSync(obj);
+      this.utils.saveKeyValuesSync(obj);
     }
   }
 
   /**
-   * Unsets all settings. For sync, use [[unsetSync|unsetSync()]].
+   * Unsets all key values. For sync, use [[unsetSync|unsetSync()]].
    *
    * @category Core
-   * @returns A promise which resolves when the settings have
+   * @returns A promise which resolves when the key values have
    * been unset.
    * @example
    *
-   * Unsets all settings.
+   * Unsets all key values.
    *
-   *     await settings.unset();
+   *     await keyValues.unset();
    */
   async unset(): Promise<void>;
 
@@ -506,44 +505,44 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     await settings.unset('color.name');
+   *     await keyValues.unset('color.name');
    *
-   *     await settings.get('color.name');
+   *     await keyValues.get('color.name');
    *     // => undefined
    *
    * @example
    *
    * Unset the property `color.code.rgba[1]`.
    *
-   *     await settings.unset('color.code.rgba[1]');
+   *     await keyValues.unset('color.code.rgba[1]');
    *
-   *     await settings.get('color.code.rgb');
+   *     await keyValues.get('color.code.rgb');
    *     // => [0, null, 230]
    */
   async unset(keyPath: KeyPath): Promise<void>;
 
   async unset(keyPath?: KeyPath): Promise<void> {
     if (keyPath) {
-      const obj = await this.utils.loadSettings();
+      const obj = await this.utils.loadKeyValues();
 
       _unset(obj, keyPath);
 
-      return this.utils.saveSettings(obj);
+      return this.utils.saveKeyValues(obj);
     } else {
-      // Unset all settings by saving empty object.
-      return this.utils.saveSettings({});
+      // Unset all keyValues by saving empty object.
+      return this.utils.saveKeyValues({});
     }
   }
 
   /**
-   * Unsets all settings. For async, use [[unset|unset()]].
+   * Unsets all key values. For async, use [[unset|unset()]].
    *
    * @category Core
    * @example
    *
-   * Unsets all settings.
+   * Unsets all key values.
    *
-   *     settings.unsetSync();
+   *     keyValues.unsetSync();
    */
   unsetSync(): void;
 
@@ -569,32 +568,32 @@ export class Settings {
    *     //   }
    *     // }
    *
-   *     settings.unsetSync('color.name');
+   *     keyValues.unsetSync('color.name');
    *
-   *     settings.getSync('color.name');
+   *     keyValues.getSync('color.name');
    *     // => undefined
    *
    * @example
    *
    * Unset the property `color.code.rgba[1]`.
    *
-   *     settings.unsetSync('color.code.rgba[1]');
+   *     keyValues.unsetSync('color.code.rgba[1]');
    *
-   *     settings.getSync('color.code.rgb');
+   *     keyValues.getSync('color.code.rgb');
    *     // => [0, null, 230]
    */
   unsetSync(keyPath: KeyPath): void;
 
   unsetSync(keyPath?: KeyPath): void {
     if (keyPath) {
-      const obj = this.utils.loadSettingsSync();
+      const obj = this.utils.loadKeyValuesSync();
 
       _unset(obj, keyPath);
 
-      this.utils.saveSettingsSync(obj);
+      this.utils.saveKeyValuesSync(obj);
     } else {
-      // Unset all settings by saving empty object.
-      this.utils.saveSettingsSync({});
+      // Unset all keyValues by saving empty object.
+      this.utils.saveKeyValuesSync({});
     }
   }
 }

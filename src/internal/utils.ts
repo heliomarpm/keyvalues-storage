@@ -14,58 +14,47 @@ export class Utils {
     constructor(options: Options) {
         this.options = options;
     }
-    /**c:\Users\helio\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\code\electron-sandbox\workbench\workbench.html
-     * Returns the Electron app. The app may need be accessed
-     * via `Remote` depending on whether this code is running
-     * in the main or renderer process.
-     *
-     * @returns The Electron app.
-     * @internal
-     */
-    private getElectronApp(): Electron.App {
-        return app;
-    }
-
+  
     /**
-     * Returns the path to the settings directory. The path
+     * Returns the path to the keyvalues directory. The path
      * may be customized by the developer by using
      * `configure()`.
      *
-     * @returns The path to the settings directory.
+     * @returns The path to the keyvalues directory.
      * @internal
      */
-    private getSettingsDirPath(): string {
-        return this.options.dir ?? this.getElectronApp().getPath('userData');
+    private getJsonDirPath(): string {
+        return this.options.dir ?? app.getPath('userData');
     }
 
     /**
-     * Returns the path to the settings file. The file name
+     * Returns the path to the keyvalues file. The file name
      * may be customized by the developer using `configure()`.
      *
-     * @returns The path to the settings file.
+     * @returns The path to the keyvalues file.
      * @internal
      */
-    public getSettingsFilePath(): string {
-        const dir = this.getSettingsDirPath();
+    public getJsonFilePath(): string {
+        const dir = this.getJsonDirPath();
 
         return join(dir, this.options.fileName);
     }
 
     /**
-     * Ensures that the settings file exists. If it does not
+     * Ensures that the keyvalues file exists. If it does not
      * exist, then it is created.
      *
-     * @returns A promise which resolves when the settings file exists.
+     * @returns A promise which resolves when the keyvalues file exists.
      * @internal
      */
-    private ensureSettingsFile(): Promise<void> {
-        const filePath = this.getSettingsFilePath();
+    private ensureJsonFile(): Promise<void> {
+        const filePath = this.getJsonFilePath();
 
         return new Promise((resolve, reject) => {
             fs.stat(filePath, (err) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
-                        this.saveSettings({}).then(resolve, reject);
+                        this.saveKeyValues({}).then(resolve, reject);
                     } else {
                         reject(err);
                     }
@@ -77,20 +66,20 @@ export class Utils {
     }
 
     /**
-     * Ensures that the settings file exists. If it does not
+     * Ensures that the keyvalues file exists. If it does not
      * exist, then it is created.
      *
      * @internal
      */
-    private ensureSettingsFileSync(): void {
-        const filePath = this.getSettingsFilePath();
+    private ensureJsonFileSync(): void {
+        const filePath = this.getJsonFilePath();
 
         try {
             fs.statSync(filePath);
         } catch (err: any) {
             if (err) {
                 if (err.code === 'ENOENT') {
-                    this.saveSettingsSync({});
+                    this.saveKeyValuesSync({});
                 } else {
                     throw err;
                 }
@@ -99,14 +88,14 @@ export class Utils {
     }
 
     /**
-     * Ensures that the settings directory exists. If it does
+     * Ensures that the keyvalues directory exists. If it does
      * not exist, then it is created.
      *
-     * @returns A promise which resolves when the settings dir exists.
+     * @returns A promise which resolves when the keyvalues dir exists.
      * @internal
      */
-    private ensureSettingsDir(): Promise<void> {
-        const dirPath = this.getSettingsDirPath();
+    private ensureJsonDir(): Promise<void> {
+        const dirPath = this.getJsonDirPath();
 
         return new Promise((resolve, reject) => {
             fs.stat(dirPath, (err) => {
@@ -124,13 +113,13 @@ export class Utils {
     }
 
     /**
-     * Ensures that the settings directory exists. If it does
+     * Ensures that the keyvalues directory exists. If it does
      * not exist, then it is created.
      *
      * @internal
      */
-    private ensureSettingsDirSync(): void {
-        const dirPath = this.getSettingsDirPath();
+    private ensureJsonDirSync(): void {
+        const dirPath = this.getJsonDirPath();
 
         try {
             fs.statSync(dirPath);
@@ -144,15 +133,15 @@ export class Utils {
     }
 
     /**
-     * First ensures that the settings file exists then loads
-     * the settings from the disk.
+     * First ensures that the keyvalues file exists then loads
+     * the keyvalues from the disk.
      *
-     * @returns A promise which resolves with the settings object.
+     * @returns A promise which resolves with the keyvalues object.
      * @internal
      */
-    public loadSettings(): Promise<SettingsObject> {
-        return this.ensureSettingsFile().then(() => {
-            const filePath = this.getSettingsFilePath();
+    public loadKeyValues(): Promise<ValueObject> {
+        return this.ensureJsonFile().then(() => {
+            const filePath = this.getJsonFilePath();
 
             return new Promise((resolve, reject) => {
                 fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -171,31 +160,31 @@ export class Utils {
     }
 
     /**
-     * First ensures that the settings file exists then loads
-     * the settings from the disk.
+     * First ensures that the keyvalues file exists then loads
+     * the keyvalues from the disk.
      *
-     * @returns The settings object.
+     * @returns The keyvalues object.
      * @internal
      */
-    public loadSettingsSync(): SettingsObject {
-        const filePath = this.getSettingsFilePath();
+    public loadKeyValuesSync(): ValueObject {
+        const filePath = this.getJsonFilePath();
 
-        this.ensureSettingsFileSync();
+        this.ensureJsonFileSync();
 
         const data = fs.readFileSync(filePath, 'utf-8');
 
         return JSON.parse(data);
     }
     /**
-     * Saves the settings to the disk.
+     * Saves the keyvalues to the disk.
      *
-     * @param obj The settings object to save.
-     * @returns A promise which resolves when the settings have been saved.
+     * @param obj The keyvalues object to save.
+     * @returns A promise which resolves when the keyvalues have been saved.
      * @internal
      */
-    public saveSettings(obj: SettingsObject): Promise<void> {
-        return this.ensureSettingsDir().then(() => {
-            const filePath = this.getSettingsFilePath();
+    public saveKeyValues(obj: ValueObject): Promise<void> {
+        return this.ensureJsonDir().then(() => {
+            const filePath = this.getJsonFilePath();
             const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
             const data = JSON.stringify(obj, null, numSpaces);
 
@@ -218,17 +207,17 @@ export class Utils {
     }
 
     /**
-     * Saves the settings to the disk.
+     * Saves the keyvalues to the disk.
      *
-     * @param obj The settings object to save.
+     * @param obj The keyvalues object to save.
      * @internal
      */
-    public saveSettingsSync(obj: SettingsObject): void {
-        const filePath = this.getSettingsFilePath();
+    public saveKeyValuesSync(obj: ValueObject): void {
+        const filePath = this.getJsonFilePath();
         const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
         const data = JSON.stringify(obj, null, numSpaces);
 
-        this.ensureSettingsDirSync();
+        this.ensureJsonDirSync();
 
         if (this.options.atomicSave) {
             writeFileAtomic.sync(filePath, data);
@@ -238,10 +227,3 @@ export class Utils {
     }
 
 }
-
-// export {
-//     setConfig,
-//     loadSettings, loadSettingsSync,
-//     getSettingsFilePath,
-//     saveSettings, saveSettingsSync,
-// }

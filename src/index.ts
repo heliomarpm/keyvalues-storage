@@ -1,3 +1,3 @@
-import { Settings } from "./settings";
+import { KeyValues } from "./keyvalues";
 
-export { Settings }
+export { KeyValues }

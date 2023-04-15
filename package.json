@@ -1,18 +1,18 @@
 {
-  "name": "electron-keyvalue-settings",
-  "version": "0.0.4",
-  "description": "A simple and robust settings management library for Electron.",
+  "name": "electron-keyvalues",
+  "version": "0.0.5",
+  "description": "A simple and robust key values management library for Electron.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Heliomar P. Marques",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/heliomarpm/electron-keyvalue-settings/issues"
+    "url": "https://github.com/heliomarpm/electron-keyvalues/issues"
   },
-  "homepage": "https://github.com/heliomarpm/electron-keyvalue-settings#readme",
+  "homepage": "https://github.com/heliomarpm/electron-keyvalues#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heliomarpm/electron-keyvalue-settings.git"
+    "url": "git+https://github.com/heliomarpm/electron-keyvalues.git"
   },
   "keywords": [
     "electron",
@@ -27,16 +27,13 @@
     "localstorage"
   ],
   "scripts": {
-    "test": "npm run lint && npm run test:main && npm run test:renderer",
-    "build": "npx tsc",
-    "release": "standard-version"
+    "build": "npx tsc"
   },
   "devDependencies": {
     "@electron/remote": "^2.0.9",
     "@types/lodash": "^4.14.194",
     "@types/write-file-atomic": "^4.0.0",
     "electron": "^24.1.2",
-    "eslint": "^8.38.0",
     "lodash": "^4.17.21",
     "mkdirp": "^3.0.0",
     "typescript": "^5.0.4",
