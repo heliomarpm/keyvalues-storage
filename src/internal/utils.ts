@@ -1,6 +1,4 @@
-import electron from 'electron';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import path from 'node:path';
 import fs from 'node:fs';
 import writeFileAtomic from 'write-file-atomic';
 import { mkdirp } from 'mkdirp'
@@ -24,16 +22,7 @@ export class Utils {
      * @internal
      */
     private getJsonDirPath(): string {
-        return this.options.dir ??  this.getUserDataPath()
-    }
-
-    private getUserDataPath(): string {
-        try {
-            // compatible with verson <= 11.5.0
-            return electron.app.getPath('userData'); 
-        } catch (error) {
-            return join(homedir(), ".config/electron-keyvalues");
-        } 
+        return this.options.dir ??  path.resolve('localdb')
     }
 
     /**
@@ -46,7 +35,7 @@ export class Utils {
     public getJsonFilePath(): string {
         const dir = this.getJsonDirPath();
 
-        return join(dir, this.options.fileName);
+        return path.join(dir, this.options.fileName);
     }
 
     /**
