@@ -1,0 +1,5 @@
+https://dev.to/thiagomr/como-publicar-seu-primeiro-package-ts-e-automatizar-com-github-actions-2p4m
+
+https://javascript.plainenglish.io/publishing-a-typescript-npm-package-with-github-actions-7f6486e7da95
+https://medium.com/@saqibnoorani/create-your-first-npm-package-in-typescript-and-publish-it-using-github-actions-d04e32607da8
+https://medium.com/swlh/publishing-typescript-packages-with-github-actions-3b484f34bacd
