@@ -20,7 +20,7 @@ export class KeyValues {
 
 
   /**
- * Sets the configuration for Electron KeyValues. To reset
+ * Sets the configuration for KeyValues Settings. To reset
  * to defaults, use [[reset|reset()]].
  *
  * Defaults:
@@ -57,7 +57,7 @@ export class KeyValues {
    * The default user data directory varies by system.
    *
    * - **macOS** - `~/Library/Application\ Support/<Your App>`
-   * - **Windows** - `%APPDATA%/<Your App>`
+   * - **Windows** - `%LOCALAPPDATA%/PROGRAMS/<Your App>`
    * - **Linux** - Either `$XDG_CONFIG_HOME/<Your App>` or
    * `~/.config/<Your App>`
    *
@@ -71,14 +71,14 @@ export class KeyValues {
    * Get the path to the keyvalues file.
    *
    *     keyValues.file();
-   *     // => /home/nathan/.config/MyApp/keyvalues.json
+   *     // => c:/users/<userprofile>/appdata/local/programs/<AppName>/keyvalues.json
    */
   file(): string {
     return this.utils.getJsonFilePath();
   }
 
   /**
-   * Resets the Electron KeyValues configuration to defaults.
+   * Resets the KeyValues Settings configuration to defaults.
    *
    * @example
    *

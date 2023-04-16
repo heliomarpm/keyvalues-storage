@@ -1,30 +1,32 @@
 {
-  "name": "electron-keyvalues",
+  "name": "@heliomarpm/kv-settings",
   "version": "0.1.7",
-  "description": "A simple and robust key values management library for Electron.",
+  "description": "A simple and robust key-value settings library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "Heliomar P. Marques",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/heliomarpm/electron-keyvalues/issues"
+    "url": "https://github.com/heliomarpm/kv-settings/issues"
   },
-  "homepage": "https://github.com/heliomarpm/electron-keyvalues#readme",
+  "homepage": "https://github.com/heliomarpm/kv-settings#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heliomarpm/electron-keyvalues.git"
+    "url": "git+https://github.com/heliomarpm/kv-settings.git"
   },
   "keywords": [
     "electron",
+    "desktop",
     "app",
-    "user",
     "data",
     "settings",
     "config",
-    "storage",
     "json",
-    "keyvalue",
-    "localstorage"
+    "keyvalues",
+    "db",
+    "localdb",
+    "store",
+    "storage"
   ],
   "scripts": {
     "build": "tsc"
