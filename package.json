@@ -1,18 +1,18 @@
 {
   "name": "@heliomarpm/kv-settings",
   "version": "0.1.7",
-  "description": "A simple and robust key-value settings library",
+  "description": "A simple and robust key-values settings library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "Heliomar P. Marques",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/heliomarpm/kv-settings/issues"
+    "url": "https://github.com/heliomarpm/keyvalues-settings/issues"
   },
-  "homepage": "https://github.com/heliomarpm/kv-settings#readme",
+  "homepage": "https://github.com/heliomarpm/keyvalues-settings#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heliomarpm/kv-settings.git"
+    "url": "git+https://github.com/heliomarpm/keyvalues-settings.git"
   },
   "keywords": [
     "electron",
