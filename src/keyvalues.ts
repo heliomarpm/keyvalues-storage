@@ -20,7 +20,7 @@ export class KeyValues {
 
 
   /**
- * Sets the configuration for KeyValues Settings. To reset
+ * Sets the configuration for KeyValues Storage's. To reset
  * to defaults, use [[reset|reset()]].
  *
  * Defaults:
@@ -52,7 +52,8 @@ export class KeyValues {
   /**
    * Returns the path to the json file.
    *
-   * In general, the json file is stored in your app's
+   * In general, the json file is stored 
+   * in then install location of your app's
    * user data directory in a file called `keyvalues.json`.
    * The default user data directory varies by system.
    *
@@ -62,8 +63,9 @@ export class KeyValues {
    * `~/.config/<Your App>`
    *
    * Although it is not recommended, you may change the name
-   * or location of the keyvalues file using
-   * [[configure|configure()]].
+   * or location of the keyvalues file using 
+   * 
+   * new KeyValye({dir: 'newpath'})
    *
    * @returns The path to the keyvalues file.
    * @example
@@ -78,7 +80,7 @@ export class KeyValues {
   }
 
   /**
-   * Resets the KeyValues Settings configuration to defaults.
+   * Resets the KeyValues Storage's configuration to defaults.
    *
    * @example
    *
