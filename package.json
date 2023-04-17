@@ -7,12 +7,12 @@
   "author": "Heliomar P. Marques",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/heliomarpm/keyvalues-storages/issues"
+    "url": "https://github.com/heliomarpm/keyvalues-storage/issues"
   },
-  "homepage": "https://github.com/heliomarpm/keyvalues-storages#readme",
+  "homepage": "https://github.com/heliomarpm/keyvalues-storage#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heliomarpm/keyvalues-storages.git"
+    "url": "git+https://github.com/heliomarpm/keyvalues-storage.git"
   },
   "keywords": [
     "electron",
