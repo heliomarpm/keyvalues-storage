@@ -2,8 +2,8 @@
   "name": "@heliomarpm/kvs",
   "version": "0.1.7",
   "description": "A simple and robust KeyValues Storage's library",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Heliomar P. Marques",
   "license": "MIT",
   "bugs": {

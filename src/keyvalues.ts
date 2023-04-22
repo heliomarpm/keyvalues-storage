@@ -20,28 +20,29 @@ export class KeyValues {
 
 
   /**
- * Sets the configuration for KeyValues Storage's. To reset
- * to defaults, use [[reset|reset()]].
- *
- * Defaults:
- *     {
- *       atomicSave: true,
- *       fileName: 'keyvalues.json',
- *       numSpaces: 2,
- *       prettify: false
- *     }
- *
- * @param customConfig The custom configuration to use.
- * @example
- *
- * Update the filename to `config.json` and prettify
- * the output.
- *
- *     new KeyValues({
- *       fileName: 'config.json',
- *       prettify: true
- *     });
- */
+   * Sets the configuration for KeyValues Storage's. To reset
+   * to defaults, use [[reset|reset()]].
+   *```js
+   * Defaults:
+   *     {
+   *       atomicSave: true,
+   *       fileName: 'keyvalues.json',
+   *       numSpaces: 2,
+   *       prettify: false
+   *     }
+   *```
+   * @param customConfig The custom configuration to use.
+   * @example
+   *
+   * Update the filename to `config.json` and prettify
+   * the output.
+   *```js
+   *     new KeyValues({
+   *       fileName: 'config.json',
+   *       prettify: true
+   *     });
+   * ```
+   */
   constructor(options?: Partial<Options>) {
     if (options)
       this.options = { ...this.options, ...options };
@@ -71,9 +72,10 @@ export class KeyValues {
    * @example
    *
    * Get the path to the keyvalues file.
-   *
+   *```js
    *     keyValues.file();
    *     // => c:/users/<userprofile>/appdata/local/programs/<AppName>/keyvalues.json
+   * ```
    */
   file(): string {
     return this.utils.getJsonFilePath();
@@ -85,8 +87,9 @@ export class KeyValues {
    * @example
    *
    * Reset configuration to defaults.
-   *
+   *```js
    *     keyValues.reset();
+   * ```
    */
   reset(): void {
     this.options = { ...defaultOptions };
@@ -103,7 +106,7 @@ export class KeyValues {
    * @example
    *
    * Check if the value at `color.name` exists.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -118,21 +121,22 @@ export class KeyValues {
    *
    *     const exists = await keyValues.has('color.name');
    *     // => true
-   *
+   *```
    * @example
    *
    * Check if the value at `color.hue` exists.
-   *
+   *```js
    *     const h = 'hue';
    *     const exists = await keyValues.has(['color', h]);
    *     // => false
-   *
+   *```
    *  @example
    *
    * Check if the value at `color.code.rgb[1]` exists.
-   *
+   *```js
    *     const exists = await keyValues.has(color.code.rgb[1]);
    *     // => true
+   * ```
    */
   async has(keyPath: KeyPath): Promise<boolean> {
     const obj = await this.utils.loadKeyValues();
@@ -150,7 +154,7 @@ export class KeyValues {
    * @example
    *
    * Check if the value at `color.name` exists.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -165,21 +169,22 @@ export class KeyValues {
    *
    *     const exists = keyValues.hasSync('color.name');
    *     // => true
-   *
+   *```
    * @example
    *
    * Check if the value at `color.hue` exists.
-   *
+   *```js
    *     const h = 'hue';
    *     const exists = keyValues.hasSync(['color', h]);
    *     // => false
-   *
+   *```
    * @example
    *
    * Check if the value at `color.code.rgb[1]` exists.
-   *
+   *```js
    *     const exists = keyValues.hasSync(color.code.rgb[1]);
    *     // => true
+   * ```
    */
   hasSync(keyPath: KeyPath): boolean {
     const obj = this.utils.loadKeyValuesSync();
@@ -196,8 +201,9 @@ export class KeyValues {
    * @example
    *
    * Gets all key values.
-   *
+   *```js
    *     const obj = await get();
+   * ```
    */
   async get(): Promise<ValueObject>;
 
@@ -212,7 +218,7 @@ export class KeyValues {
    * @example
    *
    * Get the value at `color.name`.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -227,22 +233,23 @@ export class KeyValues {
    *
    *     const value = await keyValues.get('color.name');
    *     // => "cerulean"
-   *
+   *```
    * @example
    *
    * Get the value at `color.hue`.
-   *
+   *```js
    *     const h = 'hue';
    *     const value = await keyValues.get(['color', h]);
    *     // => undefined
-   *
+   *```
    * @example
    *
    * Get the value at `color.code.rgb[1]`.
-   *
+   *```js
    *     const h = 'hue';
    *     const value = await keyValues.get('color.code.rgb[1]');
    *     // => 179
+   * ```
    */
   async get(keyPath: KeyPath): Promise<KeyValue>;
 
@@ -264,8 +271,9 @@ export class KeyValues {
    * @example
    *
    * Gets all key values.
-   *
+   *```js
    *     const obj = getSync();
+   * ```
    */
   getSync(): ValueObject;
 
@@ -279,7 +287,7 @@ export class KeyValues {
    * @example
    *
    * Get the value at `color.name`.
-   *
+   *```jsvvvvvv
    *     // Given:
    *     //
    *     // {
@@ -294,7 +302,7 @@ export class KeyValues {
    *
    *     const value = keyValues.getSync('color.name');
    *     // => "cerulean"
-   *
+   *```
    * @example
    *
    * Get the value at `color.hue`.
@@ -306,10 +314,11 @@ export class KeyValues {
    * @example
    *
    * Get the value at `color.code.rgb[1]`.
-   *
+   *```js
    *     const h = 'hue';
    *     const value = keyValues.getSync('color.code.rgb[1]');
    *     // => 179
+   * ```
    */
   getSync(keyPath: KeyPath): KeyValue;
 
@@ -333,8 +342,9 @@ export class KeyValues {
    * @example
    *
    * Set all key values.
-   *
+   *```js
    *     await keyValues.set({ aqpw: 'nice' });
+   * ```
    */
   async set(obj: ValueObject): Promise<void>;
 
@@ -350,7 +360,7 @@ export class KeyValues {
    * @example
    *
    * Change the value at `color.name` to `sapphire`.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -364,22 +374,23 @@ export class KeyValues {
    *     // }
    *
    *     await keyValues.set('color.name', 'sapphire');
-   *
+   *```
    * @example
    *
    * Set the value of `color.hue` to `blue-ish`.
-   *
+   *```js
    *     const h = 'hue';
    *     await keyValues.set(['color', h], 'blue-ish);
-   *
+   *```
    * @example
    *
    * Change the value of `color.code`.
-   *
+   *```js
    *     await keyValues.set('color.code', {
    *       rgb: [16, 31, 134],
    *       hex: '#101F86'
    *     });
+   * ```
    */
   async set(keyPath: KeyPath, obj: KeyValue): Promise<void>;
 
@@ -406,8 +417,9 @@ export class KeyValues {
    * @example
    *
    * Set all key values.
-   *
+   *```js
    *     keyValues.setSync({ aqpw: 'nice' });
+   * ```
    */
   setSync(obj: ValueObject): void;
 
@@ -421,7 +433,7 @@ export class KeyValues {
    * @example
    *
    * Change the value at `color.name` to `sapphire`.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -435,22 +447,23 @@ export class KeyValues {
    *     // }
    *
    *     keyValues.setSync('color.name', 'sapphire');
-   *
+   *```
    * @example
    *
    * Set the value of `color.hue` to `blue-ish`.
-   *
+   *```js
    *     const h = 'hue';
    *     keyValues.setSync(['color', h], 'blue-ish);
-   *
+   *```
    * @example
    *
    * Change the value of `color.code`.
-   *
+   *```js
    *     keyValues.setSync('color.code', {
    *       rgb: [16, 31, 134],
    *       hex: '#101F86'
    *     });
+   * ```
    */
   setSync(keyPath: KeyPath, value: KeyValue): void;
 
@@ -478,8 +491,9 @@ export class KeyValues {
    * @example
    *
    * Unsets all key values.
-   *
+   *```js
    *     await keyValues.unset();
+   * ```
    */
   async unset(): Promise<void>;
 
@@ -494,7 +508,7 @@ export class KeyValues {
    * @example
    *
    * Unset the property `color.name`.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -511,15 +525,16 @@ export class KeyValues {
    *
    *     await keyValues.get('color.name');
    *     // => undefined
-   *
+   *```
    * @example
    *
    * Unset the property `color.code.rgba[1]`.
-   *
+   *```js
    *     await keyValues.unset('color.code.rgba[1]');
    *
    *     await keyValues.get('color.code.rgb');
    *     // => [0, null, 230]
+   * ```
    */
   async unset(keyPath: KeyPath): Promise<void>;
 
@@ -543,8 +558,9 @@ export class KeyValues {
    * @example
    *
    * Unsets all key values.
-   *
+   *```js
    *     keyValues.unsetSync();
+   * ```
    */
   unsetSync(): void;
 
@@ -557,7 +573,7 @@ export class KeyValues {
    * @example
    *
    * Unset the property `color.name`.
-   *
+   *```js
    *     // Given:
    *     //
    *     // {
@@ -574,15 +590,16 @@ export class KeyValues {
    *
    *     keyValues.getSync('color.name');
    *     // => undefined
-   *
+   *```
    * @example
    *
    * Unset the property `color.code.rgba[1]`.
-   *
+   *```js
    *     keyValues.unsetSync('color.code.rgba[1]');
    *
    *     keyValues.getSync('color.code.rgb');
    *     // => [0, null, 230]
+   * ```
    */
   unsetSync(keyPath: KeyPath): void;
 
