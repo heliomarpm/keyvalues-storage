@@ -2,6 +2,15 @@ import { KeyValues } from '../src'
 
 const kvs = new KeyValues();
 
+const complex = {
+  name: 'complex',
+  type: 'object',
+  properties: {
+    height: 20,
+    width: 20
+  }
+}
+
 test('test set string', () => {
   kvs.setSync('s', 'Hello World!')
 })
@@ -14,8 +23,8 @@ test('test set boolean', () => {
   kvs.setSync('b', true)
 })
 
-test('test set object', () => {
-  kvs.setSync('o', {value: "settings"})
+test('test set of complex object', () => {  
+  kvs.setSync('complex', complex)
 })
 
 test('test get string', () => {
@@ -33,14 +42,19 @@ test('test get boolean', () => {
   expect(b).toBeTruthy()
 })
 
-test('test get object', () => {
-  const o = kvs.getSync('o')
-  expect(o).toEqual({value: "settings"})
+test('test get of object complex', () => {
+  const o = kvs.getSync<typeof complex>('complex')
+  expect(o.name).toEqual("complex")
 })
 
-test('test get object.value', () => {
-  const o = kvs.getSync('o.value')
-  expect(o).toEqual("settings")
+test('test get object.property', () => {
+  const o = kvs.getSync<string>('complex.name')
+  expect(o).toEqual("complex")
+})
+
+test('test get object.property.property', () => {
+  const o = kvs.getSync<number>('complex.properties.width')
+  expect(o).toEqual(20)
 })
 
 test('test get undefined value', () => {

@@ -205,7 +205,7 @@ export class KeyValues {
    *     const obj = await get();
    * ```
    */
-  async get(): Promise<ValueObject>;
+  async get<T>(): Promise<T>;
 
   /**
    * Gets the value at the given key path. For sync,
@@ -251,15 +251,15 @@ export class KeyValues {
    *     // => 179
    * ```
    */
-  async get(keyPath: KeyPath): Promise<KeyValue>;
+  async get<T>(keyPath: KeyPath): Promise<T>;
 
-  async get(keyPath?: KeyPath): Promise<ValueObject | KeyValue> {
-    const obj = await this.utils.loadKeyValues();
+  async get<T>(keyPath?: KeyPath): Promise<T> {
+    const obj = await this.utils.loadKeyValues<T>();
 
     if (keyPath) {
       return _get(obj, keyPath);
     } else {
-      return obj;
+      return obj as T;
     }
   }
 
@@ -275,7 +275,7 @@ export class KeyValues {
    *     const obj = getSync();
    * ```
    */
-  getSync(): ValueObject;
+  getSync<T>(): T;
 
   /**
    * Gets the value at the given key path. For async,
@@ -320,15 +320,15 @@ export class KeyValues {
    *     // => 179
    * ```
    */
-  getSync(keyPath: KeyPath): KeyValue;
+  getSync<T>(keyPath: KeyPath): T;
 
-  getSync(keyPath?: KeyPath): KeyValue {
-    const obj = this.utils.loadKeyValuesSync();
+  getSync<T>(keyPath?: KeyPath): T {
+    const obj = this.utils.loadKeyValuesSync<T>();
 
     if (keyPath) {
       return _get(obj, keyPath);
     } else {
-      return obj;
+      return obj as T;
     }
   }
 
@@ -346,7 +346,7 @@ export class KeyValues {
    *     await keyValues.set({ aqpw: 'nice' });
    * ```
    */
-  async set(obj: ValueObject): Promise<void>;
+  async set<T>(obj: KeyValue<T>): Promise<void>;
 
   /**
    * Sets the value at the given key path. For sync,
@@ -392,9 +392,9 @@ export class KeyValues {
    *     });
    * ```
    */
-  async set(keyPath: KeyPath, obj: KeyValue): Promise<void>;
+  async set<T>(keyPath: KeyPath, obj: KeyValue<T>): Promise<void>;
 
-  async set(...args: [ValueObject] | [KeyPath, KeyValue]): Promise<void> {
+  async set<T>(...args: [KeyValue<T>] | [KeyPath, T]): Promise<void> {
     if (args.length === 1) {
       const [value] = args;
 
@@ -421,7 +421,7 @@ export class KeyValues {
    *     keyValues.setSync({ aqpw: 'nice' });
    * ```
    */
-  setSync(obj: ValueObject): void;
+  setSync<T>(obj: KeyValue<T>): void;
 
   /**
    * Sets the value at the given key path. For async,
@@ -465,9 +465,9 @@ export class KeyValues {
    *     });
    * ```
    */
-  setSync(keyPath: KeyPath, value: KeyValue): void;
+  setSync<T>(keyPath: KeyPath, value: T | KeyValue<T>): void;
 
-  setSync(...args: [ValueObject] | [KeyPath, KeyValue]): void {
+  setSync<T>(...args: [KeyValue<T>] | [KeyPath, T]): void {
     if (args.length === 1) {
       const [value] = args;
 

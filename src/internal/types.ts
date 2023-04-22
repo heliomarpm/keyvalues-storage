@@ -42,7 +42,8 @@ type Options = {
 };
 
 type KeyPath = string | Array<string | number>;
-type KeyValue = null | boolean | string | number | ValueObject | KeyValue[];
-type ValueObject = {
-    [key: string]: KeyValue;
-}
+type KeyValue<T> = Record<string, T>
+// type KeyValue = null | boolean | string | number | ValueObject | KeyValue[];
+// type ValueObject = {
+//     [key: string]: KeyValue;
+// }cccccc
