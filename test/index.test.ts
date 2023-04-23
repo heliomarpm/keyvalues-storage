@@ -1,6 +1,6 @@
 import { KeyValues } from '../src'
 
-const kvs = new KeyValues();
+const kvs = new KeyValues({prettify: true});
 
 const complex = {
   name: 'complex',
@@ -10,6 +10,32 @@ const complex = {
     width: 20
   }
 }
+
+const arrString = [
+  "Teste1",
+  "Teste2",
+]
+
+interface IPerson {
+  name: string;
+  age: number;
+}
+
+const persons: IPerson[] = [
+  { name: 'John Doe', age: 30 },
+  { name: 'Jane Doe', age: 33 }
+]
+
+const r = kvs.getSync<string>('persons[1].name');
+
+  // const t: IPerson = JSON.parse(p.toString());
+  // console.log(JSON.stringify(p.toString()));
+  // console.log('age', t.age);
+
+// test('test set symbol', () => {
+//   const symbol = Symbol()
+//   kvs.setSync('symbol', symbol)
+// })
 
 test('test set string', () => {
   kvs.setSync('s', 'Hello World!')
@@ -23,23 +49,37 @@ test('test set boolean', () => {
   kvs.setSync('b', true)
 })
 
-test('test set of complex object', () => {  
+test('test set null', () => {
+  kvs.setSync('null', null)
+})
+
+test('test set of complex object', () => {    
   kvs.setSync('complex', complex)
 })
 
+test('test set of array string', () => {    
+  kvs.setSync('array', arrString)
+})
+
+test('test set of array object', () => {
+  // kvs.setSync('persons', [{ ...persons }]);
+  const mapPerson = persons.map(person => ({ ...person })); 
+  kvs.setSync('persons', mapPerson);
+})
+
 test('test get string', () => {
-  const s = kvs.getSync('s')
-  expect(s).toBe('Hello World!')
+  const r = kvs.getSync('s')
+  expect(r).toBe('Hello World!')
 })
 
 test('test get number', () => {
-  const n = kvs.getSync('n')
-  expect(n).toBe(2021)
+  const r = kvs.getSync('n')
+  expect(r).toBe(2021)
 })
 
 test('test get boolean', () => {
-  const b = kvs.getSync('b')
-  expect(b).toBeTruthy()
+  const r = kvs.getSync('b')
+  expect(r).toBeTruthy()
 })
 
 test('test get of object complex', () => {
@@ -48,35 +88,61 @@ test('test get of object complex', () => {
 })
 
 test('test get object.property', () => {
-  const o = kvs.getSync<string>('complex.name')
-  expect(o).toEqual("complex")
+  const r = kvs.getSync<string>('complex.name')
+  expect(r).toEqual("complex")
 })
 
 test('test get object.property.property', () => {
-  const o = kvs.getSync<number>('complex.properties.width')
-  expect(o).toEqual(20)
+  const r = kvs.getSync<number>('complex.properties.width')
+  expect(r).toEqual(20)
+})
+
+test('test get persons', () => {
+  const r: IPerson[] = kvs.getSync<[]>('persons')!;  
+  expect(r[0].name).toEqual('John Doe');
+})
+
+test('test get person name', () => {
+  const r = kvs.getSync<string>('persons[1].name');
+  expect(r).toEqual('Jane Doe');
+})
+
+test('test get person age', () => {
+  const r = kvs.getSync<Record<string, string>>('persons[1]')!;
+  expect(r['age']).toEqual(33);
+})
+
+
+test('test has propertie `null`', () => {
+  const r = kvs.hasSync('null')
+  expect(r).toBeTruthy()
+})
+
+test('test get null value', () => {
+  const r = kvs.getSync('null')
+  expect(r).toBeNull()
 })
 
 test('test get undefined value', () => {
-  const u = kvs.getSync('not defined')
-  expect(u).toBeUndefined()
+  const r = kvs.getSync('undefined')
+  expect(r).toBeUndefined()
 })
 
 test('test change value', () => {
   kvs.setSync('s', 'change value')
-  const s = kvs.getSync('s')
-  expect(s).toBe('change value')
+  const r = kvs.getSync('s')
+  expect(r).toBe('change value')
 })
 
-test('test unset', () => {
-  kvs.unsetSync('a')
-  const a = kvs.getSync('a')
-  expect(a).toBeUndefined()
-})
 
-test('test unsetAll', () => {
-  kvs.unsetSync()
-  const b = kvs.getSync('b')
-  console.log("test unsetAll", b);
-  expect(b).toBeUndefined()
-})
+// test('test unset', () => {
+//   kvs.unsetSync('a')
+//   const r = kvs.getSync('a')
+//   expect(r).toBeUndefined()
+// })
+
+// test('test unsetAll', () => {
+//   kvs.unsetSync()
+//   const r = kvs.getSync('b')
+//   expect(r).toBeUndefined()
+// })

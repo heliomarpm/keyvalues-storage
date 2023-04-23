@@ -137,7 +137,7 @@ export class Utils {
      * @returns A promise which resolves with the keyvalues object.
      * @internal
      */
-    public loadKeyValues<T>(): Promise<KeyValue<T>> {
+    public loadKeyValues<T extends valueTypes>(): Promise<T> {
         return this.ensureJsonFile().then(() => {
             const filePath = this.getJsonFilePath();
 
@@ -164,7 +164,7 @@ export class Utils {
      * @returns The keyvalues object.
      * @internal
      */
-    public loadKeyValuesSync<T>(): KeyValue<T> {
+    public loadKeyValuesSync<T extends valueTypes>(): T {
         const filePath = this.getJsonFilePath();
 
         this.ensureJsonFileSync();
@@ -180,7 +180,7 @@ export class Utils {
      * @returns A promise which resolves when the keyvalues have been saved.
      * @internal
      */
-    public saveKeyValues(obj: KeyValue<unknown> ): Promise<void> {
+    public saveKeyValues<T>(obj: T ): Promise<void> {
         return this.ensureJsonDir().then(() => {
             const filePath = this.getJsonFilePath();
             const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
@@ -210,7 +210,7 @@ export class Utils {
      * @param obj The keyvalues object to save.
      * @internal
      */
-    public saveKeyValuesSync(obj: KeyValue<unknown>): void {
+    public saveKeyValuesSync<T>(obj: T): void {
         const filePath = this.getJsonFilePath();
         const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
         const data = JSON.stringify(obj, null, numSpaces);

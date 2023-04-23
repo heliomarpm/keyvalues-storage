@@ -41,9 +41,12 @@ type Options = {
     numSpaces: number;
 };
 
+
+
 type KeyPath = string | Array<string | number>;
-type KeyValue<T> = Record<string, T>
-// type KeyValue = null | boolean | string | number | ValueObject | KeyValue[];
-// type ValueObject = {
-//     [key: string]: KeyValue;
-// }cccccc
+type Types<T extends valueTypes> = Record<string, T>
+
+type valueTypes = null | string | number | boolean | valueTypes[] | dictionaryType;
+type dictionaryType = {
+    [key: string]: valueTypes;
+}

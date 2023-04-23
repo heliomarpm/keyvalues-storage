@@ -205,7 +205,7 @@ export class KeyValues {
    *     const obj = await get();
    * ```
    */
-  async get<T>(): Promise<T>;
+  async get<T extends valueTypes>(): Promise<T>;
 
   /**
    * Gets the value at the given key path. For sync,
@@ -251,15 +251,15 @@ export class KeyValues {
    *     // => 179
    * ```
    */
-  async get<T>(keyPath: KeyPath): Promise<T>;
+  async get<T extends valueTypes>(keyPath: KeyPath): Promise<T>;
 
-  async get<T>(keyPath?: KeyPath): Promise<T> {
+  async get<T extends valueTypes>(keyPath?: KeyPath): Promise<T> {
     const obj = await this.utils.loadKeyValues<T>();
 
     if (keyPath) {
       return _get(obj, keyPath);
     } else {
-      return obj as T;
+      return obj;
     }
   }
 
@@ -275,7 +275,7 @@ export class KeyValues {
    *     const obj = getSync();
    * ```
    */
-  getSync<T>(): T;
+  getSync<T extends valueTypes>(): T;
 
   /**
    * Gets the value at the given key path. For async,
@@ -320,15 +320,15 @@ export class KeyValues {
    *     // => 179
    * ```
    */
-  getSync<T>(keyPath: KeyPath): T;
+  getSync<T extends valueTypes>(keyPath: KeyPath): T;
 
-  getSync<T>(keyPath?: KeyPath): T {
+  getSync<T extends valueTypes>(keyPath?: KeyPath): T {
     const obj = this.utils.loadKeyValuesSync<T>();
 
     if (keyPath) {
       return _get(obj, keyPath);
     } else {
-      return obj as T;
+      return obj;
     }
   }
 
@@ -346,7 +346,7 @@ export class KeyValues {
    *     await keyValues.set({ aqpw: 'nice' });
    * ```
    */
-  async set<T>(obj: KeyValue<T>): Promise<void>;
+  async set<T extends valueTypes>(obj: Types<T>): Promise<void>;
 
   /**
    * Sets the value at the given key path. For sync,
@@ -392,18 +392,18 @@ export class KeyValues {
    *     });
    * ```
    */
-  async set<T>(keyPath: KeyPath, obj: KeyValue<T>): Promise<void>;
+  async set<T extends valueTypes>(keyPath: KeyPath, obj: Types<T>): Promise<void>;
 
-  async set<T>(...args: [KeyValue<T>] | [KeyPath, T]): Promise<void> {
+  async set<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): Promise<void> {
     if (args.length === 1) {
       const [value] = args;
 
       return this.utils.saveKeyValues(value);
     } else {
       const [keyPath, value] = args;
-      const obj = await this.utils.loadKeyValues();
+      const obj = await this.utils.loadKeyValues<T>();
 
-      _set(obj, keyPath, value);
+      _set(obj as Object, keyPath, value);
 
       return this.utils.saveKeyValues(obj);
     }
@@ -421,7 +421,7 @@ export class KeyValues {
    *     keyValues.setSync({ aqpw: 'nice' });
    * ```
    */
-  setSync<T>(obj: KeyValue<T>): void;
+  setSync<T extends valueTypes>(obj: Types<T>): void;
 
   /**
    * Sets the value at the given key path. For async,
@@ -465,18 +465,18 @@ export class KeyValues {
    *     });
    * ```
    */
-  setSync<T>(keyPath: KeyPath, value: T | KeyValue<T>): void;
+  setSync<T extends valueTypes>(keyPath: KeyPath, value: T): void;
 
-  setSync<T>(...args: [KeyValue<T>] | [KeyPath, T]): void {
+  setSync<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): void {
     if (args.length === 1) {
       const [value] = args;
 
       this.utils.saveKeyValuesSync(value);
     } else {
       const [keyPath, value] = args;
-      const obj = this.utils.loadKeyValuesSync();
+      const obj = this.utils.loadKeyValuesSync<T>();
 
-      _set(obj, keyPath, value);
+      _set(obj as Object, keyPath, value);
 
       this.utils.saveKeyValuesSync(obj);
     }
