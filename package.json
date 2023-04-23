@@ -1,6 +1,6 @@
 {
   "name": "@heliomarpm/kvs",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A simple and robust KeyValues Storage's library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
