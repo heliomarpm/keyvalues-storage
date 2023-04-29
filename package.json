@@ -1,6 +1,6 @@
 {
   "name": "@heliomarpm/kvs",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "A simple and robust KeyValues Storage's library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,12 +33,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "atomically": "^2.0.1",
     "lodash": "^4.17.21",
-    "mkdirp": "^3.0.0",
-    "write-file-atomic": "^5.0.0"
+    "write-file-atomic": "^5.0.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
+    "@types/write-file-atomic": "^4.0.0",
     "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"

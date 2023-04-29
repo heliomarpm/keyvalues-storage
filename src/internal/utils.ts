@@ -1,7 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import writeFileAtomic from 'write-file-atomic';
-import { mkdirp } from 'mkdirp'
 
 import './types';
 
@@ -22,7 +21,7 @@ export class Utils {
      * @internal
      */
     private getJsonDirPath(): string {
-        return this.options.dir ??  path.resolve('localdb')
+        return this.options.dir ?? path.resolve('localdb')
     }
 
     /**
@@ -99,7 +98,10 @@ export class Utils {
             fs.stat(dirPath, (err) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
-                        mkdirp(dirPath).then(() => resolve(), reject);
+                        fs.mkdir(dirPath, { recursive: true }, (error) => {
+                            error ? reject(error) : resolve();
+                        });
+                        // mkdirp(dirPath).then(() => resolve(), reject);
                     } else {
                         reject(err);
                     }
@@ -123,7 +125,8 @@ export class Utils {
             fs.statSync(dirPath);
         } catch (err: any) {
             if (err.code === 'ENOENT') {
-                mkdirp.sync(dirPath);
+                fs.mkdirSync(dirPath, { recursive: true });
+                // mkdirp.sync(dirPath);
             } else {
                 throw err;
             }
@@ -180,7 +183,7 @@ export class Utils {
      * @returns A promise which resolves when the keyvalues have been saved.
      * @internal
      */
-    public saveKeyValues<T>(obj: T ): Promise<void> {
+    public saveKeyValues<T>(obj: T): Promise<void> {
         return this.ensureJsonDir().then(() => {
             const filePath = this.getJsonFilePath();
             const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
