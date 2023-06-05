@@ -21,6 +21,11 @@ interface IPerson {
     age: number;
 }
 
+const person: IPerson = {
+    name: 'John Doe',
+    age: 30
+}
+
 const persons: IPerson[] = [
     { name: 'John Doe', age: 30 },
     { name: 'Jane Doe', age: 33 }
@@ -34,7 +39,7 @@ const r = kvs.getSync<string>('persons[1].name');
 
 // test('test set symbol', () => {
 //   const symbol = Symbol()
-//   kvs.setSync('symbol', symbol)
+//   kvs.setSync('person', symbol)
 // })
 
 test('test set async', async () => {
@@ -59,6 +64,10 @@ test('test set null', () => {
 
 test('test set of complex object', () => {
     kvs.setSync('complex', complex)
+})
+
+test('test set interfae', () => {
+    kvs.setSync<IPerson>('person', person);
 })
 
 test('test set of array string', () => {
@@ -101,8 +110,13 @@ test('test get object.property.property', () => {
     expect(r).toEqual(20)
 })
 
+test('test get interfae', () => {
+    const r = kvs.getSync<IPerson>('person');
+    expect(r.name).toEqual('John Doe');
+})
+
 test('test get persons', () => {
-    const r: IPerson[] = kvs.getSync<[]>('persons')!;
+    const r = kvs.getSync<IPerson[]>('persons')!;
     expect(r[0].name).toEqual('John Doe');
 })
 
@@ -138,13 +152,13 @@ test('test change value', () => {
 })
 
 test('test unset', () => {
-  kvs.unsetSync('a')
-  const r = kvs.getSync('a')
-  expect(r).toBeUndefined()
+    kvs.unsetSync('a')
+    const r = kvs.getSync('a')
+    expect(r).toBeUndefined()
 })
 
 test('test unsetAll', () => {
-  kvs.unsetSync()
-  const r = kvs.getSync('b')
-  expect(r).toBeUndefined()
+    kvs.unsetSync()
+    const r = kvs.getSync('b')
+    expect(r).toBeUndefined()
 })

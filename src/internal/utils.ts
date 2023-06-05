@@ -150,7 +150,7 @@ export class Utils {
                         reject(err);
                     } else {
                         try {
-                            resolve(JSON.parse(data));
+                            resolve(JSON.parse(data.length ? data : "{}"));
                         } catch (err) {
                             reject(err);
                         }
@@ -168,10 +168,9 @@ export class Utils {
      * @internal
      */
     public loadKeyValuesSync<T extends valueTypes>(): T {
-        const filePath = this.getJsonFilePath();
-
         this.ensureJsonFileSync();
 
+        const filePath = this.getJsonFilePath();
         const data = fs.readFileSync(filePath, 'utf-8');
 
         return JSON.parse(data.length ? data : "{}");
