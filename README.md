@@ -38,12 +38,6 @@ The `KeyValues` class is responsible for managing key-value pairs and storing th
 ## Example Usage
 ```javascript
 // Create a new instance of KeyValues with custom options
-const keyValues = new KeyValues({
-  fileName: 'config.json',
-  prettify: true
-});
-
--- or --
 
 /**
  * Default Options
@@ -56,6 +50,11 @@ const keyValues = new KeyValues({
  * }
  */
 const keyValues = new KeyValues()
+-- or --
+const keyValues = new KeyValues({
+  fileName: 'config.json',
+  prettify: true
+});
 
 // Set a key-value pair
 await keyValues.set('color.name', 'sapphire');
