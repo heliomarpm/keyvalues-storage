@@ -31,8 +31,6 @@ const persons: IPerson[] = [
     { name: 'Jane Doe', age: 33 }
 ]
 
-const r = kvs.getSync<string>('persons[1].name');
-
 // const t: IPerson = JSON.parse(p.toString());
 // console.log(JSON.stringify(p.toString()));
 // console.log('age', t.age);
