@@ -36,6 +36,11 @@
 The `KeyValues` class is responsible for managing key-value pairs and storing them in a JSON file. It provides methods for setting, getting, checking existence, and removing key-value pairs. The class uses the `Functions` class to handle file operations and data manipulation.
 
 ## Example Usage
+```bash
+# install package
+npm i @heliomarpm/kvs
+```
+
 ```javascript
 // Create a new instance of KeyValues with custom options
 
