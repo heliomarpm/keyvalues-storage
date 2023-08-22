@@ -2,7 +2,7 @@
 <h1 align="center">
   <br> KeyValues Storage
 
-  [![DeepScan grade](https://deepscan.io/api/teams/19612/projects/25344/branches/791226/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19612&pid=25344&bid=791226) [![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage/badge)](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage) ![CodeQL](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/codeql-analysis.yml/badge.svg) ![Publish](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/publish.yml/badge.svg) <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
+  [![DeepScan grade](https://deepscan.io/api/teams/19612/projects/25344/branches/791226/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19612&pid=25344&bid=791226) [![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage/badge)](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage) ![CodeQL](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/codeql.yml/badge.svg) ![Publish](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/publish.yml/badge.svg) <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
 
   ![lodash](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/lodash)
   ![write-file-atomic](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/write-file-atomic)
