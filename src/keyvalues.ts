@@ -1,7 +1,7 @@
 import { get as _get, set as _set, has as _has, unset as _unset } from 'lodash';
 
 import './internal/types';
-import { Utils } from './internal/utils'
+import { Functions } from './internal/functions'
 
 /** @internal */
 const defaultOptions: Options = {
@@ -11,12 +11,36 @@ const defaultOptions: Options = {
     numSpaces: 2,
 };
 
+/**
+ * The `KeyValues` class is responsible for managing key-value pairs and storing them in a JSON file.
+ * It provides methods for setting, getting, checking existence, and removing key-value pairs.
+ * The class uses the `Functions` class to handle file operations and data manipulation.
+ *
+ * @example
+ * // Create a new instance of KeyValues with custom options
+ * const keyValues = new KeyValues({
+ *   fileName: 'config.json',
+ *   prettify: true
+ * });
+ *
+ * // Set a key-value pair
+ * await keyValues.set('color.name', 'sapphire');
+ *
+ * // Get the value at a specific key path
+ * const value = await keyValues.get('color.name');
+ *
+ * // Check if a key path exists
+ * const exists = await keyValues.has('color.name');
+ *
+ * // Remove a key-value pair
+ * await keyValues.unset('color.name');
+ */
 export class KeyValues {
     private options: Options = {
         ...defaultOptions,
     };
 
-    private utils!: Utils;
+    private fnc: Functions;
 
 
     /**
@@ -47,7 +71,7 @@ export class KeyValues {
         if (options)
             this.options = { ...this.options, ...options };
 
-        this.utils = new Utils(this.options);
+        this.fnc = new Functions(this.options);
     }
 
     /**
@@ -78,7 +102,7 @@ export class KeyValues {
      * ```
      */
     file(): string {
-        return this.utils.getJsonFilePath();
+        return this.fnc.getJsonFilePath();
     }
 
     /**
@@ -139,7 +163,7 @@ export class KeyValues {
      * ```
      */
     async has(keyPath: KeyPath): Promise<boolean> {
-        const obj = await this.utils.loadKeyValues();
+        const obj = await this.fnc.loadKeyValues();
 
         return _has(obj, keyPath);
     }
@@ -187,7 +211,7 @@ export class KeyValues {
      * ```
      */
     hasSync(keyPath: KeyPath): boolean {
-        const obj = this.utils.loadKeyValuesSync();
+        const obj = this.fnc.loadKeyValuesSync();
 
         return _has(obj, keyPath);
     }
@@ -254,7 +278,7 @@ export class KeyValues {
     async get<T extends valueTypes>(keyPath: KeyPath): Promise<T>;
 
     async get<T extends valueTypes>(keyPath?: KeyPath): Promise<T> {
-        const obj = await this.utils.loadKeyValues<T>();
+        const obj = await this.fnc.loadKeyValues<T>();
 
         if (keyPath) {
             return _get(obj, keyPath);
@@ -323,7 +347,7 @@ export class KeyValues {
     getSync<T extends valueTypes>(keyPath: KeyPath): T;
 
     getSync<T extends valueTypes>(keyPath?: KeyPath): T {
-        const obj = this.utils.loadKeyValuesSync<T>();
+        const obj = this.fnc.loadKeyValuesSync<T>();
 
         if (keyPath) {
             return _get(obj, keyPath);
@@ -398,14 +422,14 @@ export class KeyValues {
         if (args.length === 1) {
             const [value] = args;
 
-            return this.utils.saveKeyValues(value);
+            return this.fnc.saveKeyValues(value);
         } else {
             const [keyPath, value] = args;
-            const obj = await this.utils.loadKeyValues<T>();
+            const obj = await this.fnc.loadKeyValues<T>();
 
             _set(obj as Object, keyPath, value);
 
-            return this.utils.saveKeyValues(obj);
+            return this.fnc.saveKeyValues(obj);
         }
     }
 
@@ -471,14 +495,14 @@ export class KeyValues {
         if (args.length === 1) {
             const [value] = args;
 
-            this.utils.saveKeyValuesSync(value);
+            this.fnc.saveKeyValuesSync(value);
         } else {
             const [keyPath, value] = args;
-            const obj = this.utils.loadKeyValuesSync<T>();
+            const obj = this.fnc.loadKeyValuesSync<T>();
 
             _set(obj as Object, keyPath, value);
 
-            this.utils.saveKeyValuesSync(obj);
+            this.fnc.saveKeyValuesSync(obj);
         }
     }
 
@@ -540,14 +564,14 @@ export class KeyValues {
 
     async unset(keyPath?: KeyPath): Promise<void> {
         if (keyPath) {
-            const obj = await this.utils.loadKeyValues();
+            const obj = await this.fnc.loadKeyValues();
 
             _unset(obj, keyPath);
 
-            return this.utils.saveKeyValues(obj);
+            return this.fnc.saveKeyValues(obj);
         } else {
             // Unset all keyValues by saving empty object.
-            return this.utils.saveKeyValues({});
+            return this.fnc.saveKeyValues({});
         }
     }
 
@@ -605,14 +629,14 @@ export class KeyValues {
 
     unsetSync(keyPath?: KeyPath): void {
         if (keyPath) {
-            const obj = this.utils.loadKeyValuesSync();
+            const obj = this.fnc.loadKeyValuesSync();
 
             _unset(obj, keyPath);
 
-            this.utils.saveKeyValuesSync(obj);
+            this.fnc.saveKeyValuesSync(obj);
         } else {
             // Unset all keyValues by saving empty object.
-            this.utils.saveKeyValuesSync({});
+            this.fnc.saveKeyValuesSync({});
         }
     }
 }

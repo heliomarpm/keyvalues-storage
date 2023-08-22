@@ -4,7 +4,7 @@ import writeFileAtomic from 'write-file-atomic';
 
 import './types';
 
-export class Utils {
+export class Functions {
 
     options: Options;
 

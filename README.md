@@ -1,17 +1,12 @@
 <span id="top"></span>
 <h1 align="center">
-  <img src="./public/logo.png" alt="electron-vue" width="428" />
-  <br> Electron Quick Start - Vue+Vite+TypeScript+Sass
+  <br> KeyValues Storage
 
-  ![CodeQL](https://github.com/heliomarpm/electron-vuevite-quick-start/actions/workflows/codeql-analysis.yml/badge.svg) ![Publish](https://github.com/heliomarpm/electron-vuevite-quick-start/actions/workflows/publish.yml/badge.svg) <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
+  [![DeepScan grade](https://deepscan.io/api/teams/19612/projects/25344/branches/791226/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19612&pid=25344&bid=791226) [![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage/badge)](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage) ![CodeQL](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/codeql-analysis.yml/badge.svg) ![Publish](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/publish.yml/badge.svg) <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
 
-  ![electron version](https://img.shields.io/github/package-json/dependency-version/heliomarpm/electron-vuevite-quick-start/dev/electron)
-  ![electron builder version](https://img.shields.io/github/package-json/dependency-version/heliomarpm/electron-vuevite-quick-start/dev/electron-builder)
-  ![vite version](https://img.shields.io/github/package-json/dependency-version/heliomarpm/electron-vuevite-quick-start/dev/vite)
-  ![vue version](https://img.shields.io/github/package-json/dependency-version/heliomarpm/electron-vuevite-quick-start/vue)
-  ![typescript version](https://img.shields.io/github/package-json/dependency-version/heliomarpm/electron-vuevite-quick-start/dev/typescript)
-  ![electron vite version](https://img.shields.io/github/package-json/dependency-version/heliomarpm/electron-vuevite-quick-start/dev/sass)
-  
+  ![lodash](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/lodash)
+  ![write-file-atomic](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/write-file-atomic)
+  ![jest](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/dev/jest)
 </h1>
 
 <p align="center">
@@ -28,105 +23,93 @@
      <img alt="liberapay url" src="https://img.shields.io/badge/liberapay-1C1E26?style=for-the-badge&labelColor=1C1E26&color=f6c915"/>
   </a>
   <!-- Version -->
-  <a href="https://github.com/heliomarpm/electron-vuevite-quick-start/releases" target="_blank" rel="noopener noreferrer">
-     <img alt="releases url" src="https://img.shields.io/github/v/release/heliomarpm/electron-vuevite-quick-start?style=for-the-badge&labelColor=1C1E26&color=2ea043"/>
+  <a href="https://github.com/heliomarpm/keyvalues-storage/releases" target="_blank" rel="noopener noreferrer">
+     <img alt="releases url" src="https://img.shields.io/github/v/release/heliomarpm/keyvalues-storage?style=for-the-badge&labelColor=1C1E26&color=2ea043"/>
   </a>  
   <!-- License -->
-  <a href="https://github.com/heliomarpm/electron-vuevite-quick-start/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+  <a href="https://github.com/heliomarpm/keyvalues-storage/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
     <img alt="license url" src="https://img.shields.io/badge/license%20-MIT-1C1E26?style=for-the-badge&labelColor=1C1E26&color=61ffca"/>
   </a>
 </p>
 
+## Summary
+The `KeyValues` class is responsible for managing key-value pairs and storing them in a JSON file. It provides methods for setting, getting, checking existence, and removing key-value pairs. The class uses the `Functions` class to handle file operations and data manipulation.
 
-Clone and run for a quick way to see Electron in action.
+## Example Usage
+```javascript
+// Create a new instance of KeyValues with custom options
+const keyValues = new KeyValues({
+  fileName: 'config.json',
+  prettify: true
+});
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+-- or --
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/latest/tutorial/quick-start) within the Electron documentation.
+/**
+ * Default Options
+ * 
+ * {
+ *   atomicSave: true,
+ *   fileName: 'keyvalues.json',
+ *   prettify: false,
+ *   numSpaces: 2,
+ * }
+ */
+const keyValues = new KeyValues()
 
-A basic Electron application needs just these files:
+// Set a key-value pair
+await keyValues.set('color.name', 'sapphire');
 
-package.json - Points to the app's main file and lists its details and dependencies.
-src/index.html - A web page to render. This is the app's renderer process.
-electron/main.ts - Starts the app and creates a browser window to render HTML. This is the app's main process.
-electron/preload.ts - A content script that runs before the renderer process loads.
-You can learn more about each of these components in depth within the [Tutorial](https://electronjs.org/docs/latest/tutorial/tutorial-prerequisites).
+// Get the value at a specific key path
+const value = await keyValues.get('color.name');
 
+// Check if a key path exists
+const exists = await keyValues.has('color.name');
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-   
-
-
-<p align="center">
-  <a href="#electron-app">
-    <img alt="preview" src="https://raw.githubusercontent.com/heliomarpm/screenshots/main/electron-vuevite-quick-start.png" >
-  </a>
-</p>
-
-## To Use
-
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-```bash
-# Clone this repository
-git clone https://github.com/heliomarpm/electron-vuevite-quick-start
-# Go into the repository
-cd electron-vuevite-quick-start
-# Install dependencies
-npm install
-# Run the app mode develop
-npm start
+// Remove a key-value pair
+await keyValues.unset('color.name');
 ```
 
-> **Note**: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+## Code Analysis
+### Main functionalities
+- Manage key-value pairs and store them in a JSON file
+- Set and get values at specific key paths
+- Check if a key path exists
+- Remove key-value pairs
+___
+### Methods
+- `constructor(options?: Partial<Options>)`: Initializes a new instance of the `KeyValues` class with optional custom options.
+- `file(): string`: Returns the path to the JSON file.
+- `reset(): void`: Resets the configuration of the `KeyValues` instance to default options.
+- `has(keyPath: KeyPath): Promise<boolean>`: Checks if a key path exists asynchronously.
+- `hasSync(keyPath: KeyPath): boolean`: Checks if a key path exists synchronously.
+- `get<T extends valueTypes>(keyPath?: KeyPath): Promise<T>`: Gets the value at a specific key path asynchronously.
+- `getSync<T extends valueTypes>(keyPath?: KeyPath): T`: Gets the value at a specific key path synchronously.
+- `set<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): Promise<void>`: Sets a value at a specific key path asynchronously.
+- `setSync<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): void`: Sets a value at a specific key path synchronously.
+- `unset(keyPath?: KeyPath): Promise<void>`: Removes a key-value pair at a specific key path asynchronously.
+- `unsetSync(keyPath?: KeyPath): void`: Removes a key-value pair at a specific key path synchronously.
+___
+### Fields
+- `options: Options`: The configuration options for the `KeyValues` instance.
+- `fnc: Functions`: An instance of the `Functions` class used for file operations and data manipulation.
 
 
-# Releasing
-> **Note**: to be able to perform `auto-updates` you will need a `code signed app`, for this purpose you will need to configure it by yourself, so check the [electron-builder](https://www.electron.build/code-signing) and [action-electron-builder](https://github.com/samuelmeuli/action-electron-builder#code-signing) docs please to get know how to do this.
+## Dependencies
 
-To release your app on a GitHub release with `Windows`, `Mac` and `Linux` binaries, you can perform the following commands:
+- [lodash](https://lodash.com/): The Lodash library exported as Node.js modules.
+- [write-file-atomic](https://github.com/npm/write-file-atomic): Atomically and asynchronously writes data to a file, replacing the file if it already exists. data can be a string or a buffer
 
-```bash
-git pull
-npm run make:release
-```
-
-> **Note**: Script for make release is contribution by @daltonmenezes
-
-
-## Dev Dependencies
-
-- [electron](https://ghub.io/electron): Build cross platform desktop apps with JavaScript, HTML, and CSS
-- [electron-builder](https://ghub.io/electron-builder): A complete solution to package and build a ready for distribution Electron app for MacOS, Windows and Linux with “auto update” support out of the box
-- [open](https://ghub.io/open): Open stuff like URLs, files, executables. Cross-platform.
-- [semver](https://ghub.io/semver): The semantic version parser used by npm.
-
-## Resources for Learning Electron
-
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
 
 # Contributing
 
-Please make sure to read the [Contributing Guide](https://github.com/heliomarpm/electron-vuevite-quick-start/blob/master/docs/CONTRIBUTING.md) before making a pull request.
+Please make sure to read the [Contributing Guide](https://github.com/heliomarpm/keyvalues-storage/blob/master/docs/CONTRIBUTING.md) before making a pull request.
 
 
 Thank you to all the people who already contributed to project!
 
-<a href="https://github.com/heliomarpm/electron-vuevite-quick-start/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=heliomarpm/electron-vuevite-quick-start" />
+<a href="https://github.com/heliomarpm/keyvalues-storage/graphs/contributors" target="_blank">
+  <img src="https://contrib.rocks/image?repo=heliomarpm/keyvalues-storage" />
 </a>
 
 ###### Made with [contrib.rocks](https://contrib.rocks).
@@ -165,4 +148,4 @@ If you appreciate that, please consider donating to the Developer.
 
 ## License
 
-[MIT © Heliomar P. Marques](https://github.com/heliomarpm/electron-vuevite-quick-start/blob/main/LICENSE) <a href="#top">🔝</a>
+[MIT © Heliomar P. Marques](https://github.com/heliomarpm/keyvalues-storage/blob/main/LICENSE) <a href="#top">🔝</a>
