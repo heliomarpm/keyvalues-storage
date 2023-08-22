@@ -74,12 +74,10 @@ export class Functions {
         try {
             fs.statSync(filePath);
         } catch (err: any) {
-            if (err) {
-                if (err.code === 'ENOENT') {
-                    this.saveKeyValuesSync({});
-                } else {
-                    throw err;
-                }
+            if (err.code === 'ENOENT') {
+                this.saveKeyValuesSync({});
+            } else {
+                throw err;
             }
         }
     }
