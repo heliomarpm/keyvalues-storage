@@ -1,6 +1,7 @@
 const { writeFile } = require('fs/promises')
 const { resolve } = require('path')
-const { shell } = require('electron')
+// const open = require('open')
+const openPromise = import('open');
 
 const { extractOwnerAndRepoFromGitRemoteURL } = require('./utils')
 const { checkValidations } = require('./validations')
@@ -9,67 +10,71 @@ const { question, exec } = require('../../utils')
 const { COLORS } = require('../../constants')
 
 async function makeRelease() {
-  console.clear()
+    console.clear()
 
-  const { version } = packageJSON
+    const { version } = packageJSON
 
-  const newVersion = await question(
-    `Enter a new version: ${COLORS.SOFT_GRAY}(current is ${version})${COLORS.RESET} `
-  )
-
-  if (checkValidations({ version, newVersion })) {
-    return
-  }
-
-  packageJSON.version = newVersion
-
-  try {
-    console.log(
-      `${COLORS.CYAN}> Updating package.json version...${COLORS.RESET}`
+    const newVersion = await question(
+        `Enter a new version: ${COLORS.SOFT_GRAY}(current is ${version})${COLORS.RESET} `
     )
 
-    await writeFile(
-      resolve('package.json'),
-      JSON.stringify(packageJSON, null, 2)
-    )
+    if (checkValidations({ version, newVersion })) {
+        return
+    }
 
-    console.log(`\n${COLORS.GREEN}Done!${COLORS.RESET}\n`)
-    console.log(`${COLORS.CYAN}> Trying to release it...${COLORS.RESET}`)
+    packageJSON.version = newVersion
 
-    exec(
-      [
-        `git commit -am v${newVersion}`,
-        `git tag v${newVersion}`,
-        `git push`,
-        `git push --tags`,
-      ],
-      {
-        inherit: true,
-      }
-    )
+    try {
+        console.log(
+            `${COLORS.CYAN}> Updating package.json version...${COLORS.RESET}`
+        )
 
-    const [repository] = exec([`git remote get-url --push origin`])
-    const ownerAndRepo = extractOwnerAndRepoFromGitRemoteURL(repository)
+        await writeFile(
+            resolve('package.json'),
+            JSON.stringify(packageJSON, null, 2)
+        )
 
-    console.log(
-      `${COLORS.CYAN}> Opening the repository releases page...${COLORS.RESET}`
-    )
+        console.log(`\n${COLORS.GREEN}Done!${COLORS.RESET}\n`)
+        console.log(`${COLORS.CYAN}> Trying to release it...${COLORS.RESET}`)
 
-    await shell.openExternal(`https://github.com/${ownerAndRepo}/releases`)
+        exec(
+            [
+                `git commit -am v${newVersion}`,
+                `git tag v${newVersion}`,
+                `git push`,
+                `git push --tags`,
+            ],
+            {
+                inherit: true,
+            }
+        )
 
-    console.log(
-      `${COLORS.CYAN}> Opening the repository actions page...${COLORS.RESET}`
-    )
+        const [repository] = exec([`git remote get-url --push origin`])
+        const ownerAndRepo = extractOwnerAndRepoFromGitRemoteURL(repository)
 
-    await shell.openExternal(`https://github.com/${ownerAndRepo}/actions`)
+        console.log(
+            `${COLORS.CYAN}> Opening the repository releases page...${COLORS.RESET}`
+        )
 
-    console.log(`\n${COLORS.GREEN}Done!${COLORS.RESET}\n`)
-  } catch ({ message }) {
-    console.log(`
+        openPromise.then(openModule => {
+            openModule.default(`https://github.com/${ownerAndRepo}/releases`);
+        })
+
+        console.log(
+            `${COLORS.CYAN}> Opening the repository actions page...${COLORS.RESET}`
+        )
+
+        openPromise.then(openModule => {
+            openModule.default(`https://github.com/${ownerAndRepo}/actions`);
+        })
+
+        console.log(`\n${COLORS.GREEN}Done!${COLORS.RESET}\n`)
+    } catch ({ message }) {
+        console.log(`
     🛑 Something went wrong!\n
       👀 Error: ${message}
     `)
-  }
+    }
 }
 
 makeRelease()
