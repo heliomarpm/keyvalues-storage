@@ -2,13 +2,16 @@
  * ANTES DE EXECUTAR ESSE ROTEIRO EXECUTE OS COMANDOS ABAIXO
  *
  * npm run build
- * npm link @helomarpm/kvs
+ * npm link @heliomarpm/kvs
 */
 import { KeyValues } from "@heliomarpm/kvs";
 
-const kvs = new KeyValues();
-
 describe('npm link @heliomarpm/kvs', () => {
+    let kvs: KeyValues;
+
+    beforeEach(() => {
+        kvs = new KeyValues();
+    });
 
     // Tests that the set method sets the value of a key
     it('should set & get async', async () => {

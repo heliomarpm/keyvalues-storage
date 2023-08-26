@@ -1,7 +1,7 @@
 import { get as _get, set as _set, has as _has, unset as _unset } from 'lodash';
 
 import './internal/types';
-import { Functions } from './internal/functions'
+import { JsonFileHelper } from './internal/JsonFileHelper'
 
 /** @internal */
 const defaultOptions: Options = {
@@ -40,7 +40,7 @@ export class KeyValues {
         ...defaultOptions,
     };
 
-    private fnc: Functions;
+    private fnc: JsonFileHelper;
 
 
     /**
@@ -71,7 +71,7 @@ export class KeyValues {
         if (options)
             this.options = { ...this.options, ...options };
 
-        this.fnc = new Functions(this.options);
+        this.fnc = new JsonFileHelper(this.options);
     }
 
     /**
@@ -244,19 +244,25 @@ export class KeyValues {
      * Get the value at `color.name`.
      *```js
      *     // Given:
-     *     //
-     *     // {
-     *     //   "color": {
-     *     //     "name": "cerulean",
-     *     //     "code": {
-     *     //       "rgb": [0, 179, 230],
-     *     //       "hex": "#003BE6"
-     *     //     }
-     *     //   }
-     *     // }
+     *     {
+     *        "color": {
+     *          "name": "cerulean",
+     *          "code": {
+     *            "rgb": [0, 179, 230],
+     *            "hex": "#003BE6"
+     *          }
+     *        }
+     *     }
      *
      *     const value = await keyValues.get('color.name');
      *     // => "cerulean"
+     *```
+     * @example
+     *
+     * Get the value at `color.code.hex`.
+     *```js
+     *     const hex = await keyValues.get('color.color.hex');
+     *     // => "#003BE6"
      *```
      * @example
      *
@@ -311,36 +317,42 @@ export class KeyValues {
      * @example
      *
      * Get the value at `color.name`.
-     *```jsvvvvvv
+     *```js
      *     // Given:
-     *     //
-     *     // {
-     *     //   "color": {
-     *     //     "name": "cerulean",
-     *     //     "code": {
-     *     //       "rgb": [0, 179, 230],
-     *     //       "hex": "#003BE6"
-     *     //     }
-     *     //   }
-     *     // }
+     *     {
+     *        "color": {
+     *          "name": "cerulean",
+     *          "code": {
+     *            "rgb": [0, 179, 230],
+     *            "hex": "#003BE6"
+     *          }
+     *        }
+     *     }
      *
-     *     const value = keyValues.getSync('color.name');
+     *     const value = await keyValues.get('color.name');
      *     // => "cerulean"
      *```
      * @example
      *
+     * Get the value at `color.code.hex`.
+     *```js
+     *     const hex = await keyValues.get('color.color.hex');
+     *     // => "#003BE6"
+     *```
+     * @example
+     *
      * Get the value at `color.hue`.
-     *
+     *```js
      *     const h = 'hue';
-     *     const value = keyValues.getSync(['color', h]);
+     *     const value = await keyValues.get(['color', h]);
      *     // => undefined
-     *
+     *```
      * @example
      *
      * Get the value at `color.code.rgb[1]`.
      *```js
      *     const h = 'hue';
-     *     const value = keyValues.getSync('color.code.rgb[1]');
+     *     const value = await keyValues.get('color.code.rgb[1]');
      *     // => 179
      * ```
      */

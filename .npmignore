@@ -1,7 +1,9 @@
 src
 test
+coverage
 tsconfig.json
 artigos.txt
 cmd
 licence
 docs
+*.map

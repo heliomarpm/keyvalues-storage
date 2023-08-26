@@ -4,7 +4,7 @@ import writeFileAtomic from 'write-file-atomic';
 
 import './types';
 
-export class Functions {
+export class JsonFileHelper {
 
     options: Options;
 
@@ -138,22 +138,21 @@ export class Functions {
      * @returns A promise which resolves with the keyvalues object.
      * @internal
      */
-    public loadKeyValues<T extends valueTypes>(): Promise<T> {
-        return this.ensureJsonFile().then(() => {
-            const filePath = this.getJsonFilePath();
+    public async loadKeyValues<T extends valueTypes>(): Promise<T> {
+        await this.ensureJsonFile();
+        const filePath = this.getJsonFilePath();
 
-            return new Promise((resolve, reject) => {
-                fs.readFile(filePath, 'utf-8', (err, data) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        try {
-                            resolve(JSON.parse(data.length ? data : "{}"));
-                        } catch (err) {
-                            reject(err);
-                        }
+        return await new Promise((resolve, reject) => {
+            fs.readFile(filePath, 'utf-8', (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    try {
+                        resolve(JSON.parse(data.length ? data : "{}"));
+                    } catch (err_1) {
+                        reject(err_1);
                     }
-                });
+                }
             });
         });
     }
@@ -167,12 +166,12 @@ export class Functions {
      */
     public loadKeyValuesSync<T extends valueTypes>(): T {
         this.ensureJsonFileSync();
-
         const filePath = this.getJsonFilePath();
         const data = fs.readFileSync(filePath, 'utf-8');
 
         return JSON.parse(data.length ? data : "{}");
     }
+
     /**
      * Saves the keyvalues to the disk.
      *
@@ -180,27 +179,25 @@ export class Functions {
      * @returns A promise which resolves when the keyvalues have been saved.
      * @internal
      */
-    public saveKeyValues<T>(obj: T): Promise<void> {
-        return this.ensureJsonDir().then(() => {
-            const filePath = this.getJsonFilePath();
-            const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
-            const data = JSON.stringify(obj, null, numSpaces);
+    public async saveKeyValues<T>(obj: T): Promise<void> {
+        await this.ensureJsonDir();
+        const filePath = this.getJsonFilePath();
+        const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
+        const data = JSON.stringify(obj, null, numSpaces);
 
-            return new Promise((resolve, reject) => {
-                if (this.options.atomicSave) {
-                    writeFileAtomic(filePath, data, (err: any) => {
-                        return err
-                            ? reject(err)
-                            : resolve();
-                    });
-                } else {
-                    fs.writeFile(filePath, data, (err) => {
-                        return err
-                            ? reject(err)
-                            : resolve();
-                    });
-                }
-            });
+        return await new Promise((resolve, reject) => {
+            if (this.options.atomicSave) {
+                writeFileAtomic(filePath, data, (err: any) => {
+                    return err
+                        ? reject(err)
+                        : resolve();
+                });
+            } else {
+                fs.writeFile(filePath, data, (err_1) => {
+                    return err_1 ? reject(err_1)
+                        : resolve();
+                });
+            }
         });
     }
 

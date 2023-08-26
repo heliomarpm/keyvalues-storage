@@ -33,16 +33,23 @@
 </p>
 
 ## Summary
-The `KeyValues` class is responsible for managing key-value pairs and storing them in a JSON file. It provides methods for setting, getting, checking existence, and removing key-value pairs. The class uses the `Functions` class to handle file operations and data manipulation.
+The `KeyValues Storage` library is a utility for managing key-value pairs and storing them in a JSON file. It provides methods for setting, getting, checking existence, and removing key-value pairs. This document provides an overview of the library and its usage.
 
-## Example Usage
+## Installation
+
+You can install the library using `npm` or `yarn`:
+
 ```bash
-# install package
 npm i @heliomarpm/kvs
+# or 
+yarn add @heliomarpm/kvs
 ```
 
+## Example Usage
+
+
 ```javascript
-// Create a new instance of KeyValues with custom options
+// Create a new instance of KeyValues with or or without custom options
 
 /**
  * Default Options
@@ -54,29 +61,58 @@ npm i @heliomarpm/kvs
  *   numSpaces: 2,
  * }
  */
-const keyValues = new KeyValues()
+const kvs = new KeyValues()
 -- or --
-const keyValues = new KeyValues({
+const kvs = new KeyValues({
   fileName: 'config.json',
   prettify: true
 });
 
+const color =
+{
+    "name": "cerulean",
+    "code": {
+        "rgb": [0, 179, 230],
+        "hex": "#003BE6"
+    }
+}
+
+// Set a key-values
+kvs.setSync('color', color);
+
+kvs.getSync('color.name')
+// => 'cerulean'
+
+kvs.getSync('color.code.hex')
+// => "#003BE6"
+
+kvs.getSync(['color', 'code'])
+// => { "hex": "#003BE6", "rgb": [0, 179, 230] }
+
+kvs.getSync(['color', 'hue'])
+// => undefined
+
 // Set a key-value pair
-await keyValues.set('color.name', 'sapphire');
+await kvs.set('color.name', 'sapphire');
 
 // Get the value at a specific key path
-const value = await keyValues.get('color.name');
+const value = await kvs.get('color.name');
+// => 'sapphire'
 
 // Check if a key path exists
-const exists = await keyValues.has('color.name');
+const exists = await kvs.has('color.name');
 
 // Remove a key-value pair
-await keyValues.unset('color.name');
+await kvs.unset('color.name');
+
+kvs.getSync(); 
+// => { "code": { "rgb": [0, 179, 230], "hex": "#003BE6" } }
 ```
 
 ## Code Analysis
 ### Main functionalities
 - Manage key-value pairs and store them in a JSON file
+- Create one or more instances for different JSON files
 - Set and get values at specific key paths
 - Check if a key path exists
 - Remove key-value pairs

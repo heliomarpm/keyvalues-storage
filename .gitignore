@@ -3,3 +3,4 @@ localdb
 dist
 lib
 tmp
+coverage

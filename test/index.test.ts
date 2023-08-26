@@ -160,3 +160,4 @@ test('test unsetAll', () => {
     const r = kvs.getSync('b')
     expect(r).toBeUndefined()
 })
+
