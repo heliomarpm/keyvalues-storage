@@ -50,7 +50,7 @@ describe('KeyValues', () => {
             }
         }
         const keyValues = new KeyValues({ fileName: 'color.json', prettify: true });
-        keyValues.set('color', color);
+        keyValues.setSync('color', color);
         expect(keyValues.getSync('color')).toEqual(color);
 
         expect(keyValues.getSync('color.name')).toEqual('cerulean');
