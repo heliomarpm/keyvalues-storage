@@ -439,7 +439,7 @@ export class KeyValues {
             const [keyPath, value] = args;
             const obj = await this.fnc.loadKeyValues<T>();
 
-            _set(obj as {}, keyPath, value);
+            _set(obj as Object, keyPath, value);
 
             return this.fnc.saveKeyValues(obj);
         }
@@ -512,7 +512,7 @@ export class KeyValues {
             const [keyPath, value] = args;
             const obj = this.fnc.loadKeyValuesSync<T>();
 
-            _set(obj as {}, keyPath, value);
+            _set(obj as Object, keyPath, value);
 
             this.fnc.saveKeyValuesSync(obj);
         }
