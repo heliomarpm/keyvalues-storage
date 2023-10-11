@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "test:c": "jest --coverage",
     "commit": "node ./cmd/modules/release/index.js"
   },

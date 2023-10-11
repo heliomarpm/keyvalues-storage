@@ -1,12 +1,16 @@
 <span id="top"></span>
 <h1 align="center">
-  <br> KeyValues Storage
+  <br>🎲 KeyValues Storage
 
-  [![DeepScan grade](https://deepscan.io/api/teams/19612/projects/25344/branches/791226/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19612&pid=25344&bid=791226) [![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage/badge)](https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage) ![CodeQL](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/codeql.yml/badge.svg) ![Publish](https://github.com/heliomarpm/keyvalues-storage/actions/workflows/publish.yml/badge.svg) <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
+  [![DeepScan grade][url-deepscan-badge]][url-deepscan]
+  [![CodeFactor][url-codefactor-badge]][url-codefactor] 
+  ![CodeQL][url-codeql]<!-- ![Publish][url-publish] --> [![NPM version][url-npm-badge]][url-npm]
+  [![Downloads][url-downloads-badge]][url-downloads]
+  <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
 
   ![lodash](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/lodash)
   ![write-file-atomic](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/write-file-atomic)
-  ![jest](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/dev/jest)
+  <!-- ![jest](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/dev/jest) -->
 </h1>
 
 <p align="center">
@@ -143,7 +147,7 @@ ___
 
 # Contributing
 
-Please make sure to read the [Contributing Guide](https://github.com/heliomarpm/keyvalues-storage/blob/master/docs/CONTRIBUTING.md) before making a pull request.
+Please make sure to read the [Contributing Guide](docs/CONTRIBUTING.md) before making a pull request.
 
 
 Thank you to all the people who already contributed to project!
@@ -188,4 +192,17 @@ If you appreciate that, please consider donating to the Developer.
 
 ## License
 
-[MIT © Heliomar P. Marques](https://github.com/heliomarpm/keyvalues-storage/blob/main/LICENSE) <a href="#top">🔝</a>
+[MIT © Heliomar P. Marques](LICENSE) <a href="#top">🔝</a>
+
+
+----
+[url-npm]: https://www.npmjs.com/package/@heliomarpm/kvs
+[url-npm-badge]: https://img.shields.io/npm/v/@heliomarpm/kvs.svg
+[url-downloads-badge]: https://img.shields.io/npm/dm/@heliomarpm/kvs.svg
+[url-downloads]: http://badge.fury.io/js/@heliomarpm/kvs.svg
+[url-deepscan-badge]: https://deepscan.io/api/teams/19612/projects/25344/branches/791226/badge/grade.svg
+[url-deepscan]: https://deepscan.io/dashboard#view=project&tid=19612&pid=25344&bid=791226
+[url-codefactor-badge]: https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage/badge
+[url-codefactor]: https://www.codefactor.io/repository/github/heliomarpm/keyvalues-storage
+[url-codeql]: https://github.com/heliomarpm/keyvalues-storage/actions/workflows/codeql.yml/badge.svg 
+[url-publish]: https://github.com/heliomarpm/keyvalues-storage/actions/workflows/publish.yml/badge.svg 
