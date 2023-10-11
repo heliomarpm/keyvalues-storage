@@ -6,219 +6,219 @@ import './types';
 
 export class JsonFileHelper {
 
-    options: Options;
+  options: Options;
 
-    constructor(options: Options) {
-        this.options = options;
-    }
+  constructor(options: Options) {
+    this.options = options;
+  }
 
-    /**
-     * Returns the path to the keyvalues directory. The path
-     * may be customized by the developer by using
-     * `configure()`.
-     *
-     * @returns The path to the keyvalues directory.
-     * @internal
-     */
-    private getJsonDirPath(): string {
-        return this.options.dir ?? path.resolve('localdb')
-    }
+  /**
+   * Returns the path to the keyvalues directory. The path
+   * may be customized by the developer by using
+   * `configure()`.
+   *
+   * @returns The path to the keyvalues directory.
+   * @internal
+   */
+  private getJsonDirPath(): string {
+    return this.options.dir ?? path.resolve('localdb')
+  }
 
-    /**
-     * Returns the path to the keyvalues file. The file name
-     * may be customized by the developer using `configure()`.
-     *
-     * @returns The path to the keyvalues file.
-     * @internal
-     */
-    public getJsonFilePath(): string {
-        const dir = this.getJsonDirPath();
+  /**
+   * Returns the path to the keyvalues file. The file name
+   * may be customized by the developer using `configure()`.
+   *
+   * @returns The path to the keyvalues file.
+   * @internal
+   */
+  public getJsonFilePath(): string {
+    const dir = this.getJsonDirPath();
 
-        return path.join(dir, this.options.fileName);
-    }
+    return path.join(dir, this.options.fileName);
+  }
 
-    /**
-     * Ensures that the keyvalues file exists. If it does not
-     * exist, then it is created.
-     *
-     * @returns A promise which resolves when the keyvalues file exists.
-     * @internal
-     */
-    private ensureJsonFile(): Promise<void> {
-        const filePath = this.getJsonFilePath();
+  /**
+   * Ensures that the keyvalues file exists. If it does not
+   * exist, then it is created.
+   *
+   * @returns A promise which resolves when the keyvalues file exists.
+   * @internal
+   */
+  private ensureJsonFile(): Promise<void> {
+    const filePath = this.getJsonFilePath();
 
-        return new Promise((resolve, reject) => {
-            fs.stat(filePath, (err) => {
-                if (err) {
-                    if (err.code === 'ENOENT') {
-                        this.saveKeyValues({}).then(resolve, reject);
-                    } else {
-                        reject(err);
-                    }
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    /**
-     * Ensures that the keyvalues file exists. If it does not
-     * exist, then it is created.
-     *
-     * @internal
-     */
-    private ensureJsonFileSync(): void {
-        const filePath = this.getJsonFilePath();
-
-        try {
-            fs.statSync(filePath);
-        } catch (err: any) {
-            if (err.code === 'ENOENT') {
-                this.saveKeyValuesSync({});
-            } else {
-                throw err;
-            }
-        }
-    }
-
-    /**
-     * Ensures that the keyvalues directory exists. If it does
-     * not exist, then it is created.
-     *
-     * @returns A promise which resolves when the keyvalues dir exists.
-     * @internal
-     */
-    private ensureJsonDir(): Promise<void> {
-        const dirPath = this.getJsonDirPath();
-
-        return new Promise((resolve, reject) => {
-            fs.stat(dirPath, (err) => {
-                if (err) {
-                    if (err.code === 'ENOENT') {
-                        fs.mkdir(dirPath, { recursive: true }, (error) => {
-                            error ? reject(error) : resolve();
-                        });
-                        // mkdirp(dirPath).then(() => resolve(), reject);
-                    } else {
-                        reject(err);
-                    }
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-    /**
-     * Ensures that the keyvalues directory exists. If it does
-     * not exist, then it is created.
-     *
-     * @internal
-     */
-    private ensureJsonDirSync(): void {
-        const dirPath = this.getJsonDirPath();
-
-        try {
-            fs.statSync(dirPath);
-        } catch (err: any) {
-            if (err.code === 'ENOENT') {
-                fs.mkdirSync(dirPath, { recursive: true });
-                // mkdirp.sync(dirPath);
-            } else {
-                throw err;
-            }
-        }
-    }
-
-    /**
-     * First ensures that the keyvalues file exists then loads
-     * the keyvalues from the disk.
-     *
-     * @returns A promise which resolves with the keyvalues object.
-     * @internal
-     */
-    public async loadKeyValues<T extends valueTypes>(): Promise<T> {
-        await this.ensureJsonFile();
-        const filePath = this.getJsonFilePath();
-
-        return await new Promise((resolve, reject) => {
-            fs.readFile(filePath, 'utf-8', (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    try {
-                        resolve(JSON.parse(data.length ? data : "{}"));
-                    } catch (err_1) {
-                        reject(err_1);
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * First ensures that the keyvalues file exists then loads
-     * the keyvalues from the disk.
-     *
-     * @returns The keyvalues object.
-     * @internal
-     */
-    public loadKeyValuesSync<T extends valueTypes>(): T {
-        this.ensureJsonFileSync();
-        const filePath = this.getJsonFilePath();
-        const data = fs.readFileSync(filePath, 'utf-8');
-
-        return JSON.parse(data.length ? data : "{}");
-    }
-
-    /**
-     * Saves the keyvalues to the disk.
-     *
-     * @param obj The keyvalues object to save.
-     * @returns A promise which resolves when the keyvalues have been saved.
-     * @internal
-     */
-    public async saveKeyValues<T>(obj: T): Promise<void> {
-        await this.ensureJsonDir();
-        const filePath = this.getJsonFilePath();
-        const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
-        const data = JSON.stringify(obj, null, numSpaces);
-
-        return await new Promise((resolve, reject) => {
-            if (this.options.atomicSave) {
-                writeFileAtomic(filePath, data, (err: any) => {
-                    return err
-                        ? reject(err)
-                        : resolve();
-                });
-            } else {
-                fs.writeFile(filePath, data, (err_1) => {
-                    return err_1 ? reject(err_1)
-                        : resolve();
-                });
-            }
-        });
-    }
-
-    /**
-     * Saves the keyvalues to the disk.
-     *
-     * @param obj The keyvalues object to save.
-     * @internal
-     */
-    public saveKeyValuesSync<T>(obj: T): void {
-        const filePath = this.getJsonFilePath();
-        const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
-        const data = JSON.stringify(obj, null, numSpaces);
-
-        this.ensureJsonDirSync();
-
-        if (this.options.atomicSave) {
-            writeFileAtomic.sync(filePath, data);
+    return new Promise((resolve, reject) => {
+      fs.stat(filePath, (err) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            this.saveKeyValues({}).then(resolve, reject);
+          } else {
+            reject(err);
+          }
         } else {
-            fs.writeFileSync(filePath, data);
+          resolve();
         }
+      });
+    });
+  }
+
+  /**
+   * Ensures that the keyvalues file exists. If it does not
+   * exist, then it is created.
+   *
+   * @internal
+   */
+  private ensureJsonFileSync(): void {
+    const filePath = this.getJsonFilePath();
+
+    try {
+      fs.statSync(filePath);
+    } catch (err: any) {
+      if (err.code === 'ENOENT') {
+        this.saveKeyValuesSync({});
+      } else {
+        throw err;
+      }
     }
+  }
+
+  /**
+   * Ensures that the keyvalues directory exists. If it does
+   * not exist, then it is created.
+   *
+   * @returns A promise which resolves when the keyvalues dir exists.
+   * @internal
+   */
+  private ensureJsonDir(): Promise<void> {
+    const dirPath = this.getJsonDirPath();
+
+    return new Promise((resolve, reject) => {
+      fs.stat(dirPath, (err) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            fs.mkdir(dirPath, { recursive: true }, (error) => {
+              error ? reject(error) : resolve();
+            });
+            // mkdirp(dirPath).then(() => resolve(), reject);
+          } else {
+            reject(err);
+          }
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * Ensures that the keyvalues directory exists. If it does
+   * not exist, then it is created.
+   *
+   * @internal
+   */
+  private ensureJsonDirSync(): void {
+    const dirPath = this.getJsonDirPath();
+
+    try {
+      fs.statSync(dirPath);
+    } catch (err: any) {
+      if (err.code === 'ENOENT') {
+        fs.mkdirSync(dirPath, { recursive: true });
+        // mkdirp.sync(dirPath);
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  /**
+   * First ensures that the keyvalues file exists then loads
+   * the keyvalues from the disk.
+   *
+   * @returns A promise which resolves with the keyvalues object.
+   * @internal
+   */
+  public async loadKeyValues<T extends valueTypes>(): Promise<T> {
+    await this.ensureJsonFile();
+    const filePath = this.getJsonFilePath();
+
+    return await new Promise((resolve, reject) => {
+      fs.readFile(filePath, 'utf-8', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          try {
+            resolve(JSON.parse(data.length ? data : "{}"));
+          } catch (err_1) {
+            reject(err_1);
+          }
+        }
+      });
+    });
+  }
+
+  /**
+   * First ensures that the keyvalues file exists then loads
+   * the keyvalues from the disk.
+   *
+   * @returns The keyvalues object.
+   * @internal
+   */
+  public loadKeyValuesSync<T extends valueTypes>(): T {
+    this.ensureJsonFileSync();
+    const filePath = this.getJsonFilePath();
+    const data = fs.readFileSync(filePath, 'utf-8');
+
+    return JSON.parse(data.length ? data : "{}");
+  }
+
+  /**
+   * Saves the keyvalues to the disk.
+   *
+   * @param obj The keyvalues object to save.
+   * @returns A promise which resolves when the keyvalues have been saved.
+   * @internal
+   */
+  public async saveKeyValues<T>(obj: T): Promise<void> {
+    await this.ensureJsonDir();
+    const filePath = this.getJsonFilePath();
+    const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
+    const data = JSON.stringify(obj, null, numSpaces);
+
+    return await new Promise((resolve, reject) => {
+      if (this.options.atomicSave) {
+        writeFileAtomic(filePath, data, (err: any) => {
+          return err
+            ? reject(err)
+            : resolve();
+        });
+      } else {
+        fs.writeFile(filePath, data, (err_1) => {
+          return err_1 ? reject(err_1)
+            : resolve();
+        });
+      }
+    });
+  }
+
+  /**
+   * Saves the keyvalues to the disk.
+   *
+   * @param obj The keyvalues object to save.
+   * @internal
+   */
+  public saveKeyValuesSync<T>(obj: T): void {
+    const filePath = this.getJsonFilePath();
+    const numSpaces = this.options.prettify ? this.options.numSpaces : 0;
+    const data = JSON.stringify(obj, null, numSpaces);
+
+    this.ensureJsonDirSync();
+
+    if (this.options.atomicSave) {
+      writeFileAtomic.sync(filePath, data);
+    } else {
+      fs.writeFileSync(filePath, data);
+    }
+  }
 
 }

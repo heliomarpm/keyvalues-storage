@@ -10,7 +10,7 @@ trim_trailing_whitespace = true
 max_line_length = 140
 end_of_line = lf
 
-[*.{js,ts,html}]
+[*.{html}]
 indent_size = 4
 
 [*.{js,ts}]
