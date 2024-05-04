@@ -13,12 +13,29 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - "**/*.sh"
+      - "**/.*"
+      - "**/_*"
+      - "**/*.txt"
+      - "**/*.adoc"
+      - "**/*.md"
+      - ".github/**"
+      - "!.github/workflows/codeql.yml"
+      
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
-  schedule:
-    - cron: '21 12 * * 5'
+    paths-ignore:
+      - "**/*.sh"
+      - "**/.*"
+      - "**/_*"
+      - "**/*.txt"
+      - "**/*.adoc"
+      - "**/*.md"
+  # schedule:
+  #   - cron: '21 12 * * 5'
 
 jobs:
   analyze:
