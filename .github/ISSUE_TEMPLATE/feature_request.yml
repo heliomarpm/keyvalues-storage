@@ -6,7 +6,7 @@ labels:
 body:
   - type: markdown
     attributes:
-      value: Please read and follow the instructions before submitting an issue:
+      value: 'Please read and follow the instructions before submitting an issue:'
   - type: markdown
     attributes:
       value: |
