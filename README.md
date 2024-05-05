@@ -51,7 +51,6 @@ yarn add @heliomarpm/kvs
 
 ## Example Usage
 
-
 ```javascript
 // Create a new instance of KeyValues with or or without custom options
 
