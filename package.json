@@ -1,6 +1,6 @@
 {
   "name": "@heliomarpm/kvs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A simple and robust KeyValues Storage's library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,7 +36,7 @@
     "build": "tsc",
     "test": "jest --detectOpenHandles",
     "test:c": "jest --coverage",
-    "commit": "node ./cmd/modules/release/index.js"
+    "pub:release": "node ./cmd/modules/release/index.js"
   },
   "dependencies": {
     "lodash": "^4.17.21",

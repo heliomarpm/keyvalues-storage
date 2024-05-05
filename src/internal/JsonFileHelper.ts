@@ -4,6 +4,9 @@ import writeFileAtomic from 'write-file-atomic';
 
 import './types';
 
+export const DEFAULT_DIR_NAME = 'localdb';
+export const DEFAULT_FILE_NAME = 'keyvalues.json';
+
 export class JsonFileHelper {
 
   options: Options;
@@ -21,7 +24,8 @@ export class JsonFileHelper {
    * @internal
    */
   private getJsonDirPath(): string {
-    return this.options.dir ?? path.resolve('localdb')
+    let dir = (this.options.dir ?? path.resolve(DEFAULT_DIR_NAME)).trim();
+    return dir === '' ? './' : dir;
   }
 
   /**
@@ -33,8 +37,10 @@ export class JsonFileHelper {
    */
   public getJsonFilePath(): string {
     const dir = this.getJsonDirPath();
+    let fileName = this.options.fileName.trim();
+    fileName = fileName === '' ? DEFAULT_FILE_NAME : fileName;
 
-    return path.join(dir, this.options.fileName);
+    return path.join(dir, fileName);
   }
 
   /**
@@ -48,7 +54,7 @@ export class JsonFileHelper {
     const filePath = this.getJsonFilePath();
 
     return new Promise((resolve, reject) => {
-      fs.stat(filePath, (err) => {
+      fs.stat(filePath, (err: any) => {
         if (err) {
           if (err.code === 'ENOENT') {
             this.saveKeyValues({}).then(resolve, reject);
@@ -93,10 +99,10 @@ export class JsonFileHelper {
     const dirPath = this.getJsonDirPath();
 
     return new Promise((resolve, reject) => {
-      fs.stat(dirPath, (err) => {
+      fs.stat(dirPath, (err: any) => {
         if (err) {
           if (err.code === 'ENOENT') {
-            fs.mkdir(dirPath, { recursive: true }, (error) => {
+            fs.mkdir(dirPath, { recursive: true }, (error: any) => {
               error ? reject(error) : resolve();
             });
             // mkdirp(dirPath).then(() => resolve(), reject);
@@ -143,12 +149,13 @@ export class JsonFileHelper {
     const filePath = this.getJsonFilePath();
 
     return await new Promise((resolve, reject) => {
-      fs.readFile(filePath, 'utf-8', (err, data) => {
+      fs.readFile(filePath, 'utf-8', (err: any, data: string | any[]) => {
         if (err) {
           reject(err);
         } else {
           try {
-            resolve(JSON.parse(data.length ? data : "{}"));
+            // resolve(JSON.parse(data.length ? data : "{}"));
+            resolve(JSON.parse(data ? (Array.isArray(data) ? data.join('') : data) : "{}"));
           } catch (err_1) {
             reject(err_1);
           }
@@ -193,7 +200,7 @@ export class JsonFileHelper {
             : resolve();
         });
       } else {
-        fs.writeFile(filePath, data, (err_1) => {
+        fs.writeFile(filePath, data, (err_1: any) => {
           return err_1 ? reject(err_1)
             : resolve();
         });

@@ -1,12 +1,13 @@
 import { get as _get, set as _set, has as _has, unset as _unset } from 'lodash';
 
 import './internal/types';
-import { JsonFileHelper } from './internal/JsonFileHelper'
+import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from './internal/JsonFileHelper'
 
 /** @internal */
 const defaultOptions: Options = {
   atomicSave: true,
-  fileName: 'keyvalues.json',
+  dir: DEFAULT_DIR_NAME,
+  fileName: DEFAULT_FILE_NAME,
   prettify: false,
   numSpaces: 2,
 };

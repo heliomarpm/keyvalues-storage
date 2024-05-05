@@ -1,5 +1,6 @@
 node_modules
 localdb
+data
 dist
 lib
 tmp
