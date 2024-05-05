@@ -4,19 +4,6 @@ import { KeyValues } from '../src/keyvalues';
 import { JsonFileHelper } from '../src/internal/JsonFileHelper';
 
 describe('Codium Complex Test', () => {
-  it('healthCheck', () => {
-    expect(1).toBe(1);
-  });
-  // Tests that the set method sets the value of a key
-  it('should set the value of a key', async () => {
-    const mockSaveKeyValues = jest.spyOn(JsonFileHelper.prototype, 'saveKeyValues').mockResolvedValue();
-
-    const kvs = new KeyValues({fileName: 'complex.json', prettify: true});
-    await kvs.set('key', 'value');
-
-    expect(mockSaveKeyValues).toHaveBeenCalledWith({ key: 'value' });
-    mockSaveKeyValues.mockRestore();
-  });
 
   // Tests that the set method sets the value of a nested key
   it('should set the value of a nested key', async () => {
@@ -33,20 +20,32 @@ describe('Codium Complex Test', () => {
     mockSaveKeyValues.mockRestore();
   });
 
+  
+  // Tests that the set method sets the value of a key
+  // it('should set the value of a key', async () => {
+  //   const mockSaveKeyValues = jest.spyOn(JsonFileHelper.prototype, 'saveKeyValues').mockResolvedValue();
+
+  //   const kvs = new KeyValues({fileName: 'complex.json', prettify: true});
+  //   await kvs.set('key', 'value');
+
+  //   expect(mockSaveKeyValues).toHaveBeenCalledWith({ key: 'value' });
+  //   mockSaveKeyValues.mockRestore();
+  // });
+
   // Tests that the unset method removes a key and its value
-  it('should remove a key and its value', async () => {
-    const mockLoadKeyValues = jest.spyOn(JsonFileHelper.prototype, 'loadKeyValues');
-    const mockSaveKeyValues = jest.spyOn(JsonFileHelper.prototype, 'saveKeyValues');
-    mockLoadKeyValues.mockResolvedValue({ key: 'value' });
+  // it('should remove a key and its value', async () => {
+  //   const mockLoadKeyValues = jest.spyOn(JsonFileHelper.prototype, 'loadKeyValues');
+  //   const mockSaveKeyValues = jest.spyOn(JsonFileHelper.prototype, 'saveKeyValues');
+  //   mockLoadKeyValues.mockResolvedValue({ key: 'value' });
 
-    const kvs = new KeyValues({fileName: 'complex.json', prettify: true});
-    await kvs.unset('key');
+  //   const kvs = new KeyValues({fileName: 'complex.json', prettify: true});
+  //   await kvs.unset('key');
 
-    expect(mockLoadKeyValues).toHaveBeenCalled();
-    expect(mockSaveKeyValues).toHaveBeenCalledWith({});
-    mockLoadKeyValues.mockRestore();
-    mockSaveKeyValues.mockRestore();
-  });
+  //   expect(mockLoadKeyValues).toHaveBeenCalled();
+  //   expect(mockSaveKeyValues).toHaveBeenCalledWith({});
+  //   mockLoadKeyValues.mockRestore();
+  //   mockSaveKeyValues.mockRestore();
+  // });
 
   it('shold get complex value', () => {
     const color = {

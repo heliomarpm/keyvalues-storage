@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import { KeyValues } from '../src';
 
 const options: Options = {

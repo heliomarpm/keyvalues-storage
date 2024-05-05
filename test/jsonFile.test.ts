@@ -3,12 +3,6 @@ import fs from 'node:fs';
 import { KeyValues } from '../src/keyvalues';
 import { JsonFileHelper } from '../src/internal/JsonFileHelper';
 
-class TestClass {
-  public file() {
-    return 'keyvalues.json';
-  }
-}
-
 describe('KeyValues', () => {
   it('healthCheck', () => {
     expect(1).toBe(1);
