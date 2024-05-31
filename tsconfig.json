@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "useDefineForClassFields": true,
-    "forceConsistentCasingInFileNames": true, 
+    "forceConsistentCasingInFileNames": true,
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "./dist",

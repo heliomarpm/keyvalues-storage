@@ -8,29 +8,60 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
+      # PUBLICANDO EM NPM
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '>=16.8.0'
+          node-version: '>=20'
+          registry-url: https://registry.npmjs.org/
+          scope: "@heliomarpm"
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Publish Lib
-        uses: JS-DevTools/npm-publish@v2
+      - name: Test & Build
+        run: |
+          npm run test
+          npm run build
+
+      - name: Publish NPM Package
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+
+      # PUBLICANDO EM GITHUB PACKAGE
+      - name: Setup Node GPR
+        uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.NPM_TOKEN }}
-          strategy: all
+          node-version: '>=20'
+          registry-url: https://npm.pkg.github.com/
+          scope: "@heliomarpm"
 
-    # - uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '>=18'
-    #     registry-url: https://registry.npmjs.org/
+      - name: Install Dependencies
+        run: npm ci
 
-    # - run: npm publish
-    #   env:
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build
+        run: npm run build
+
+      - name: Publish GPR
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      # # ISSO PUBLICOU NO NPM
+      # - name: Publish Lib
+      #   uses: JS-DevTools/npm-publish@v3
+      #   with:
+      #     token: ${{ secrets.NPM_TOKEN }}
+      #     strategy: all
+

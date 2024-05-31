@@ -8,7 +8,6 @@ export const DEFAULT_DIR_NAME = 'localdb';
 export const DEFAULT_FILE_NAME = 'keyvalues.json';
 
 export class JsonFileHelper {
-
   options: Options;
 
   constructor(options: Options) {
@@ -24,7 +23,7 @@ export class JsonFileHelper {
    * @internal
    */
   private getJsonDirPath(): string {
-    let dir = (this.options.dir ?? path.resolve(DEFAULT_DIR_NAME)).trim();
+    const dir = (this.options.dir ?? path.resolve(DEFAULT_DIR_NAME)).trim();
     return dir === '' ? './' : dir;
   }
 
@@ -54,7 +53,7 @@ export class JsonFileHelper {
     const filePath = this.getJsonFilePath();
 
     return new Promise((resolve, reject) => {
-      fs.stat(filePath, (err: any) => {
+      fs.stat(filePath, (err) => {
         if (err) {
           if (err.code === 'ENOENT') {
             this.saveKeyValues({}).then(resolve, reject);
@@ -79,7 +78,8 @@ export class JsonFileHelper {
 
     try {
       fs.statSync(filePath);
-    } catch (err: any) {
+    } catch (ex) {
+      const err = ex as NodeJS.ErrnoException;
       if (err.code === 'ENOENT') {
         this.saveKeyValuesSync({});
       } else {
@@ -89,7 +89,7 @@ export class JsonFileHelper {
   }
 
   /**
-   * Ensures that the keyvalues directory exists. If it does
+   * Ensures that the KeyValues directory exists. If it does
    * not exist, then it is created.
    *
    * @returns A promise which resolves when the keyvalues dir exists.
@@ -99,7 +99,7 @@ export class JsonFileHelper {
     const dirPath = this.getJsonDirPath();
 
     return new Promise((resolve, reject) => {
-      fs.stat(dirPath, (err: any) => {
+      fs.stat(dirPath, (err) => {
         if (err) {
           if (err.code === 'ENOENT') {
             fs.mkdir(dirPath, { recursive: true }, (error: any) => {
@@ -117,9 +117,10 @@ export class JsonFileHelper {
   }
 
   /**
-   * Ensures that the keyvalues directory exists. If it does
-   * not exist, then it is created.
+   * Ensures that the KeyValues directory exists synchronously. If it does not exist,
+   * then it is created.
    *
+   * @returns {void}
    * @internal
    */
   private ensureJsonDirSync(): void {
@@ -127,7 +128,9 @@ export class JsonFileHelper {
 
     try {
       fs.statSync(dirPath);
-    } catch (err: any) {
+    } catch (ex) {
+      const err = ex as NodeJS.ErrnoException;
+
       if (err.code === 'ENOENT') {
         fs.mkdirSync(dirPath, { recursive: true });
         // mkdirp.sync(dirPath);
@@ -138,10 +141,11 @@ export class JsonFileHelper {
   }
 
   /**
-   * First ensures that the keyvalues file exists then loads
-   * the keyvalues from the disk.
+   * Asynchronously loads key-value pairs from a JSON file. First ensures that the file exists,
+   * then reads the file and parses its contents into a JavaScript object.
    *
-   * @returns A promise which resolves with the keyvalues object.
+   * @template T - The type of the key-value pairs.
+   * @return {Promise<T>} A promise that resolves with the key-value pairs.
    * @internal
    */
   public async loadKeyValues<T extends valueTypes>(): Promise<T> {
@@ -149,15 +153,15 @@ export class JsonFileHelper {
     const filePath = this.getJsonFilePath();
 
     return await new Promise((resolve, reject) => {
-      fs.readFile(filePath, 'utf-8', (err: any, data: string | any[]) => {
+      fs.readFile(filePath, 'utf-8', (err, data: string | any[]) => {
         if (err) {
           reject(err);
         } else {
           try {
             // resolve(JSON.parse(data.length ? data : "{}"));
-            resolve(JSON.parse(data ? (Array.isArray(data) ? data.join('') : data) : "{}"));
-          } catch (err_1) {
-            reject(err_1);
+            resolve(JSON.parse(data ? (Array.isArray(data) ? data.join('') : data) : '{}'));
+          } catch (error) {
+            reject(error);
           }
         }
       });
@@ -165,10 +169,10 @@ export class JsonFileHelper {
   }
 
   /**
-   * First ensures that the keyvalues file exists then loads
-   * the keyvalues from the disk.
+   * Loads the key-value pairs synchronously from the JSON file.
    *
-   * @returns The keyvalues object.
+   * @template T - The type of the key-value pairs.
+   * @returns {T} - The loaded key-value pairs.
    * @internal
    */
   public loadKeyValuesSync<T extends valueTypes>(): T {
@@ -176,14 +180,14 @@ export class JsonFileHelper {
     const filePath = this.getJsonFilePath();
     const data = fs.readFileSync(filePath, 'utf-8');
 
-    return JSON.parse(data.length ? data : "{}");
+    return JSON.parse(data.length ? data : '{}');
   }
 
   /**
    * Saves the keyvalues to the disk.
    *
-   * @param obj The keyvalues object to save.
-   * @returns A promise which resolves when the keyvalues have been saved.
+   * @param {T} obj - The keyvalues object to save.
+   * @return {Promise<void>} A promise that resolves when the keyvalues have been saved.
    * @internal
    */
   public async saveKeyValues<T>(obj: T): Promise<void> {
@@ -195,23 +199,21 @@ export class JsonFileHelper {
     return await new Promise((resolve, reject) => {
       if (this.options.atomicSave) {
         writeFileAtomic(filePath, data, (err: any) => {
-          return err
-            ? reject(err)
-            : resolve();
+          return err ? reject(err) : resolve();
         });
       } else {
         fs.writeFile(filePath, data, (err_1: any) => {
-          return err_1 ? reject(err_1)
-            : resolve();
+          return err_1 ? reject(err_1) : resolve();
         });
       }
     });
   }
 
   /**
-   * Saves the keyvalues to the disk.
+   * Saves the keyvalues to the disk synchronously.
    *
-   * @param obj The keyvalues object to save.
+   * @param {T} obj - The keyvalues object to save.
+   * @return {void} This function does not return anything.
    * @internal
    */
   public saveKeyValuesSync<T>(obj: T): void {
@@ -227,5 +229,4 @@ export class JsonFileHelper {
       fs.writeFileSync(filePath, data);
     }
   }
-
 }

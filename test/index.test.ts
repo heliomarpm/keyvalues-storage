@@ -1,12 +1,6 @@
+import fs from 'node:fs';
 import { KeyValues } from '../src';
 
-const options: Options = {
-  atomicSave: false,
-  dir: 'localdb/data',
-  fileName: 'settings.json',
-  prettify: true,
-  numSpaces: 4,
-};
 const defaultOptions: Options = {
   atomicSave: true,
   dir: 'localdb',
@@ -15,7 +9,13 @@ const defaultOptions: Options = {
   numSpaces: 2,
 };
 
-const kvs = new KeyValues(options);
+const options: Options = {
+  atomicSave: false,
+  dir: 'localdb/data',
+  fileName: 'settings.json',
+  prettify: true,
+  numSpaces: 4,
+};
 
 const complex = {
   name: 'complex',
@@ -47,9 +47,30 @@ const persons: IPerson[] = [
 // console.log(JSON.stringify(p.toString()));
 // console.log('age', t.age);
 
+const deleteFiles = () => {
+    //delete json file
+    const kvs = new KeyValues(options);
+    if (fs.existsSync(kvs.file())) {
+      fs.unlinkSync(kvs.file());
+    }
+
+    const kvsDefault = new KeyValues(defaultOptions);
+    if (fs.existsSync(kvsDefault.file())) {
+      fs.unlinkSync(kvsDefault.file());
+    }
+};
+
 describe('KeyValues Default Test', () => {
-  it('healthCheck', () => {
-    expect(1).toBe(1);
+  let kvs: KeyValues;
+
+  beforeAll(() => {
+    deleteFiles();
+
+    kvs = new KeyValues(options);
+  });
+
+  afterAll(() => {
+    // deleteFiles();
   });
 
   // test('test set symbol', () => {
@@ -75,6 +96,7 @@ describe('KeyValues Default Test', () => {
     await kvs.set({ propAsync: true });
     expect(await kvs.get('propAsync')).toBeTruthy();
   });
+
   it('test set/get property', () => {
     kvs.setSync({ prop: false });
     expect(kvs.getSync('prop')).toBeFalsy();
@@ -146,6 +168,7 @@ describe('KeyValues Default Test', () => {
     const r = kvs.getSync<IPerson>('person');
     expect(r.name).toEqual('John Doe');
   });
+
   it('test set/get of array map object', () => {
     const mapPerson = persons.map((person) => ({ ...person }));
     kvs.setSync('persons', mapPerson);
@@ -200,6 +223,7 @@ describe('KeyValues Default Test', () => {
     const r = await kvs.has('string');
     expect(r).toBeTruthy();
   });
+
   it('test unset propertie async', async () => {
     await kvs.unset('string');
     const r = await kvs.has('string');
@@ -209,6 +233,7 @@ describe('KeyValues Default Test', () => {
   it('test has propertie', () => {
     expect(kvs.hasSync('complex')).toBeTruthy();
   });
+
   it('test unset propertie', () => {
     kvs.unsetSync('complex');
     expect(kvs.hasSync('complex')).toBeFalsy();
@@ -221,10 +246,12 @@ describe('KeyValues Default Test', () => {
   it('test unset undefined propertie', () => {
     expect(kvs.unsetSync('undefined')).toBeFalsy();
   });
+
   it('test unset/get ', () => {
     kvs.unsetSync('boolean');
     expect(kvs.getSync('boolean')).toBeUndefined();
   });
+
   it('test unsetAll/get all async', async () => {
     await kvs.unset();
     expect(kvs.getSync()).toEqual({});

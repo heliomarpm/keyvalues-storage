@@ -37,11 +37,18 @@ const defaultOptions: Options = {
  * await keyValues.unset('color.name');
  */
 export class KeyValues {
+
+  /**
+   * @internal
+   */
   private options: Options = {
     ...defaultOptions,
   };
 
-  private fnc: JsonFileHelper;
+  /**
+   * @internal
+   */
+  private jsonHelper: JsonFileHelper;
 
 
   /**
@@ -72,7 +79,7 @@ export class KeyValues {
     if (options)
       this.options = { ...this.options, ...options };
 
-    this.fnc = new JsonFileHelper(this.options);
+    this.jsonHelper = new JsonFileHelper(this.options);
   }
 
   /**
@@ -103,7 +110,7 @@ export class KeyValues {
    * ```
    */
   file(): string {
-    return this.fnc.getJsonFilePath();
+    return this.jsonHelper.getJsonFilePath();
   }
 
   /**
@@ -164,7 +171,7 @@ export class KeyValues {
    * ```
    */
   async has(keyPath: KeyPath): Promise<boolean> {
-    const obj = await this.fnc.loadKeyValues();
+    const obj = await this.jsonHelper.loadKeyValues();
 
     return _has(obj, keyPath);
   }
@@ -212,7 +219,7 @@ export class KeyValues {
    * ```
    */
   hasSync(keyPath: KeyPath): boolean {
-    const obj = this.fnc.loadKeyValuesSync();
+    const obj = this.jsonHelper.loadKeyValuesSync();
 
     return _has(obj, keyPath);
   }
@@ -285,7 +292,7 @@ export class KeyValues {
   async get<T extends valueTypes>(keyPath: KeyPath): Promise<T>;
 
   async get<T extends valueTypes>(keyPath?: KeyPath): Promise<T> {
-    const obj = await this.fnc.loadKeyValues<T>();
+    const obj = await this.jsonHelper.loadKeyValues<T>();
 
     if (keyPath) {
       return _get(obj, keyPath);
@@ -360,7 +367,7 @@ export class KeyValues {
   getSync<T extends valueTypes>(keyPath: KeyPath): T;
 
   getSync<T extends valueTypes>(keyPath?: KeyPath): T {
-    const obj = this.fnc.loadKeyValuesSync<T>();
+    const obj = this.jsonHelper.loadKeyValuesSync<T>();
 
     if (keyPath) {
       return _get(obj, keyPath);
@@ -435,14 +442,14 @@ export class KeyValues {
     if (args.length === 1) {
       const [value] = args;
 
-      return this.fnc.saveKeyValues(value);
+      return this.jsonHelper.saveKeyValues(value);
     } else {
       const [keyPath, value] = args;
-      const obj = await this.fnc.loadKeyValues<T>();
+      const obj = await this.jsonHelper.loadKeyValues<T>();
 
       _set(obj as object, keyPath, value);
 
-      return this.fnc.saveKeyValues(obj);
+      return this.jsonHelper.saveKeyValues(obj);
     }
   }
 
@@ -508,14 +515,14 @@ export class KeyValues {
     if (args.length === 1) {
       const [value] = args;
 
-      this.fnc.saveKeyValuesSync(value);
+      this.jsonHelper.saveKeyValuesSync(value);
     } else {
       const [keyPath, value] = args;
-      const obj = this.fnc.loadKeyValuesSync<T>();
+      const obj = this.jsonHelper.loadKeyValuesSync<T>();
 
       _set(obj as object, keyPath, value);
 
-      this.fnc.saveKeyValuesSync(obj);
+      this.jsonHelper.saveKeyValuesSync(obj);
     }
   }
 
@@ -577,14 +584,14 @@ export class KeyValues {
 
   async unset(keyPath?: KeyPath): Promise<void> {
     if (keyPath) {
-      const obj = await this.fnc.loadKeyValues();
+      const obj = await this.jsonHelper.loadKeyValues();
 
       _unset(obj, keyPath);
 
-      return this.fnc.saveKeyValues(obj);
+      return this.jsonHelper.saveKeyValues(obj);
     } else {
       // Unset all keyValues by saving empty object.
-      return this.fnc.saveKeyValues({});
+      return this.jsonHelper.saveKeyValues({});
     }
   }
 
@@ -642,14 +649,14 @@ export class KeyValues {
 
   unsetSync(keyPath?: KeyPath): void {
     if (keyPath) {
-      const obj = this.fnc.loadKeyValuesSync();
+      const obj = this.jsonHelper.loadKeyValuesSync();
 
       _unset(obj, keyPath);
 
-      this.fnc.saveKeyValuesSync(obj);
+      this.jsonHelper.saveKeyValuesSync(obj);
     } else {
       // Unset all keyValues by saving empty object.
-      this.fnc.saveKeyValuesSync({});
+      this.jsonHelper.saveKeyValuesSync({});
     }
   }
 }
