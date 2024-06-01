@@ -1,5 +1,5 @@
-<span id="top"></span>
-<h1 align="center">
+<div id="top" align="center" style="text-align:center;">
+<h1>
   <br>🎲 KeyValues Storage
 
   [![DeepScan grade][url-deepscan-badge]][url-deepscan]
@@ -13,7 +13,7 @@
   <!-- ![jest](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/dev/jest) -->
 </h1>
 
-<p align="center">
+<p>
   <!-- PixMe -->
   <a href="https://www.pixme.bio/heliomarpm" target="_blank" rel="noopener noreferrer">
     <img alt="pixme url" src="https://img.shields.io/badge/donate%20on-pixme-1C1E26?style=for-the-badge&labelColor=1C1E26&color=28f4f4"/>
@@ -39,6 +39,7 @@
     <img alt="license url" src="https://img.shields.io/badge/license%20-MIT-1C1E26?style=for-the-badge&labelColor=1C1E26&color=61ffca"/>
   </a>
 </p>
+</div>
 
 ## Summary
 The `KeyValues Storage` library is a utility for managing key-value pairs and storing them in a JSON file. It provides methods for setting, getting, checking existence, and removing key-value pairs. This document provides an overview of the library and its usage.
