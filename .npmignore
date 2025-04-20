@@ -1,9 +1,11 @@
+.*
+*.map
+docs
 src
 test
+tests
 coverage
-tsconfig.json
+tsconfig.*
+jest.config.js
+vitest.config.js
 artigos.txt
-cmd
-licence
-docs
-*.map

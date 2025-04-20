@@ -10,12 +10,15 @@
     "declaration": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+		"paths": {
+			"@/*": ["./src/*"]
+		}
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "**/*.test.ts", "**/*.spec.ts"
+    "**/*.test.ts", "**/*.spec.ts", "test/**/*", "node_modules"
   ]
 }
