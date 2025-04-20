@@ -1,20 +1,56 @@
-## Summary of the Pull Request
-Thanks for contributing!
+## 📋 Description
 
-Please be sure you are following the guidelines at 
-https://github.com/heliomarpm/keyvalues-storage/blob/master/docs/CONTRIBUTING.md
+Please make sure you're following the [contribution guidelines](../docs/CONTRIBUTING.md).
 
-**What is this about:**
+Clearly describe the purpose of this Pull Request. What was implemented, fixed, or changed?
 
-**What is included in the PR:** 
+> Example: Fixes typos in documentation and improves code examples in README.
 
-**How does someone test / validate:** 
+---
 
-## Quality ChecklistV
+## ✅ Type of Change
 
-- [ ] **Linked issue:** #xxx
-- [ ] **Tests:** Added/updated and all pass
-- [ ] **Localization:** All end user facing strings can be localized
-- [ ] **Docs:** Added/ updated
-<!-- - [ ] **Communication:** I've discussed this with core contributors in the issue.  -->
-<!-- - [ ] **Installer:** Added/updated and all pass -->
+Check all that apply:
+
+- [ ] 🐛 Bug fix (non-breaking fix for an issue)
+- [ ] ✨ New feature (non-breaking feature addition)
+- [ ] ⚠️ Breaking change (changes that break existing functionality)
+- [ ] 🧹 Code improvement or refactoring
+- [ ] 📝 Documentation update
+- [ ] 🔧 Other (please describe below)
+
+---
+
+## 🧪 How to Test
+
+Provide clear steps to test this PR. If applicable, link to examples, screenshots, or test cases.
+
+---
+
+## 🔗 Related Issue(s)
+
+Reference any related issues:
+
+> Example: Closes #42, Fixes #99
+
+---
+
+## 📸 Screenshots (Optional)
+
+Attach screenshots, recordings, or GIFs to help visualize the changes.
+
+---
+
+## 🚨 Checklist
+
+Please confirm the following before submitting:
+
+- [ ] Code follows the project's coding standards
+- [ ] Tests were added or updated
+- [ ] All new and existing tests pass
+- [ ] Documentation was updated if needed
+- [ ] Changes were tested manually or locally
+
+---
+
+Thanks for your contribution! 💪🚀

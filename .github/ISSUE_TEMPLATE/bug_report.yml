@@ -1,82 +1,94 @@
-name: '🐛 Bug Report'
+name: "🐛 Bug Report"
 description: Report a reproducible bug.
 labels:
-- possible-bug
-- needs-triage
+  - possible-bug
+  - needs-triage
 body:
   - type: markdown
     attributes:
-      value: 'Please read and follow the instructions before submitting an issue:'
+      value: "Please read and follow the instructions before submitting an issue:"
+
   - type: markdown
     attributes:
-      value: |
-        - Read all our documentation, especially the [README](https://github.com/heliomarpm/keyvalues-storage/blob/master/README.md). It may contain information that helps you solve your issue.
-        - Ensure your issue isn't already [reported](https://github.com/heliomarpm/keyvalues-storage/issues?utf8=%E2%9C%93&q=is%3Aissue).
-        - Ensure it isn't already fixed in the latest KVS version.
+    value: |
+      - Check the project's documentation and [README](../../README.md) — it may already provide guidance or a workaround for your issue.
+      - Ensure your issue hasn't already been [reported](../../issues).
+      - Make sure your bug hasn't already been fixed in the latest version.
+
   - type: markdown
     attributes:
-      value: '⚠️👆 Feel free to these instructions before submitting the issue 👆⚠️'
+      value: "⚠️👆 Please read the instructions above before submitting the issue 👆⚠️"
+
   - type: textarea
     id: description
     attributes:
-      label: 'Describe the bug'
+      label: "Describe the bug"
       description: A clear and concise description of what the bug is.
     validations:
       required: true
+
   - type: textarea
     id: reproduce
     attributes:
-      label: 'To Reproduce'
+      label: "To Reproduce"
       description: |
-        Code snippet to reproduce, ideally if you can provide a live example in https://codesandbox.io/ sandbox or a repository that illustrates the issue.
-        **If your problem is not reproducible, please file under Support or Usage Question**
+        Steps or code snippet to reproduce the bug.
+        If possible, provide a live example (e.g., via [CodeSandbox](https://codesandbox.io/), [StackBlitz](https://stackblitz.com/), or a GitHub repo).
+        **If your problem is not reproducible, consider asking a question instead.**
     validations:
       required: false
+
   - type: textarea
     id: code-snippet
     attributes:
-      label: 'Code snippet'
+      label: "Code snippet"
       render: js
     validations:
       required: false
+
   - type: textarea
     id: expected
     attributes:
-      label: 'Expected behavior'
+      label: "Expected behavior"
       description: A clear and concise description of what you expected to happen.
     validations:
       required: false
+
   - type: markdown
     attributes:
-      value: Environment
+      value: "**Environment**"
 
   - type: input
     id: node-version
     attributes:
-      label: 'Node.js Version'
-      description: 'node --version'
-      placeholder: 'e.g. 13.0.1'
+      label: "Node.js Version (if applicable)"
+      description: "Output of: node --version"
+      placeholder: "e.g. 20.10.0"
+
   - type: input
     id: os
     attributes:
-      label: 'OS'
-      placeholder: 'e.g. iOS 16.0.2, OSX 12.6.0'
+      label: "Operating System"
+      placeholder: "e.g. Windows 11, macOS 14, Ubuntu 22.04"
+
   - type: textarea
     id: other-version
     attributes:
-      label: 'Additional Library Versions'
+      label: "Additional Library or Framework Versions"
       placeholder: |
         e.g.
-        React 16.7,
-        React Native 0.58.0
+        React 18.0.0
+        Vue 3.4.15
+        Angular 17.1.0
       render: bash
     validations:
       required: false
+
   - type: textarea
     id: additional-context
     attributes:
-      label: 'Additional context/Screenshots'
-      description: Add any other context about the problem here. If applicable, add screenshots to help explain.
+      label: "Additional context/Screenshots"
+      description: Add any other context about the problem. If applicable, include screenshots.
       render: bash
     validations:
       required: false

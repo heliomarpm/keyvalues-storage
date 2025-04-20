@@ -1,74 +1,33 @@
-name: '🤔 Support or Usage Question'
+name: "🤔 Support or Usage Question"
 description: Get help using KVS.
 labels:
-- question
-- needs-triage
+  - question
+  - needs-triage
 body:
   - type: markdown
     attributes:
-      value: 'Please read and follow the instructions before submitting an issue:'
-  - type: markdown
-    attributes:
       value: |
-        - Read all our documentation, especially the [README](https://github.com/heliomarpm/keyvalues-storage/blob/master/README.md). It may contain information that helps you solve your issue.
-        - Ensure your issue isn't already [reported](https://github.com/heliomarpm/keyvalues-storage/issues?utf8=%E2%9C%93&q=is%3Aissue).
+        Have a question? You're in the right place! Before submitting, check if it's already answered in:
+        - [Issues](../../issues)
+        - [Discussions](../../discussions) (if available)
+        - The project's [README](../../README.md) and documentation
 
   - type: markdown
     attributes:
-      value: '⚠️👆 Feel free to these instructions before submitting the issue 👆⚠️'
+      value: "⚠️👆 Please read the instructions above before submitting the issue 👆⚠️"
+
   - type: textarea
-    id: description
+    id: question
     attributes:
-      label: 'Describe the issue'
-      description: A clear and concise description of what the issue is.
+      label: "Your question"
+      description: Provide as much detail as possible so we can assist you effectively.
     validations:
       required: true
-  - type: textarea
-    id: example
-    attributes:
-      label: 'Example Code'
-      description: Code snippet to illustrate your question
-      render: js
-    validations:
-      required: false
-  - type: textarea
-    id: expected
-    attributes:
-      label: 'Expected behavior'
-      description: A clear and concise description of what you expected to happen.
-    validations:
-      required: false
-  - type: markdown
-    attributes:
-      value: Environment
 
-  - type: input
-    id: node-version
-    attributes:
-      label: 'Node.js Version'
-      description: 'node --version'
-      placeholder: 'e.g. 16.8.1'
-  - type: input
-    id: os
-    attributes:
-      label: 'OS'
-      placeholder: 'e.g. iOS 16.0.2, OSX 12.6.0'
   - type: textarea
-    id: other-version
+    id: context
     attributes:
-      label: 'Additional Library Versions'
-      placeholder: |
-        e.g.
-        React 16.7,
-        React Native 0.58.0
-      render: bash
-    validations:
-      required: false
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: 'Additional context/Screenshots'
-      description: Add any other context about the problem here. If applicable, add screenshots to help explain.
-      render: bash
+      label: "Context"
+      description: Share relevant code, configuration, or environment info.
     validations:
       required: false

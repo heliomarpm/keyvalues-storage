@@ -1,32 +1,43 @@
-name: '📝 Documentation'
+name: "📝 Documentation"
 description: Report an error or area that needs clarification.
 labels:
-- documentation
-- needs-triage
+  - documentation
+  - needs-triage
 body:
   - type: markdown
     attributes:
-      value: 'If you found an area that needs clarification, feel free to open a PR or list the section/content that could be improved below'
+      value: |
+        If you found an area that needs clarification or an improvement in the documentation, feel free to open a pull request or describe the section/content that could be improved below.
+
   - type: markdown
     attributes:
-      value: '⚠️👆 Feel free to these instructions before submitting the issue 👆⚠️'
+      value: "⚠️👆 Please read the instructions above before submitting the issue 👆⚠️"
+
   - type: textarea
     id: content
     attributes:
-      label: 'Section/Content To Improve'
-      description: Quote or link to section
+      label: "Section/Content To Improve"
+      description: Quote the section or provide a link to the part of the documentation that needs improvement.
     validations:
       required: true
+
   - type: textarea
     id: solution
     attributes:
-      label: 'Suggested Improvement'
-      description: Identify what is confusing or incorrect and what could make it better
+      label: "Suggested Improvement"
+      description: Describe what is confusing, outdated, or incorrect, and suggest what could make it better.
     validations:
       required: true
+
   - type: textarea
     id: files
     attributes:
-      label: 'Relevant File(s)'
-      placeholder: e.g. README.md
+      label: "Relevant File(s)"
+      description: List relevant files if known (e.g., README.md, CONTRIBUTING.md).
+      placeholder: |
+        e.g.
+        README.md
+        docs/getting-started.md
       render: bash
+    validations:
+      required: false
