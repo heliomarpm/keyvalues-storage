@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": {
-		"name": "Heliomar P. Marques",
-		"email": "heliomarpm@proton.me",
-		"url": "https://navto.me/heliomarpm"
-	},
+    "name": "Heliomar P. Marques",
+    "email": "heliomarpm@proton.me",
+    "url": "https://navto.me/heliomarpm"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/heliomarpm/keyvalues-storage/issues"
@@ -37,25 +37,35 @@
     "storage"
   ],
   "scripts": {
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "test": "jest --detectOpenHandles --silent=false",
+    "test:c": "jest --detectOpenHandles --coverage",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.prod.json",
-    "test": "jest",
-    "test:c": "jest --coverage",
-    "pub:release": "node ./cmd/modules/release/index.js"
+    "pub:release": "node ./node_modules/gh_deploy/index.mjs"
   },
   "dependencies": {
     "lodash": "^4.17.21",
     "write-file-atomic": "^5.0.1"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/jest": "^29.5.12",
     "@types/write-file-atomic": "^4.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.30.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "gh_deploy": "github:heliomarpm/gh_deploy",
     "jest": "^29.7.0",
-    "open": "^10.1.0",
-    "semver": "^7.6.0",
-    "ts-jest": "^29.1.2"
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.2.4"
   },
   "peerDependencies": {
-    "@types/lodash": "^4.17.1",
+    "@types/lodash": "^4.17.7",
     "@types/write-file-atomic": "^4.0.3"
   }
 }
