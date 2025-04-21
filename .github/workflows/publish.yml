@@ -1,4 +1,5 @@
-name: Publish
+name: Publish Package
+
 on:
   push:
     tags: ["*"]
@@ -6,62 +7,70 @@ on:
       - 'package.json'
 
 jobs:
-  publish:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '>=20.x'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm test
+      # Adicionando um step que pode capturar a falha de algum teste
+      - name: Show test error
+        if: failure()
+        run: echo "Tests Failed!"
+
+  publish-npm:
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
+      id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # PUBLICANDO EM NPM
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '>=20'
-          registry-url: https://registry.npmjs.org/
-          scope: "@heliomarpm"
+          node-version: '>=20.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Test & Build
-        run: |
-          npm run test
-          npm run build
-
-      - name: Publish NPM Package
-        run: npm publish --access=public
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Show successfull publish
+        if: success()
+        run: echo "Package published successfully on NPM"
 
-      # PUBLICANDO EM GITHUB PACKAGE
-      - name: Setup Node GPR
-        uses: actions/setup-node@v4
+  publish-gpr:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '>=20'
-          registry-url: https://npm.pkg.github.com/
-          scope: "@heliomarpm"
+          node-version: '20.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: ${{ github.repository_owner }}
+          cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci
+      - run: npm ci
+      - run: npm run build
 
-      - name: Build
-        run: npm run build
-
-      - name: Publish GPR
+      - name: Publish to GitHub Packages
         run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-      # # ISSO PUBLICOU NO NPM
-      # - name: Publish Lib
-      #   uses: JS-DevTools/npm-publish@v3
-      #   with:
-      #     token: ${{ secrets.NPM_TOKEN }}
-      #     strategy: all
-
+      - name: Show successfull publish
+        if: success()
+        run: echo "Package published successfully on GPR"
