@@ -11,8 +11,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        - Check the project's documentation and [README](../../README.md) — it may already provide guidance or a workaround for your issue.
-        - Ensure your issue hasn't already been [reported](../../issues).
+        - Check the project's documentation and [README](README.md) — it may already provide guidance or a workaround for your issue.
+        - Ensure your issue hasn't already been [reported](./issues).
         - Make sure your bug hasn't already been fixed in the latest version.
   
   - type: markdown
