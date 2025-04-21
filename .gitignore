@@ -1,8 +1,9 @@
 node_modules
-localdb
-data
-dist
-lib
-tmp
-coverage
 .qodo
+dist
+test/__snapshots__
+coverage
+lib
+data
+localdb
+tmp
