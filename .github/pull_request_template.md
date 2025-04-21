@@ -1,6 +1,6 @@
 ## 📋 Description
 
-Please make sure you're following the [contribution guidelines](../docs/CONTRIBUTING.md).
+Please make sure you're following the [contribution guidelines](./blob/main/docs/CONTRIBUTING.md).
 
 Clearly describe the purpose of this Pull Request. What was implemented, fixed, or changed?
 
