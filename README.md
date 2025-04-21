@@ -15,12 +15,12 @@
 
 <p>
   <!-- PixMe -->
-  <a href="https://www.pixme.bio/heliomarpm" target="_blank" rel="noopener noreferrer">
+  <!-- <a href="https://www.pixme.bio/heliomarpm" target="_blank" rel="noopener noreferrer">
     <img alt="pixme url" src="https://img.shields.io/badge/donate%20on-pixme-1C1E26?style=for-the-badge&labelColor=1C1E26&color=28f4f4"/>
-  </a>
+  </a> -->
   <!-- PayPal -->
   <a href="https://bit.ly/paypal-sponsor-heliomarpm" target="_blank" rel="noopener noreferrer">
-    <img alt="paypal url" src="https://img.shields.io/badge/paypal-1C1E26?style=for-the-badge&labelColor=1C1E26&color=0475fe"/>
+    <img alt="paypal url" src="https://img.shields.io/badge/donate%20on-paypal-1C1E26?style=for-the-badge&labelColor=1C1E26&color=0475fe"/>
   </a>
   <!-- Ko-fi -->
   <a href="https://ko-fi.com/heliomarpm" target="_blank" rel="noopener noreferrer">
@@ -30,14 +30,19 @@
   <a href="https://liberapay.com/heliomarpm" target="_blank" rel="noopener noreferrer">
      <img alt="liberapay url" src="https://img.shields.io/badge/liberapay-1C1E26?style=for-the-badge&labelColor=1C1E26&color=f6c915"/>
   </a>
-  <!-- Version -->
-  <a href="https://github.com/heliomarpm/keyvalues-storage/releases" target="_blank" rel="noopener noreferrer">
-     <img alt="releases url" src="https://img.shields.io/github/v/release/heliomarpm/keyvalues-storage?style=for-the-badge&labelColor=1C1E26&color=2ea043"/>
-  </a>  
-  <!-- License -->
-  <a href="https://github.com/heliomarpm/keyvalues-storage/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
-    <img alt="license url" src="https://img.shields.io/badge/license%20-MIT-1C1E26?style=for-the-badge&labelColor=1C1E26&color=61ffca"/>
+  <!-- GitHub Sponsors -->
+  <a href="https://github.com/sponsors/heliomarpm" target="_blank" rel="noopener noreferrer">
+    <img alt="github sponsors url" src="https://img.shields.io/badge/GitHub%20-Sponsor-1C1E26?style=for-the-badge&labelColor=1C1E26&color=db61a2"/>
   </a>
+  <br>
+  <!-- Version -->
+  <!-- <a href="https://github.com/heliomarpm/keyvalues-storage/releases" target="_blank" rel="noopener noreferrer">
+     <img alt="releases url" src="https://img.shields.io/github/v/release/heliomarpm/keyvalues-storage?style=for-the-badge&labelColor=1C1E26&color=2ea043"/>
+  </a>   -->
+  <!-- License -->
+  <!-- <a href="https://github.com/heliomarpm/keyvalues-storage/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+    <img alt="license url" src="https://img.shields.io/badge/license%20-MIT-1C1E26?style=for-the-badge&labelColor=1C1E26&color=61ffca"/>
+  </a> -->
 </p>
 </div>
 
@@ -80,41 +85,85 @@ const color =
 {
     "name": "cerulean",
     "code": {
-        "rgb": [0, 179, 230],
-        "hex": "#003BE6"
+				"hex": "#003BE6",
+        "rgb": [0, 179, 230]
     }
 }
 
-// Set a key-values
-kvs.setSync('color', color);
+// Set a key-value
+kvs.setSync(['settings', 'language'], "pt-Br");
+kvs.getSync(['settings', 'language'])	
+// => 'pt-Br'
 
-kvs.getSync('color.name')
-// => 'cerulean'
+// Set/Add a key settings
+kvs.setSync("settings.default", "en");
+kvs.getSync("settings")
+// => { "language": "pt-Br", "default": "en" }
 
-kvs.getSync('color.code.hex')
+kvs.getSync();	
+// => { "settings": { "language": "pt-Br", "default": "en" } }
+
+// replace key settings
+kvs.setSync("settings", { theme: "dark"});
+kvs.getSync("settings")
+// => { "theme": "dark" }
+
+// Added a new key-value
+kvs.setSync("color", color);
+kvs.getSync();
+// => { "theme": "dark", "color": { "name": "cerulean", "code": { "rgb": [0, 179, 230], "hex": "#003BE6" } } }
+
+// Replace all key-values
+kvs.setSync(color);
+kvs.getSync();
+// => { "name": "cerulean", "code": { "rgb": [0, 179, 230], "hex": "#003BE6" } }
+
+// Unset a key-value
+kvs.unsetSync();
+kvs.getSync();
+// => {}
+
+// Set a new key-values
+kvs.setSync("color", color);
+kvs.getSync();	
+// => { "color": { "name": "cerulean", "code": { "rgb": [0, 179, 230], "hex": "#003BE6" } } }
+
+kvs.getSync("color.name")
+// => "cerulean"
+
+kvs.getSync("color.code.hex")
 // => "#003BE6"
 
-kvs.getSync(['color', 'code'])
+kvs.getSync(["color", "code"])
+-- or --
+kvs.getSync("color.code")
 // => { "hex": "#003BE6", "rgb": [0, 179, 230] }
 
-kvs.getSync(['color', 'hue'])
+kvs.getSync(["color", "hue"])
 // => undefined
 
 // Set a key-value pair
-await kvs.set('color.name', 'sapphire');
+await kvs.set("color.name", "sapphire");
 
 // Get the value at a specific key path
-const value = await kvs.get('color.name');
-// => 'sapphire'
+const value = await kvs.get("color.name");
+// => "sapphire"
 
 // Check if a key path exists
-const exists = await kvs.has('color.name');
+const exists = await kvs.has("color.name");
+// => true
 
 // Remove a key-value pair
-await kvs.unset('color.name');
-
-kvs.getSync(); 
+await kvs.unset("color.name");
+await kvs.get(); 
 // => { "code": { "rgb": [0, 179, 230], "hex": "#003BE6" } }
+
+const exists = kvs.hasSync("color.name");
+// => false
+
+kvs.unset().then(() => {
+	console.log("All key-value pairs have been removed.");
+})
 ```
 
 ## Code Analysis
@@ -177,12 +226,12 @@ If you appreciate that, please consider donating to the Developer.
 
 <p>
   <!-- PixMe -->
-  <a href="https://www.pixme.bio/heliomarpm" target="_blank" rel="noopener noreferrer">
+  <!-- <a href="https://www.pixme.bio/heliomarpm" target="_blank" rel="noopener noreferrer">
     <img alt="pixme url" src="https://img.shields.io/badge/donate%20on-pixme-1C1E26?style=for-the-badge&labelColor=1C1E26&color=28f4f4"/>
-  </a>
+  </a> -->
   <!-- PayPal -->
   <a href="https://bit.ly/paypal-sponsor-heliomarpm" target="_blank" rel="noopener noreferrer">
-    <img alt="paypal url" src="https://img.shields.io/badge/paypal-1C1E26?style=for-the-badge&labelColor=1C1E26&color=0475fe"/>
+    <img alt="paypal url" src="https://img.shields.io/badge/donate%20on-paypal-1C1E26?style=for-the-badge&labelColor=1C1E26&color=0475fe"/>
   </a>
   <!-- Ko-fi -->
   <a href="https://ko-fi.com/heliomarpm" target="_blank" rel="noopener noreferrer">
