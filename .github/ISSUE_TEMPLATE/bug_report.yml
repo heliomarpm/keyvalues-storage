@@ -1,8 +1,8 @@
 name: "🐛 Bug Report"
 description: Report a reproducible bug.
 labels:
-  - possible-bug
-  - needs-triage
+- possible-bug
+- needs-triage
 body:
   - type: markdown
     attributes:
