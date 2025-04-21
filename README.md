@@ -83,11 +83,11 @@ const kvs = new KeyValues({
 
 const color =
 {
-    "name": "cerulean",
-    "code": {
-				"hex": "#003BE6",
-        "rgb": [0, 179, 230]
-    }
+  "name": "cerulean",
+  "code": {
+    "hex": "#003BE6",
+    "rgb": [0, 179, 230]
+  }
 }
 
 // Set a key-value
@@ -162,8 +162,8 @@ const exists = kvs.hasSync("color.name");
 // => false
 
 kvs.unset().then(() => {
-	console.log("All key-value pairs have been removed.");
-})
+  console.log("All key-value pairs have been removed.");
+});
 ```
 
 ## Code Analysis
