@@ -48,24 +48,24 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "write-file-atomic": "^5.0.1"
+    "write-file-atomic": "^6.0.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.14",
     "@types/write-file-atomic": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
-    "eslint": "^8.57.1",
+    "eslint": "8.57.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "gh_deploy": "github:heliomarpm/gh_deploy",
     "jest": "^29.7.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
-    "ts-jest": "^29.2.4"
+    "ts-jest": "^29.3.2"
   },
   "peerDependencies": {
-    "@types/lodash": "^4.17.7",
+    "@types/lodash": "^4.17.16",
     "@types/write-file-atomic": "^4.0.3"
   }
 }
