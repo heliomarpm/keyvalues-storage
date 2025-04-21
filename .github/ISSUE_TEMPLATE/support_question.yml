@@ -8,9 +8,9 @@ body:
     attributes:
       value: |
         Have a question? You're in the right place! Before submitting, check if it's already answered in:
-        - [Issues](../../issues)
-        - [Discussions](../../discussions) (if available)
-        - The project's [README](../../README.md) and documentation
+        - [Issues](./issues)
+        - [Discussions](./discussions) (if available)
+        - The project's [README](./blob/main/README.md) and documentation
 
   - type: markdown
     attributes:
