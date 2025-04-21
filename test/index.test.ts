@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 import { KeyValues } from '../src';
 
 const defaultOptions: Options = {
@@ -77,8 +78,9 @@ describe('KeyValues Default Test', () => {
 	it('should return the default path to the json file', () => {
 		const keyValues = new KeyValues();
 		const filePath = keyValues.file();
-		// expect(filePath).toMatch(/\.json$/);
-		expect(filePath).toBe('localdb\\keyvalues.json');
+
+		const expectedPath = path.join('localdb', 'keyvalues.json');
+		expect(filePath).toStrictEqual(expectedPath);
 	});
 
 	it('should reset options object to defaultOptions', () => {
@@ -132,7 +134,7 @@ describe('KeyValues Default Test', () => {
 		expect(kvs.getSync('recObject')).toBeUndefined();
 		expect(kvs.getSync('recDictionary')).toBeUndefined();
 		expect(kvs.getSync('recArray')).not.toBeUndefined();
-		expect(kvs.getSync('recArray')).toMatchSnapshot(['Heliomar', 'Marques']);
+		expect(kvs.getSync('recArray')).toStrictEqual(['Heliomar', 'Marques']);
 
 		kvs.setSync('recNull', Object.values(recNull)[0]);
 		kvs.setSync('recStr', Object.values(recStr)[0]);
@@ -148,7 +150,7 @@ describe('KeyValues Default Test', () => {
 		expect(kvs.getSync('recBool')).not.toBeUndefined();
 		expect(kvs.getSync('recObject')).not.toBeUndefined();
 		expect(kvs.getSync('recDictionary')).not.toBeUndefined();
-		expect(kvs.getSync<string[]>('recArray')).toMatchSnapshot(['Heliomar', 'Marques']);
+		expect(kvs.getSync<string[]>('recArray')).toStrictEqual(['Heliomar', 'Marques']);
 	});
 
 	it('test set/get property Array', () => {
