@@ -1,108 +1,108 @@
 name: "🐛 Bug Report"
 description: Report a reproducible bug.
 labels:
-- possible-bug
-- needs-triage
+  - possible-bug
+  - needs-triage
 body:
-- type: markdown
-  attributes:
-    value: "Please read and follow the instructions before submitting an issue:"
-
-- type: markdown
-  attributes:
-    value: |
-      - Check the project's documentation and [README](../../README.md) — it may already provide guidance or a workaround for your issue.
-      - Ensure your issue hasn't already been [reported](../../issues).
-      - Make sure your bug hasn't already been fixed in the latest version.
-
-- type: markdown
-  attributes:
-    value: "⚠️👆 Please read the instructions above before submitting the issue 👆⚠️"
-
-- type: textarea
-  id: description
-  attributes:
-    label: "Describe the bug"
-    description: A clear and concise description of what the bug is.
-  validations:
-    required: true
-
-- type: textarea
-  id: reproduce
-  attributes:
-    label: "To Reproduce"
-    description: |
-      Steps or code snippet to reproduce the bug.
-      If possible, provide a live example (e.g., via [CodeSandbox](https://codesandbox.io/), [StackBlitz](https://stackblitz.com/), or a GitHub repo).
-      **If your problem is not reproducible, consider asking a question instead.**
-  validations:
-    required: false
-
-- type: textarea
-  id: code-snippet
-  attributes:
-    label: "Code snippet"
-    render: js
-  validations:
-    required: false
-
-- type: textarea
-  id: expected
-  attributes:
-    label: "Expected behavior"
-    description: A clear and concise description of what you expected to happen.
-  validations:
-    required: false
-
-- type: markdown
-  attributes:
-    value: "**Environment**"
-
-- type: input
-  id: node-version
-  attributes:
-    label: "Node.js Version (if applicable)"
-    description: "Output of: node --version"
-    placeholder: "e.g. 20.10.0"
-  validations:
-    required: true
-
-- type: input
-  id: os
-  attributes:
-    label: "Operating System"
-    description: "Provide details about your OS."
-    placeholder: "e.g. Windows 11, macOS 14, Ubuntu 22.04"
-  validations:
-    required: true
-
-- type: textarea
-  id: other-version
-  attributes:
-    label: "Additional Library or Framework Versions"
-    placeholder: |
-      e.g.
-      React 18.0.0
-      Vue 3.4.15
-      Angular 17.1.0
-    render: bash
-  validations:
-    required: false
-
-- type: textarea
-  id: additional-context
-  attributes:
-    label: "Additional context/Screenshots"
-    description: Add any other context about the problem. If applicable, include screenshots.
-    render: bash
-  validations:
-    required: false
-
-- type: textarea
-  id: debug-logs
-  attributes:
-    label: "Debug Logs (Optional)"
-    description: Attach debug logs or error traces to help us identify the problem.
-    render: bash
-  validations:
-    required: false
+  - type: markdown
+    attributes:
+      value: "Please read and follow the instructions before submitting an issue:"
+  
+  - type: markdown
+    attributes:
+      value: |
+        - Check the project's documentation and [README](../../README.md) — it may already provide guidance or a workaround for your issue.
+        - Ensure your issue hasn't already been [reported](../../issues).
+        - Make sure your bug hasn't already been fixed in the latest version.
+  
+  - type: markdown
+    attributes:
+      value: "⚠️👆 Please read the instructions above before submitting the issue 👆⚠️"
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: "Describe the bug"
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "To Reproduce"
+      description: |
+        Steps or code snippet to reproduce the bug.
+        If possible, provide a live example (e.g., via [CodeSandbox](https://codesandbox.io/), [StackBlitz](https://stackblitz.com/), or a GitHub repo).
+        **If your problem is not reproducible, consider asking a question instead.**
+    validations:
+      required: false
+  
+  - type: textarea
+    id: code-snippet
+    attributes:
+      label: "Code snippet"
+      render: js
+    validations:
+      required: false
+  
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected behavior"
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: false
+  
+  - type: markdown
+    attributes:
+      value: "**Environment**"
+  
+  - type: input
+    id: node-version
+    attributes:
+      label: "Node.js Version (if applicable)"
+      description: "Output of: node --version"
+      placeholder: "e.g. 20.10.0"
+    validations:
+      required: true
+  
+  - type: input
+    id: os
+    attributes:
+      label: "Operating System"
+      description: "Provide details about your OS."
+      placeholder: "e.g. Windows 11, macOS 14, Ubuntu 22.04"
+    validations:
+      required: true
+  
+  - type: textarea
+    id: other-version
+    attributes:
+      label: "Additional Library or Framework Versions"
+      placeholder: |
+        e.g.
+        React 18.0.0
+        Vue 3.4.15
+        Angular 17.1.0
+      render: bash
+    validations:
+      required: false
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional context/Screenshots"
+      description: Add any other context about the problem. If applicable, include screenshots.
+      render: bash
+    validations:
+      required: false
+  
+  - type: textarea
+    id: debug-logs
+    attributes:
+      label: "Debug Logs (Optional)"
+      description: Attach debug logs or error traces to help us identify the problem.
+      render: bash
+    validations:
+      required: false
