@@ -1,3 +1,1 @@
-import { KeyValues } from "./keyvalues";
-
-export { KeyValues }
+export * from './keyvalues';
