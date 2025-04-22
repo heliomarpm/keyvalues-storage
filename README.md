@@ -4,13 +4,10 @@
 
   [![DeepScan grade][url-deepscan-badge]][url-deepscan]
   [![CodeFactor][url-codefactor-badge]][url-codefactor] 
-  ![CodeQL][url-codeql]<!-- ![Publish][url-publish] --> [![NPM version][url-npm-badge]][url-npm]
+  ![CodeQL][url-codeql] <!-- ![Publish][url-publish] --> 
+  [![NPM version][url-npm-badge]][url-npm]
   [![Downloads][url-downloads-badge]][url-downloads]
   <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
-
-  ![lodash](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/lodash)
-  ![write-file-atomic](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/write-file-atomic)
-  <!-- ![jest](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/dev/jest) -->
 </h1>
 
 <p>
@@ -46,12 +43,39 @@
 </p>
 </div>
 
-## Summary
-The `KeyValues Storage` library is a utility for managing key-value pairs and storing them in a JSON file. It provides methods for setting, getting, checking existence, and removing key-value pairs. This document provides an overview of the library and its usage.
+<!-- ![lodash](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/lodash) -->
+<!-- ![write-file-atomic](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/write-file-atomic) -->
+<!-- ![jest](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/dev/jest) -->
 
-## Installation
+## 📚 Summary
 
-You can install the library using `npm` or `yarn`:
+`KeyValues Storage` is a lightweight, file-based utility for managing key-value pairs using JSON. It offers intuitive methods for reading, writing, checking, and deleting values — all with support for both synchronous and asynchronous operations.
+
+### ❓When Should You Use This Library?
+
+You should consider using KeyValues Storage when you need:
+
+1. ✅ A simple and lightweight key-value store without the overhead of a full database.
+2. 🗂️ To persist configuration or state in local .json files.
+3. 🚀 Quick read/write operations for small or medium-sized data.
+4. 🧩 Nested object support with dot notation access ('user.profile.name').
+5. 🧪 Built-in support for both synchronous and asynchronous APIs. 
+6. 🛡️ Safe and atomic writes to prevent file corruption.
+7. 📦 Minimal dependencies (just lodash and write-file-atomic).
+
+### 💡 It's a great fit for:
+
+- Desktop apps (Electron, Tauri, etc.)
+- Low-traffic web servers or services
+- Caching user preferences
+- Storing app metadata
+- Configuration files
+- Testing and development tools
+- CLI Tools
+
+## 📦 Installation
+
+Install the library using `npm` or `yarn`:
 
 ```bash
 npm i @heliomarpm/kvs
@@ -59,27 +83,23 @@ npm i @heliomarpm/kvs
 yarn add @heliomarpm/kvs
 ```
 
-## Example Usage
+## 🔧 Example Usage
+
+```js
+// Default options
+{
+  atomicSave: true,
+  fileName: 'keyvalues.json',
+  prettify: false,
+  numSpaces: 2
+}
+```
 
 ```javascript
-// Create a new instance of KeyValues with or or without custom options
-
-/**
- * Default Options
- * 
- * {
- *   atomicSave: true,
- *   fileName: 'keyvalues.json',
- *   prettify: false,
- *   numSpaces: 2,
- * }
- */
+// Create a new instance of KeyValues with or without custom options
 const kvs = new KeyValues()
--- or --
-const kvs = new KeyValues({
-  fileName: 'config.json',
-  prettify: true
-});
+//or 
+const kvs = new KeyValues({ fileName: 'config.json',  prettify: true });
 
 const color =
 {
@@ -135,7 +155,7 @@ kvs.getSync("color.code.hex")
 // => "#003BE6"
 
 kvs.getSync(["color", "code"])
--- or --
+// or
 kvs.getSync("color.code")
 // => { "hex": "#003BE6", "rgb": [0, 179, 230] }
 
@@ -166,44 +186,42 @@ kvs.unset().then(() => {
 });
 ```
 
-## Code Analysis
-### Main functionalities
-- Manage key-value pairs and store them in a JSON file
-- Create one or more instances for different JSON files
-- Set and get values at specific key paths
-- Check if a key path exists
-- Remove key-value pairs
-___
-### Methods
-- `constructor(options?: Partial<Options>)`: Initializes a new instance of the `KeyValues` class with optional custom options.
-- `file(): string`: Returns the path to the JSON file.
-- `reset(): void`: Resets the configuration of the `KeyValues` instance to default options.
-- `has(keyPath: KeyPath): Promise<boolean>`: Checks if a key path exists asynchronously.
-- `hasSync(keyPath: KeyPath): boolean`: Checks if a key path exists synchronously.
-- `get<T extends valueTypes>(keyPath?: KeyPath): Promise<T>`: Gets the value at a specific key path asynchronously.
-- `getSync<T extends valueTypes>(keyPath?: KeyPath): T`: Gets the value at a specific key path synchronously.
-- `set<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): Promise<void>`: Sets a value at a specific key path asynchronously.
-- `setSync<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): void`: Sets a value at a specific key path synchronously.
-- `unset(keyPath?: KeyPath): Promise<void>`: Removes a key-value pair at a specific key path asynchronously.
-- `unsetSync(keyPath?: KeyPath): void`: Removes a key-value pair at a specific key path synchronously.
-___
-### Fields
-- `options: Options`: The configuration options for the `KeyValues` instance.
-- `fnc: Functions`: An instance of the `Functions` class used for file operations and data manipulation.
+## 🚀 Main functionalities
+
+- Manage key-value pairs in a persistent JSON file
+- Support for nested key paths
+- Multiple instances with different file names
+- Sync and async methods
+- Atomic writes and optional formatting
+
+## 🧪 Methods
+
+| Method | Description |
+|--------|-----------|
+ `constructor(options?)` | Initializes a new instance of the `KeyValues` class with optional custom options.
+ `file(): string` | Returns the path to the JSON file.
+ `reset(): void` | Resets the configuration of the `KeyValues` instance to default options.
+ `has(keyPath): Promise<boolean>` | Checks if a key path exists asynchronously.
+ `hasSync(keyPath): boolean` | Checks if a key path exists synchronously.
+ `get<T>(keyPath?): Promise<T>` | Gets the value at a specific key path asynchronously.
+ `getSync<T>(keyPath?): T` | Gets the value at a specific key path synchronously.
+ `set<T>(...args): Promise<void>` | Sets a value at a specific key path asynchronously.
+ `setSync<T>(...args): void` | Sets a value at a specific key path synchronously.
+ `unset(keyPath?): Promise<void>` | Removes a key-value pair at a specific key path asynchronously.
+ `unsetSync(keyPath?): void` |Removes a key-value pair at a specific key path synchronously.
 
 
-## Dependencies
+## 📦 Dependencies
 
-- [lodash](https://lodash.com/): The Lodash library exported as Node.js modules.
-- [write-file-atomic](https://github.com/npm/write-file-atomic): Atomically and asynchronously writes data to a file, replacing the file if it already exists. data can be a string or a buffer
+- [![lodash](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/lodash)](https://lodash.com) Utility functions for working with objects and arrays. 
+- [![write-file-atomic](https://img.shields.io/github/package-json/dependency-version/heliomarpm/keyvalues-storage/write-file-atomic)](https://github.com/npm/write-file-atomic) Ensures file writes are safe and atomic.
 
-
-# Contributing
+## 🤝 Contributing
 
 Please make sure to read the [Contributing Guide](docs/CONTRIBUTING.md) before making a pull request.
 
 
-Thank you to all the people who already contributed to project!
+Thank you to everyone who has already contributed to the project!
 
 <a href="https://github.com/heliomarpm/keyvalues-storage/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=heliomarpm/keyvalues-storage" />
@@ -211,18 +229,16 @@ Thank you to all the people who already contributed to project!
 
 ###### Made with [contrib.rocks](https://contrib.rocks).
 
-That said, there's a bunch of ways you can contribute to this project, like by:
 
-- :beetle: Reporting a bug
-- :page_facing_up: Improving this documentation
-- :rotating_light: Sharing this project and recommending it to your friends
-- :dollar: Supporting this project on GitHub Sponsors or Ko-fi
-- :star2: Giving a star on this repository
+### ❤️ Support this project
+If this project helped you in any way, there are several ways to contribute.
+Please consider supporting it!
 
-
-## Donate
-
-If you appreciate that, please consider donating to the Developer.
+- ⭐ Starring the repository
+- 🐞 Reporting bugs
+- 🧾 Improving the documentation
+- 🚨 Telling others about it
+- 💰 Supporting via GitHub Sponsors, Ko-fi, Paypal, LiberaPay
 
 <p>
   <!-- PixMe -->
@@ -247,7 +263,7 @@ If you appreciate that, please consider donating to the Developer.
   </a>
 </p>
 
-## License
+## 📝 License
 
 [MIT © Heliomar P. Marques](LICENSE) <a href="#top">🔝</a>
 
