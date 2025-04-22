@@ -1,11 +1,11 @@
-import path from 'node:path';
-import fs from 'node:fs';
-import writeFileAtomic from 'write-file-atomic';
+import fs from "node:fs";
+import path from "node:path";
+import writeFileAtomic from "write-file-atomic";
 
-import './types';
+import "./types";
 
-export const DEFAULT_DIR_NAME = 'localdb';
-export const DEFAULT_FILE_NAME = 'keyvalues.json';
+export const DEFAULT_DIR_NAME = "localdb";
+export const DEFAULT_FILE_NAME = "keyvalues.json";
 
 export class JsonFileHelper {
 	options: Options;
@@ -24,7 +24,7 @@ export class JsonFileHelper {
 	 */
 	private getJsonDirPath(): string {
 		const dir = (this.options.dir ?? path.resolve(DEFAULT_DIR_NAME)).trim();
-		return dir === '' ? './' : dir;
+		return dir === "" ? "./" : dir;
 	}
 
 	/**
@@ -37,7 +37,7 @@ export class JsonFileHelper {
 	public getJsonFilePath(): string {
 		const dir = this.getJsonDirPath();
 		let fileName = this.options.fileName.trim();
-		fileName = fileName === '' ? DEFAULT_FILE_NAME : fileName;
+		fileName = fileName === "" ? DEFAULT_FILE_NAME : fileName;
 
 		return path.join(dir, fileName);
 	}
@@ -53,9 +53,9 @@ export class JsonFileHelper {
 		const filePath = this.getJsonFilePath();
 
 		return new Promise((resolve, reject) => {
-			fs.stat(filePath, err => {
+			fs.stat(filePath, (err) => {
 				if (err) {
-					if (err.code === 'ENOENT') {
+					if (err.code === "ENOENT") {
 						this.saveKeyValues({}).then(resolve, reject);
 					} else {
 						reject(err);
@@ -80,7 +80,7 @@ export class JsonFileHelper {
 			fs.statSync(filePath);
 		} catch (ex) {
 			const err = ex as NodeJS.ErrnoException;
-			if (err.code === 'ENOENT') {
+			if (err.code === "ENOENT") {
 				this.saveKeyValuesSync({});
 			} else {
 				throw err;
@@ -99,10 +99,10 @@ export class JsonFileHelper {
 		const dirPath = this.getJsonDirPath();
 
 		return new Promise((resolve, reject) => {
-			fs.stat(dirPath, err => {
+			fs.stat(dirPath, (err) => {
 				if (err) {
-					if (err.code === 'ENOENT') {
-						fs.mkdir(dirPath, { recursive: true }, (error: any) => {
+					if (err.code === "ENOENT") {
+						fs.mkdir(dirPath, { recursive: true }, (error: unknown) => {
 							if (error) {
 								reject(error);
 							} else {
@@ -135,7 +135,7 @@ export class JsonFileHelper {
 		} catch (ex) {
 			const err = ex as NodeJS.ErrnoException;
 
-			if (err.code === 'ENOENT') {
+			if (err.code === "ENOENT") {
 				fs.mkdirSync(dirPath, { recursive: true });
 				// mkdirp.sync(dirPath);
 			} else {
@@ -157,12 +157,12 @@ export class JsonFileHelper {
 		const filePath = this.getJsonFilePath();
 
 		return new Promise<T>((resolve, reject) => {
-			fs.readFile(filePath, 'utf-8', (err, data) => {
+			fs.readFile(filePath, "utf-8", (err, data) => {
 				if (err) {
 					reject(err);
 				} else {
 					try {
-						const jsonData = Array.isArray(data) ? data.join('') : data || '{}';
+						const jsonData = Array.isArray(data) ? data.join("") : data || "{}";
 						resolve(JSON.parse(jsonData));
 					} catch (error) {
 						reject(error);
@@ -182,9 +182,9 @@ export class JsonFileHelper {
 	public loadKeyValuesSync<T extends valueTypes>(): T {
 		this.ensureJsonFileSync();
 		const filePath = this.getJsonFilePath();
-		const data = fs.readFileSync(filePath, 'utf-8');
+		const data = fs.readFileSync(filePath, "utf-8");
 
-		return JSON.parse(data.length ? data : '{}');
+		return JSON.parse(data.length ? data : "{}");
 	}
 
 	/**
@@ -202,11 +202,11 @@ export class JsonFileHelper {
 		await this.ensureJsonDir();
 		await new Promise<void>((resolve, reject) => {
 			if (this.options.atomicSave) {
-				writeFileAtomic(filePath, content, error => {
+				writeFileAtomic(filePath, content, (error) => {
 					return error ? reject(error) : resolve();
 				});
 			} else {
-				fs.writeFile(filePath, content, error => {
+				fs.writeFile(filePath, content, (error) => {
 					return error ? reject(error) : resolve();
 				});
 			}

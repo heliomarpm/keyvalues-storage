@@ -1,7 +1,7 @@
-import { get as _get, set as _set, has as _has, unset as _unset } from 'lodash';
+import { get as _get, has as _has, set as _set, unset as _unset } from "lodash";
 
-import './internal/types';
-import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from './internal/JsonFileHelper';
+import "./internal/types";
+import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "./internal/JsonFileHelper";
 
 /** @internal */
 const defaultOptions: Options = {
@@ -9,7 +9,7 @@ const defaultOptions: Options = {
 	dir: DEFAULT_DIR_NAME,
 	fileName: DEFAULT_FILE_NAME,
 	prettify: false,
-	numSpaces: 2
+	numSpaces: 2,
 };
 
 /**
@@ -41,7 +41,7 @@ export class KeyValues {
 	 * @internal
 	 */
 	private options: Options = {
-		...defaultOptions
+		...defaultOptions,
 	};
 
 	/**
@@ -299,9 +299,9 @@ export class KeyValues {
 			// Add proper error handling
 			if (error instanceof Error) {
 				throw new Error(`Failed to get value: ${error.message}`);
-			} else {
-				throw new Error('Failed to get value: Unknown error');
 			}
+
+			throw new Error("Failed to get value: Unknown error");
 		}
 	}
 
@@ -375,9 +375,9 @@ export class KeyValues {
 
 		if (keyPath) {
 			return _get(obj, keyPath);
-		} else {
-			return obj;
 		}
+
+		return obj;
 	}
 
 	/**
@@ -447,14 +447,14 @@ export class KeyValues {
 			const [value] = args;
 
 			return this.jsonHelper.saveKeyValues(value);
-		} else {
-			const [keyPath, value] = args;
-			const obj = await this.jsonHelper.loadKeyValues<T>();
-
-			_set(obj as object, keyPath, value);
-
-			return this.jsonHelper.saveKeyValues(obj);
 		}
+
+		const [keyPath, value] = args;
+		const obj = await this.jsonHelper.loadKeyValues<T>();
+
+		_set(obj as object, keyPath, value);
+
+		return this.jsonHelper.saveKeyValues(obj);
 	}
 
 	/**
@@ -596,7 +596,7 @@ export class KeyValues {
 			}
 		} else {
 			// Unset all keyValues by saving empty object.
-			if (JSON.stringify(obj) !== '{}') {
+			if (JSON.stringify(obj) !== "{}") {
 				return this.jsonHelper.saveKeyValues({}).then(() => true);
 			}
 		}
@@ -665,7 +665,7 @@ export class KeyValues {
 			}
 		} else {
 			// Unset all keyValues by saving empty object.
-			if (JSON.stringify(obj) !== '{}') {
+			if (JSON.stringify(obj) !== "{}") {
 				this.jsonHelper.saveKeyValuesSync({});
 				return true;
 			}
