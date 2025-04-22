@@ -37,11 +37,11 @@
     "storage"
   ],
   "scripts": {
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "check": "biome check --write ./src",
+    "lint": "biome lint --write ./src",
+    "format": "biome format --write ./src && biome format --write ./test",
     "test": "jest --detectOpenHandles --silent=false",
     "test:c": "jest --detectOpenHandles --coverage",
-    "lint": "eslint \"src/**/*.ts\" --fix",
     "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.prod.json",
     "pub:release": "node ./node_modules/gh_deploy/index.mjs"
@@ -51,16 +51,11 @@
     "write-file-atomic": "^6.0.0"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@biomejs/biome": "^1.9.4",
     "@types/jest": "^29.5.14",
     "@types/write-file-atomic": "^4.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.30.1",
-    "eslint": "8.57.1",
-    "eslint-config-prettier": "^10.1.2",
-    "eslint-plugin-prettier": "^5.2.6",
     "gh_deploy": "github:heliomarpm/gh_deploy",
     "jest": "^29.7.0",
-    "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.3.2"
   },
