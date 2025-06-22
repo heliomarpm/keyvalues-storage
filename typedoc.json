@@ -1,0 +1,21 @@
+{
+  "entryPoints": ["./src/*"],
+  "out": "./.docs/app",
+  "docsRoot": "./.docs",
+  "readme": "./docs/INDEX-DOCS.md",
+  "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
+  "indexFormat": "table",
+  "useCodeBlocks": true,
+  "disableSources": true,
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "strictNullChecks": false
+  },
+  "cleanOutputDir": true,
+  "hideGenerator": true,
+  "hideBreadcrumbs": true,
+  "sidebar": {
+    "autoConfiguration": true,
+    "format": "vitepress"
+  }
+}
