@@ -1,0 +1,90 @@
+name: Deploy Documentation
+on:
+  # workflow_dispatch:  # permite execução manual
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'src/**'
+  #     - '.docs/**'
+  #     - 'typedoc.json'
+  workflow_run:
+    workflows: ["Test"]
+    branches: [main]
+    types: [completed]
+
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Permissão ESSENCIAL
+      pages: write     # Novo tipo de permissão para GitHub Pages
+      id-token: write  # Necessário para OIDC
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build docs
+        run:
+          npm run docs
+
+      - name: Run tests with coverage
+        run: |
+          # npx vitest run --coverage  --outputFile=coverage/coverage-summary.json
+          npx vitest run --coverage
+          mkdir -p coverage/lcov-report
+
+      - name: Generate Coverage Badge
+        run: |
+          # Extrai a cobertura do relatório HTML
+          # COVERAGE=$(grep -E "All files.+[0-9.]+%" coverage/lcov-report/index.html | awk '{print $NF}' || echo "unknown")
+          COVERAGE=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
+          echo "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"${COVERAGE}%\",\"color\":\"green\"}" > coverage/coverage-badge.json
+          echo "✔️ Coverage: $COVERAGE"
+
+      - name: Copy coverage badge to docs
+        run: |
+          mkdir -p .docs/.vitepress/dist/coverage
+          cp coverage/coverage-badge.json .docs/.vitepress/dist/coverage/
+          cp -r coverage/lcov-report/* .docs/.vitepress/dist/coverage/
+          cp logo.png .docs/.vitepress/dist/
+
+      # - name: Copy additional files
+      #   run: |
+      #     mkdir -p .docs/.vitepress/typedoc/docs/
+      #     cp LICENSE .docs/.vitepress/typedoc
+      #     cp ./docs/*.md .docs/.vitepress/typedoc/docs/
+
+      - name: Show deployed files
+        run: ls -R .docs/.vitepress/dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .docs/.vitepress/dist
+          # destination_dir: ./
+          keep_files: false
+          force_orphan: true  # Importante para evitar conflitos
+          # cname: seu-dominio.com  # Opcional se usar domínio customizado
+
+
+      - name: Show Documentation URL
+        run: |
+          echo "📚 Documentation deployed to:"
+          echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "Custom domain? Check Settings > Pages"

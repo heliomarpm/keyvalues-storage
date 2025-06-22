@@ -1,0 +1,86 @@
+name: Release
+on:
+  workflow_run:
+    workflows: ["Test"]
+    branches: [main]
+    types:
+      - completed
+
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'src/**'
+  #     - '.releaserc*'
+  #     - 'package.json'
+  #     - 'package-lock.json'
+  #     - '.github/workflows/2.release.yml'
+
+  # pull_request:
+  #   branches: [main]
+  #   types: [closed]
+  #   paths:
+  #     - 'src/**'
+  #     - '.releaserc*'
+  #     - 'package.json'
+  #     - 'package-lock.json'
+  #     - '.github/workflows/*release.yml'
+jobs:
+  release:
+    if: github.event.workflow_run.conclusion == 'success'
+    # if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      statuses: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }} # Usa o commit exato do teste
+          # ref: main # força o checkout na branch main
+          fetch-depth: 0 # Crítico para o semantic-release analisar histórico
+          fetch-tags: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts # Evita scripts pós-install desnecessários
+
+      - name: Confirm current branch
+        run: git branch --show-current
+
+      - name: Debug commits
+        run: |
+          git log --oneline -n 10
+          echo "Current branch: $(git branch --show-current)"
+
+      # - name: Debug environment
+      #   run: |
+      #     echo "GITHUB_REF: $GITHUB_REF"
+      #     echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+      #     echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+      #     echo "GITHUB_SHA: $GITHUB_SHA"
+      #     git remote -v
+      #     git branch -a
+
+      # - name: Create GitHub token permissions
+      #   run: |
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --global user.name "github-actions[bot]"
+
+      - name: Run Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}  # Opcional: só se publicar no npm
+        run: npx semantic-release --debug
+
+      - name: Notify success
+        if: success()
+        run: echo "✅ Release completed successfully"

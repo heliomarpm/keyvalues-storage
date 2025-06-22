@@ -1,0 +1,117 @@
+name: Publish
+
+on:
+  workflow_dispatch:  # permite execução manual
+  release:
+    types: [published]
+
+jobs:
+  check_code_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      has_code_changes: ${{ steps.check_files.outputs.has_changes }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Importante para verificar tags e histórico completo
+          fetch-tags: true  # Garante que as tags remotas sejam baixadas
+
+      - name: Verify changes since last tag
+        id: check_files
+        run: |
+          PATHS_TO_CHECK="src"
+
+          git fetch --tags
+          CURRENT_TAG=${{ github.event.release.tag_name }}
+          PREVIOUS_TAG=$(git tag --sort=-v:refname | sed -n '2p')
+
+          echo "Release atual: $CURRENT_TAG"
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "✅ Nenhuma tag anterior encontrada. Assumindo que é a primeira release."
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "Release anterior: $PREVIOUS_TAG"
+            echo "Verificando alterações nos caminhos: '$PATHS_TO_CHECK'"
+
+            if git diff --quiet $PREVIOUS_TAG $CURRENT_TAG -- $PATHS_TO_CHECK; then
+              echo "⚠️ Nenhuma alteração de código detectada. Publicação ignorada."
+              echo "has_changes=false" >> $GITHUB_OUTPUT
+            else
+              echo "✅ Alterações de código detectadas. A publicação irá prosseguir."
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  publish-npm:
+    needs: check_code_changes
+    if: needs.check_code_changes.outputs.has_code_changes == 'true' 
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}   # Faz o checkout da tag exata da release para garantir consistência
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '>=20.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install and Build package
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Show successfull publish
+        if: success()
+        run: echo "📦 Published to NPM -> ${{ github.event.release.tag_name }}"
+
+  publish-gpr:
+    needs: check_code_changes
+    if: needs.check_code_changes.outputs.has_code_changes == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '>=20.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: ${{ github.repository_owner }}
+          cache: 'npm'
+
+      - name: Install and Build package
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+
+      - name: Verify Package
+        run: npm pack --dry-run
+
+      - name: Publish to GitHub Packages
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Show successfull publish
+        if: success()
+        run: echo "📦 Published to GHP -> ${{ github.event.release.tag_name }}"
