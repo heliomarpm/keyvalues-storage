@@ -61,7 +61,7 @@ type KeyPath = string | Array<string>;
  * Example:
  * const value: valueTypes = "Hello World";
  * const valueArray: valueTypes = [1, 2, 3];
- * @typedef {null | string | number | boolean | object | dictionaryType | valueTypes
+ * @typedef {null | string | number | boolean | object | dictionaryType | valueTypes}
  * @internal
  */
 type valueTypes = null | string | number | boolean | object | dictionaryType | valueTypes[];

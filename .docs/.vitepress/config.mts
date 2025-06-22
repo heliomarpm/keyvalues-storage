@@ -4,7 +4,7 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/pt/reference/default-theme-config
 export default defineConfig({
 	title: "KeyValues Storage",
-	base: "/kvs/",
+	base: "/keyvalues-storage/",
 	description: "🎲 A simple and robust KeyValues Storage's library",
 	cleanUrls: true,
 	lastUpdated: true,
