@@ -15,10 +15,20 @@ import type { Options, valueTypes } from "./types";
 export const DEFAULT_DIR_NAME = "localdb";
 export const DEFAULT_FILE_NAME = "keyvalues.json";
 
-
 export class JsonFileHelper {
+	/**
+	 * The options for the JsonFileHelper.
+	 * @type {@link Options}
+	 * @private
+	 */
 	options: Options;
 
+	/**
+	 * Creates an instance of JsonFileHelper.
+	 *
+	 * @param {@link Options} options - The options for the JsonFileHelper.
+	 * @constructor
+	 */
 	constructor(options: Options) {
 		this.options = options;
 	}
