@@ -1,3 +1,4 @@
 #!/bin/sh
 # git add .
-npx lint-staged
+#npx lint-staged && npx vitest --no-watch
+npx vitest --no-watch
