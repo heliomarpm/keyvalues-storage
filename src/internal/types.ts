@@ -45,3 +45,6 @@ type KeyPath = string | Array<string>;
 type valueTypes = null | string | number | boolean | object | dictionaryType | valueTypes[];
 type Types<T extends valueTypes> = Record<string, T>;
 type dictionaryType = { [key: string]: valueTypes };
+
+export type { Options, KeyPath, valueTypes, Types, dictionaryType };
+
