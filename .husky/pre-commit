@@ -1,0 +1,3 @@
+#!/bin/sh
+# git add .
+npx lint-staged
