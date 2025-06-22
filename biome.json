@@ -1,15 +1,21 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
     "useIgnoreFile": false
   },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "files": {
+    "maxSize": 10485760,
     "ignoreUnknown": false,
-    "include": ["src/**/*.ts"],
-    "ignore": []
+    "includes": ["**"]
   },
   "linter": {
     "enabled": true,
@@ -21,18 +27,32 @@
       "complexity": {
         "noForEach": "off"
       },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "warn",
+        "noUnusedImports": "error"
+      },
       "style": {
-        "noNonNullAssertion": "info",
-        "useAsConstAssertion": "error"
+        "noNonNullAssertion": "off",
+        "useAsConstAssertion": "error",
+        "noParameterAssign": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
       },
       "suspicious": {
-				"noConsole": "info",
+        "noConsole": "info",
         "noExplicitAny": "info",
-				"noExtraNonNullAssertion": "error",
-				"noMisleadingInstantiator": "error",
-				"noUnsafeDeclarationMerging": "error",
-				"useNamespaceKeyword": "error"
-			}
+        "noExtraNonNullAssertion": "error",
+        "noMisleadingInstantiator": "error",
+        "noUnsafeDeclarationMerging": "error",
+        "useNamespaceKeyword": "error"
+      }
     }
   },
   "formatter": {
@@ -43,7 +63,6 @@
     "indentWidth": 4,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": [],
     "lineEnding": "lf",
     "lineWidth": 180
   },
@@ -57,5 +76,10 @@
       "semicolons": "always"
     }
   },
-  "organizeImports": { "enabled": true }
+  "json": {
+    "formatter": {
+      "indentStyle": "space",
+      "indentWidth": 2
+    }
+  }
 }
