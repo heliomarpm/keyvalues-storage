@@ -5,6 +5,8 @@ test
 tests
 coverage
 tsconfig.*
-jest.config.js
-vitest.config.js
+*.config.*
+typedoc.json
+biome.json
 logo.png
+CHANGELOG.md
