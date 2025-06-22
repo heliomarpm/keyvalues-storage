@@ -13,10 +13,17 @@ const defaultOptions: Options = {
 };
 
 /**
- * The `KeyValues` class is responsible for managing key-value pairs and storing them in a JSON file.
- * It provides methods for setting, getting, checking existence, and removing key-value pairs.
- * The class uses the `Functions` class to handle file operations and data manipulation.
  *
+ * KeyValues is a class that provides a simple key-value storage system.
+ * It allows you to set, get, check existence, and remove key-value pairs in a JSON file.
+ * It supports nested keys and complex data types, and provides both asynchronous and synchronous methods
+ *
+ * It is designed to be used in Node.js applications
+ * and can be easily configured to use a custom directory
+ * and file name for storing key-value pairs.
+ *
+ * @author Heliomar Marques
+
  * @example
  * // Create a new instance of KeyValues with custom options
  * const keyValues = new KeyValues({
@@ -35,6 +42,8 @@ const defaultOptions: Options = {
  *
  * // Remove a key-value pair
  * await keyValues.unset('color.name');
+ *
+ * @category Core
  */
 export class KeyValues {
 	/**
