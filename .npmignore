@@ -1,5 +1,4 @@
 .*
-*.map
 docs
 src
 test
@@ -8,4 +7,4 @@ coverage
 tsconfig.*
 jest.config.js
 vitest.config.js
-artigos.txt
+logo.png
