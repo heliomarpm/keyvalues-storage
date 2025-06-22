@@ -1,11 +1,20 @@
+/**
+ * @module JsonFileHelper
+ * @description This module provides a helper class for managing JSON files in a key-value store.
+ * It includes methods for loading, saving, and ensuring the existence of JSON files and directories.
+ * It is designed to work with a customizable directory and file name for storing key-value pairs.
+ * @author Heliomar Marques
+ */
+
 import fs from "node:fs";
 import path from "node:path";
 import writeFileAtomic from "write-file-atomic";
 
-import "./types";
+import type { Options, valueTypes } from "./types";
 
 export const DEFAULT_DIR_NAME = "localdb";
 export const DEFAULT_FILE_NAME = "keyvalues.json";
+
 
 export class JsonFileHelper {
 	options: Options;
@@ -49,22 +58,19 @@ export class JsonFileHelper {
 	 * @returns A promise which resolves when the keyvalues file exists.
 	 * @internal
 	 */
-	private ensureJsonFile(): Promise<void> {
+	private async ensureJsonFile(): Promise<void> {
 		const filePath = this.getJsonFilePath();
 
-		return new Promise((resolve, reject) => {
-			fs.stat(filePath, (err) => {
-				if (err) {
-					if (err.code === "ENOENT") {
-						this.saveKeyValues({}).then(resolve, reject);
-					} else {
-						reject(err);
-					}
-				} else {
-					resolve();
-				}
-			});
-		});
+		try {
+			await fs.promises.stat(filePath);
+		} catch (error) {
+			const ex = error as NodeJS.ErrnoException;
+			if (ex?.code === "ENOENT") {
+				await this.saveKeyValues({});
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	/**
@@ -78,12 +84,12 @@ export class JsonFileHelper {
 
 		try {
 			fs.statSync(filePath);
-		} catch (ex) {
-			const err = ex as NodeJS.ErrnoException;
-			if (err.code === "ENOENT") {
+		} catch (error) {
+			const ex = error as NodeJS.ErrnoException;
+			if (ex?.code === "ENOENT") {
 				this.saveKeyValuesSync({});
 			} else {
-				throw err;
+				throw error;
 			}
 		}
 	}
@@ -95,29 +101,19 @@ export class JsonFileHelper {
 	 * @returns A promise which resolves when the keyvalues dir exists.
 	 * @internal
 	 */
-	private ensureJsonDir(): Promise<void> {
+	private async ensureJsonDir(): Promise<void> {
 		const dirPath = this.getJsonDirPath();
 
-		return new Promise((resolve, reject) => {
-			fs.stat(dirPath, (err) => {
-				if (err) {
-					if (err.code === "ENOENT") {
-						fs.mkdir(dirPath, { recursive: true }, (error: unknown) => {
-							if (error) {
-								reject(error);
-							} else {
-								resolve();
-							}
-						});
-						// mkdirp(dirPath).then(() => resolve(), reject);
-					} else {
-						reject(err);
-					}
-				} else {
-					resolve();
-				}
-			});
-		});
+		try {
+			await fs.promises.stat(dirPath);
+		} catch (error) {
+			const ex = error as NodeJS.ErrnoException;
+			if (ex?.code === "ENOENT") {
+				await fs.promises.mkdir(dirPath, { recursive: true });
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	/**
@@ -132,14 +128,12 @@ export class JsonFileHelper {
 
 		try {
 			fs.statSync(dirPath);
-		} catch (ex) {
-			const err = ex as NodeJS.ErrnoException;
-
-			if (err.code === "ENOENT") {
+		} catch (error) {
+			const ex = error as NodeJS.ErrnoException;
+			if (ex?.code === "ENOENT") {
 				fs.mkdirSync(dirPath, { recursive: true });
-				// mkdirp.sync(dirPath);
 			} else {
-				throw err;
+				throw error;
 			}
 		}
 	}
@@ -154,22 +148,13 @@ export class JsonFileHelper {
 	 */
 	public async loadKeyValues<T extends valueTypes>(): Promise<T> {
 		await this.ensureJsonFile();
-		const filePath = this.getJsonFilePath();
 
-		return new Promise<T>((resolve, reject) => {
-			fs.readFile(filePath, "utf-8", (err, data) => {
-				if (err) {
-					reject(err);
-				} else {
-					try {
-						const jsonData = Array.isArray(data) ? data.join("") : data || "{}";
-						resolve(JSON.parse(jsonData));
-					} catch (error) {
-						reject(error);
-					}
-				}
-			});
-		});
+		const filePath = this.getJsonFilePath();
+		const data = await fs.promises.readFile(filePath, "utf-8");
+		// fs.promises.readFile com 'utf-8' sempre retorna uma string, então a verificação de array é desnecessária.
+		const jsonData = data || "{}";
+
+		return JSON.parse(jsonData) as T;
 	}
 
 	/**
@@ -184,7 +169,7 @@ export class JsonFileHelper {
 		const filePath = this.getJsonFilePath();
 		const data = fs.readFileSync(filePath, "utf-8");
 
-		return JSON.parse(data.length ? data : "{}");
+		return JSON.parse(data.length ? data : "{}") as T;
 	}
 
 	/**
@@ -200,17 +185,11 @@ export class JsonFileHelper {
 		const content = JSON.stringify(obj, null, numSpaces);
 
 		await this.ensureJsonDir();
-		await new Promise<void>((resolve, reject) => {
-			if (this.options.atomicSave) {
-				writeFileAtomic(filePath, content, (error) => {
-					return error ? reject(error) : resolve();
-				});
-			} else {
-				fs.writeFile(filePath, content, (error) => {
-					return error ? reject(error) : resolve();
-				});
-			}
-		});
+		if (this.options.atomicSave) {
+			await writeFileAtomic(filePath, content);
+		} else {
+			await fs.promises.writeFile(filePath, content);
+		}
 	}
 
 	/**

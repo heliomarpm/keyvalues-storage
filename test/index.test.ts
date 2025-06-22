@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { KeyValues } from '../src';
+import { KeyValues, Options } from '../src';
 
 const defaultOptions: Options = {
 	atomicSave: true,

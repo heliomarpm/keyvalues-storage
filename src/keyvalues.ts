@@ -1,6 +1,6 @@
 import { get as _get, has as _has, set as _set, unset as _unset } from "lodash";
 
-import "./internal/types";
+import type { Options, KeyPath, valueTypes, Types } from "./internal/types";
 import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "./internal/JsonFileHelper";
 
 /** @internal */
@@ -61,7 +61,7 @@ export class KeyValues {
 	 *       prettify: false
 	 *     }
 	 *```
-	 * @param options The custom configuration to use.
+	 * @param options {@link Options} The custom configuration to use.
 	 * @example
 	 *
 	 * Update the filename to `config.json` and prettify
@@ -169,7 +169,6 @@ export class KeyValues {
 	 */
 	async has(keyPath: KeyPath): Promise<boolean> {
 		const obj = await this.jsonHelper.loadKeyValues();
-
 		return _has(obj, keyPath);
 	}
 
@@ -217,7 +216,6 @@ export class KeyValues {
 	 */
 	hasSync(keyPath: KeyPath): boolean {
 		const obj = this.jsonHelper.loadKeyValuesSync();
-
 		return _has(obj, keyPath);
 	}
 
@@ -341,14 +339,14 @@ export class KeyValues {
 	 *        }
 	 *     }
 	 *
-	 *     const value = await keyValues.get('color.name');
+	 *     const value = keyValues.getSync('color.name');
 	 *     // => "cerulean"
 	 *```
 	 * @example
 	 *
 	 * Get the value at `color.code.hex`.
 	 *```js
-	 *     const hex = await keyValues.get('color.color.hex');
+	 *     const hex = keyValues.getSync('color.color.hex');
 	 *     // => "#003BE6"
 	 *```
 	 * @example
@@ -356,7 +354,7 @@ export class KeyValues {
 	 * Get the value at `color.hue`.
 	 *```js
 	 *     const h = 'hue';
-	 *     const value = await keyValues.get(['color', h]);
+	 *     const value = keyValues.getSync(['color', h]);
 	 *     // => undefined
 	 *```
 	 * @example
@@ -364,7 +362,7 @@ export class KeyValues {
 	 * Get the value at `color.code.rgb[1]`.
 	 *```js
 	 *     const h = 'hue';
-	 *     const value = await keyValues.get('color.code.rgb[1]');
+	 *     const value = keyValues.getSync('color.code.rgb[1]');
 	 *     // => 179
 	 * ```
 	 */
@@ -516,7 +514,6 @@ export class KeyValues {
 	setSync<T extends valueTypes>(keyPath: KeyPath, value: T): void;
 
 	setSync<T extends valueTypes>(...args: [Types<T>] | [KeyPath, T]): void {
-		// console.log(args);
 		if (args.length === 1) {
 			const [value] = args;
 
@@ -590,15 +587,13 @@ export class KeyValues {
 	async unset(keyPath?: KeyPath): Promise<boolean> {
 		const obj = await this.jsonHelper.loadKeyValues();
 
-		if (keyPath) {
-			if (_unset(obj, keyPath)) {
-				return this.jsonHelper.saveKeyValues(obj).then(() => true);
+		if (JSON.stringify(obj) !== "{}") {
+			if (keyPath && _unset(obj, keyPath)) {
+				await this.jsonHelper.saveKeyValues(obj);
+			} else {
+				await this.jsonHelper.saveKeyValues({});
 			}
-		} else {
-			// Unset all keyValues by saving empty object.
-			if (JSON.stringify(obj) !== "{}") {
-				return this.jsonHelper.saveKeyValues({}).then(() => true);
-			}
+			return true;
 		}
 
 		return false;
@@ -658,17 +653,16 @@ export class KeyValues {
 
 	unsetSync(keyPath?: KeyPath): boolean {
 		const obj = this.jsonHelper.loadKeyValuesSync();
-		if (keyPath) {
-			if (_unset(obj, keyPath)) {
+
+		if (JSON.stringify(obj) !== "{}") {
+			if (keyPath && _unset(obj, keyPath)) {
 				this.jsonHelper.saveKeyValuesSync(obj);
-				return true;
-			}
-		} else {
-			// Unset all keyValues by saving empty object.
-			if (JSON.stringify(obj) !== "{}") {
+			} else {
+				// Unset all keyValues by saving empty object.
 				this.jsonHelper.saveKeyValuesSync({});
-				return true;
 			}
+
+			return true;
 		}
 
 		return false;

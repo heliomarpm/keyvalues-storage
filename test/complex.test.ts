@@ -8,6 +8,7 @@ describe('Codium Complex Test', () => {
 	it('should set the value of a nested key', async () => {
 		const mockLoadKeyValues = vi.spyOn(JsonFileHelper.prototype, 'loadKeyValues');
 		const mockSaveKeyValues = vi.spyOn(JsonFileHelper.prototype, 'saveKeyValues');
+
 		mockLoadKeyValues.mockResolvedValue({ parent: {} });
 
 		const kvs = new KeyValues({ fileName: 'complex.json', prettify: true });
