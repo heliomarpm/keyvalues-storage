@@ -1,55 +1,32 @@
 ## 📋 Description
 
-Please make sure you're following the [contribution guidelines](./blob/main/docs/CONTRIBUTING.md).
+Follow the [contribution guidelines](./blob/main/docs/CONTRIBUTING.md). \
+Briefly describe what this PR does (e.g., fixes, features, improvements).
 
-Clearly describe the purpose of this Pull Request. What was implemented, fixed, or changed?
+## ✅ Change Type
 
-> Example: Fixes typos in documentation and improves code examples in README.
-
----
-
-## ✅ Type of Change
-
-Check all that apply:
-
-- [ ] 🐛 Bug fix (non-breaking fix for an issue)
-- [ ] ✨ New feature (non-breaking feature addition)
-- [ ] ⚠️ Breaking change (changes that break existing functionality)
-- [ ] 🧹 Code improvement or refactoring
+- [ ] 🐛 Bug fix
+- [ ] ✨ New feature
+- [ ] ⚠️ Breaking change
+- [ ] 🧹 Refactor or code cleanup
 - [ ] 📝 Documentation update
-- [ ] 🔧 Other (please describe below)
-
----
+- [ ] 🔧 Other (describe below)
 
 ## 🧪 How to Test
 
-Provide clear steps to test this PR. If applicable, link to examples, screenshots, or test cases.
+Describe how to test this change.  
+_If applicable, include screenshots or terminal commands._
 
----
+## 🔗 Related Issues
 
-## 🔗 Related Issue(s)
-
-Reference any related issues:
-
-> Example: Closes #42, Fixes #99
-
----
-
-## 📸 Screenshots (Optional)
-
-Attach screenshots, recordings, or GIFs to help visualize the changes.
-
----
+Link any related issues (e.g., `Closes #42`, `Fixes #99`).
 
 ## 🚨 Checklist
 
-Please confirm the following before submitting:
-
-- [ ] Code follows the project's coding standards
-- [ ] Tests were added or updated
-- [ ] All new and existing tests pass
-- [ ] Documentation was updated if needed
-- [ ] Changes were tested manually or locally
+- [ ] Code follows project standards
+- [ ] Tests added/updated (if applicable)
+- [ ] Docs updated (if needed)
+- [ ] Changes tested locally
 
 ---
 
