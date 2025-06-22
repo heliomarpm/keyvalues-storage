@@ -1,5 +1,8 @@
+import { beforeAll, describe, expect, it } from "vitest";
+
 import fs from 'node:fs';
 import path from 'node:path';
+
 import { KeyValues } from '../src';
 
 const defaultOptions: Options = {
@@ -70,9 +73,9 @@ describe('KeyValues Default Test', () => {
 		kvs = new KeyValues(options);
 	});
 
-	afterAll(() => {
-		// deleteFiles();
-	});
+	// afterAll(() => {
+	// 	deleteFiles();
+	// });
 
 	// Returns a string representing the path to the json file.
 	it('should return the default path to the json file', () => {
