@@ -47,7 +47,7 @@ type Options = {
  * Example:
  * const keyPath: KeyPath = "user.name";
  * const keyPathArray: KeyPath = ["user", "name"];
- * * This type is used to access nested properties in an object.
+ * This type is used to access nested properties in an object.
  * @typedef {string | Array<string>} KeyPath
  **/
 type KeyPath = string | Array<string>;
@@ -86,4 +86,3 @@ type Types<T extends valueTypes> = Record<string, T>;
 type dictionaryType = { [key: string]: valueTypes };
 
 export type { Options, KeyPath, valueTypes, Types, dictionaryType };
-

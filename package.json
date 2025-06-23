@@ -50,7 +50,8 @@
     "predocs": "typedoc",
     "docs": "vitepress build .docs",
     "docs:dev": "npm run predocs && vitepress dev .docs",
-    "clean": "rm -rf node_modules coverage dist .docs/.vitepress/cache .docs/.vitepress/dist .docs/app localdb"
+    "clean": "rm -rf node_modules coverage dist .docs/.vitepress/cache .docs/.vitepress/dist .docs/app localdb",
+    "postclean": "npm cache clean --force"
   },
   "dependencies": {
     "lodash": "^4.17.21",

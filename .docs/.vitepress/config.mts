@@ -11,9 +11,7 @@ export default defineConfig({
 	ignoreDeadLinks: true,
 	themeConfig: {
 		logo: { src: "./logo.png", width: 24, height: 24 },
-		nav: [
-			{ text: "Guide", link: "/app/_media/CONTRIBUTING" },
-		],
+		nav: [{ text: "Guide", link: "/app/_media/CONTRIBUTING" }],
 
 		sidebar: [
 			{
