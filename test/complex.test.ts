@@ -20,31 +20,19 @@ describe("Codium Complex Test", () => {
 		mockSaveKeyValues.mockRestore();
 	});
 
-	// Tests that the set method sets the value of a key
-	// it('should set the value of a key', async () => {
-	//   const mockSaveKeyValues = jest.spyOn(JsonFileHelper.prototype, 'saveKeyValues').mockResolvedValue();
+	it("should remove a key and its value", async () => {
+		const mockLoadKeyValues = vi.spyOn(JsonFileHelper.prototype, "loadKeyValues");
+		const mockSaveKeyValues = vi.spyOn(JsonFileHelper.prototype, "saveKeyValues");
+		mockLoadKeyValues.mockResolvedValue({ key: "value" });
 
-	//   const kvs = new KeyValues({fileName: 'complex.json', prettify: true});
-	//   await kvs.set('key', 'value');
+		const kvs = new KeyValues({ fileName: "complex.json", prettify: true });
+		await kvs.unset("key");
 
-	//   expect(mockSaveKeyValues).toHaveBeenCalledWith({ key: 'value' });
-	//   mockSaveKeyValues.mockRestore();
-	// });
-
-	// Tests that the unset method removes a key and its value
-	// it('should remove a key and its value', async () => {
-	//   const mockLoadKeyValues = jest.spyOn(JsonFileHelper.prototype, 'loadKeyValues');
-	//   const mockSaveKeyValues = jest.spyOn(JsonFileHelper.prototype, 'saveKeyValues');
-	//   mockLoadKeyValues.mockResolvedValue({ key: 'value' });
-
-	//   const kvs = new KeyValues({fileName: 'complex.json', prettify: true});
-	//   await kvs.unset('key');
-
-	//   expect(mockLoadKeyValues).toHaveBeenCalled();
-	//   expect(mockSaveKeyValues).toHaveBeenCalledWith({});
-	//   mockLoadKeyValues.mockRestore();
-	//   mockSaveKeyValues.mockRestore();
-	// });
+		expect(mockLoadKeyValues).toHaveBeenCalled();
+		expect(mockSaveKeyValues).toHaveBeenCalledWith({});
+		mockLoadKeyValues.mockRestore();
+		mockSaveKeyValues.mockRestore();
+	});
 
 	it("shold get complex value", () => {
 		const color = {
@@ -55,6 +43,7 @@ describe("Codium Complex Test", () => {
 			},
 		};
 		const keyValues = new KeyValues({ fileName: "color.json", prettify: true });
+
 		keyValues.setSync("color", color);
 		expect(keyValues.getSync("color")).toEqual(color);
 

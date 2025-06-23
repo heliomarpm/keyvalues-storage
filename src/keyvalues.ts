@@ -22,7 +22,7 @@ const defaultOptions: Options = {
  * and file name for storing key-value pairs.
  *
  * @author Heliomar Marques
-
+ * @category Core
  * @example
  * // Create a new instance of KeyValues with custom options
  * const keyValues = new KeyValues({
@@ -41,8 +41,6 @@ const defaultOptions: Options = {
  *
  * // Remove a key-value pair
  * await keyValues.unset('color.name');
- *
- * @category Core
  */
 export class KeyValues {
 	/**
@@ -105,7 +103,7 @@ export class KeyValues {
 	 *
 	 * new KeyValye({dir: 'newpath'})
 	 *
-	 * @returns The path to the keyvalues file.
+	 * @returns The path to the keyvalues file.	 *
 	 * @example
 	 *
 	 * Get the path to the keyvalues file.
@@ -136,7 +134,6 @@ export class KeyValues {
 	 * Checks if the given key path exists. For sync,
 	 * use [[hasSync|hasSync()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path to check.
 	 * @returns A promise which resolves to `true` if the
 	 * `keyPath` exists, else `false`.
@@ -184,7 +181,6 @@ export class KeyValues {
 	 * Checks if the given key path exists. For async,
 	 * use [[hasSync|hasSync()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path to check.
 	 * @returns `true` if the `keyPath` exists, else `false`.
 	 * @example
@@ -231,7 +227,6 @@ export class KeyValues {
 	 * Gets all key values. For sync, use
 	 * [[getSync|getSync()]].
 	 *
-	 * @category Core
 	 * @returns A promise which resolves with all key values.
 	 * @example
 	 *
@@ -246,7 +241,6 @@ export class KeyValues {
 	 * Gets the value at the given key path. For sync,
 	 * use [[getSync|getSync()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path of the property.
 	 * @returns A promise which resolves with the value at the
 	 * given key path.
@@ -314,7 +308,6 @@ export class KeyValues {
 	/**
 	 * Gets all key values. For async, use [[get|get()]].
 	 *
-	 * @category Core
 	 * @returns All key values.
 	 * @example
 	 *
@@ -329,7 +322,6 @@ export class KeyValues {
 	 * Gets the value at the given key path. For async,
 	 * use [[get|get()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path of the property.
 	 * @returns The value at the given key path.
 	 * @example
@@ -389,7 +381,6 @@ export class KeyValues {
 	/**
 	 * Sets all key values. For sync, use [[setSync|setSync()]].
 	 *
-	 * @category Core
 	 * @param obj The new key value.
 	 * @returns A promise which resolves when the value have
 	 * been set.
@@ -406,7 +397,6 @@ export class KeyValues {
 	 * Sets the value at the given key path. For sync,
 	 * use [[setSync|setSync()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path of the property.
 	 * @param value The value to set.
 	 * @returns A promise which resolves when the setting has
@@ -466,7 +456,6 @@ export class KeyValues {
 	/**
 	 * Sets all key values. For async, use [[set|set()]].
 	 *
-	 * @category Core
 	 * @param obj The new key values.
 	 * @example
 	 *
@@ -481,7 +470,6 @@ export class KeyValues {
 	 * Sets the value at the given key path. For async,
 	 * use [[set|set()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path of the property.
 	 * @param value The value to set.
 	 * @example
@@ -539,7 +527,6 @@ export class KeyValues {
 	/**
 	 * Unsets all key values. For sync, use [unsetSync()].
 	 *
-	 * @category Core
 	 * @returns A promise which resolves when the key values have
 	 * been unset.
 	 * @example
@@ -555,7 +542,6 @@ export class KeyValues {
 	 * Unsets the property at the given key path. For sync,
 	 * use [[unsetSync|unsetSync()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path of the property.
 	 * @returns A promise which resolves when the setting has
 	 * been unset.
@@ -610,7 +596,6 @@ export class KeyValues {
 	/**
 	 * Unsets all key values. For async, use [unset()].
 	 *
-	 * @category Core
 	 * @example
 	 *
 	 * Unsets all key values.
@@ -624,7 +609,6 @@ export class KeyValues {
 	 * Unsets the property at the given key path. For async,
 	 * use [[unset|unset()]].
 	 *
-	 * @category Core
 	 * @param keyPath The key path of the property.
 	 * @example
 	 *
