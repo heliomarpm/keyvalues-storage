@@ -1,7 +1,6 @@
 import { get as _get, has as _has, set as _set, unset as _unset } from "lodash";
-
-import type { Options, KeyPath, valueTypes, Types } from "./internal/types";
 import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "./internal/JsonFileHelper";
+import type { KeyPath, Options, Types, valueTypes } from "./internal/types";
 
 /** @internal */
 const defaultOptions: Options = {

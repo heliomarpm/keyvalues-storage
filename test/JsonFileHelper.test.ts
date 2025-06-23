@@ -1,10 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
 import fs from "node:fs";
 import path from "node:path";
-
-import { JsonFileHelper, DEFAULT_DIR_NAME, DEFAULT_FILE_NAME } from "../src/internal/JsonFileHelper";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import writeFileAtomic from "write-file-atomic";
+
+import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "../src/internal/JsonFileHelper";
 
 // Mock da dependência para testar o comportamento de 'atomicSave' de forma isolada.
 vi.mock("write-file-atomic", () => {
@@ -184,7 +183,7 @@ describe("JsonFileHelper", () => {
 			const MSG_ERROR = "Permission denied";
 			const helper = new JsonFileHelper({ dir: TEST_DIR, fileName: "sync-error.json", atomicSave: false, prettify: false, numSpaces: 2 });
 			const customError = new Error(MSG_ERROR);
-			(customError as any).code = "EACCES";
+			(customError as NodeJS.ErrnoException).code = "EACCES";
 
 			vi.spyOn(fs, "statSync").mockImplementation(() => {
 				throw customError;
@@ -200,7 +199,7 @@ describe("JsonFileHelper", () => {
 		it("(Async/Sync) ensureJsonDir: should throw if fs.promises.statSync fails with ENOENT", async () => {
 			const helper = new JsonFileHelper({ dir: TEST_DIR, fileName: "sync-error.json", atomicSave: false, prettify: false, numSpaces: 2 });
 			const customError = new Error();
-			(customError as any).code = "ENOENT";
+			(customError as NodeJS.ErrnoException).code = "ENOENT";
 
 			vi.spyOn(fs, "statSync").mockImplementation(() => {
 				throw customError;

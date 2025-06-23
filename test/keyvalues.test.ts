@@ -1,7 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-import path from "node:path";
 import fs from "node:fs/promises";
+import path from "node:path";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { KeyValues } from "../src/keyvalues";
 
@@ -166,7 +165,7 @@ describe("KeyValues", () => {
 
 	it("should throw a generic error when a non-Error is caught during get()", async () => {
 		const kvs = new KeyValues({ dir: TEST_DIR });
-		// Forçamos a dependência interna a rejeitar com um valor que não é uma instância de Error
+		// biome-ignore lint/complexity/useLiteralKeys: needed for dynamic property access in test
 		vi.spyOn(kvs["jsonHelper"], "loadKeyValues").mockRejectedValue("a plain string error");
 
 		// Verificamos se o bloco `catch` que trata erros genéricos é acionado
