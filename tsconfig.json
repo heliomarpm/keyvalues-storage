@@ -11,14 +11,10 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-		"paths": {
-			"@/*": ["./src/*"]
-		}
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "test", "**/*.test.ts", "**/*.spec.ts", "test/**/*", "node_modules", "dist", ".*"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["test", "**/*.test.ts", "**/*.spec.ts", "test/**/*", "node_modules", "dist", ".*"]
 }
