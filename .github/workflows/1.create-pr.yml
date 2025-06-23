@@ -71,7 +71,7 @@ jobs:
           echo "---" >> .github/coverage.md
           echo "### 📊 Test Coverage Summary" >> .github/coverage.md
           echo "\`\`\`" >> .github/coverage.md
-          cat coverage-report.txt >> .github/coverage.md
+          tail -n +2 coverage-report.txt >> .github/coverage.md
           echo "\`\`\`" >> .github/coverage.md
           cat .github/pull_request_auto.md .github/coverage.md >> .github/pr_body.md
 
