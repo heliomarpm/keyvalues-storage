@@ -6,7 +6,6 @@
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
-  "biome.lsp.bin": "./node_modules/@biomejs/biome/bin/biome",
   "errorLens.codeLensEnabled": true,
   "errorLens.gutterIconsEnabled": true,
   "errorLens.messageTemplate": "[$source]($code) $message (+$count)",
