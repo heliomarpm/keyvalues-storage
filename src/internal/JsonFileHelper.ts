@@ -1,16 +1,18 @@
 /**
- * @module JsonFileHelper
- * @description This module provides a helper class for managing JSON files in a key-value store.
+ * This module provides a helper class for managing JSON files in a key-value store.
  * It includes methods for loading, saving, and ensuring the existence of JSON files and directories.
  * It is designed to work with a customizable directory and file name for storing key-value pairs.
+ *
+ * @module JsonFileHelper
  * @author Heliomar Marques
+ * @ignore
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import writeFileAtomic from "write-file-atomic";
 
-import type { Options, valueTypes } from "./types";
+import type { Options, ValueType } from "@/types";
 
 export const DEFAULT_DIR_NAME = "localdb";
 export const DEFAULT_FILE_NAME = "keyvalues.json";
@@ -156,7 +158,7 @@ export class JsonFileHelper {
 	 * @return {Promise<T>} A promise that resolves with the key-value pairs.
 	 * @internal
 	 */
-	public async loadKeyValues<T extends valueTypes>(): Promise<T> {
+	public async loadKeyValues<T extends ValueType>(): Promise<T> {
 		await this.ensureJsonFile();
 
 		const filePath = this.getJsonFilePath();
@@ -174,7 +176,7 @@ export class JsonFileHelper {
 	 * @returns {T} - The loaded key-value pairs.
 	 * @internal
 	 */
-	public loadKeyValuesSync<T extends valueTypes>(): T {
+	public loadKeyValuesSync<T extends ValueType>(): T {
 		this.ensureJsonFileSync();
 		const filePath = this.getJsonFilePath();
 		const data = fs.readFileSync(filePath, "utf-8");

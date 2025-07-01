@@ -1,2 +1,2 @@
-export * from "./internal/types";
 export * from "./keyvalues";
+export * from "./types";

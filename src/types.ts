@@ -1,8 +1,10 @@
 /**
  * `Options` types contain all the configuration options for
  * Options that can be set in the constructor of KeyValues Class
- * Example:
+ * @example:
  *  new KeyValues({fileName: 'config.json'})
+ *
+ * @category Types
  */
 type Options = {
 	/**
@@ -44,45 +46,49 @@ type Options = {
  * `KeyPath` is a type that represents a key path in a key-value pair.
  *
  * It can be a string or an array of strings.
- * Example:
+ * @example:
  * const keyPath: KeyPath = "user.name";
  * const keyPathArray: KeyPath = ["user", "name"];
  * This type is used to access nested properties in an object.
  * @typedef {string | Array<string>} KeyPath
+ *
+ * @category Types
  **/
 type KeyPath = string | Array<string>;
 
 /**
- * `valueTypes` is a type that represents the possible values
+ * `ValueType` is a type that represents the possible values
  * that can be stored in a key-value pair.
  *
- * It can be null, string, number, boolean, object, dictionaryType,
- * or an array of valueTypes.
- * Example:
- * const value: valueTypes = "Hello World";
- * const valueArray: valueTypes = [1, 2, 3];
- * @typedef {null | string | number | boolean | object | dictionaryType | valueTypes}
- * @internal
+ * It can be null, string, number, boolean, object, DictionaryType, or an array of ValueType.
+ * @example:
+ * const value: ValueType = "Hello World";
+ * const valueArray: ValueType = [1, 2, 3];
+ * @typedef {null | string | number | boolean | object | DictionaryType | Array<ValueType>}
+ *
+ * @category Types
  */
-type valueTypes = null | string | number | boolean | object | dictionaryType | valueTypes[];
+type ValueType = null | string | number | boolean | object | DictionaryType | Array<ValueType>;
 
 /**
- * `Types` is a type that represents an object with string keys
- * and values of type `T`, where `T` is a subtype of `valueTypes`.
- * This type is used to define the structure of key-value pairs.
- * @typedef {Record<string, T>} Types
- * @internal
- */
-type Types<T extends valueTypes> = Record<string, T>;
-
-/**
- * `dictionaryType` is a type that represents an object
- * with string keys and values of type `valueTypes`.
+ * `DictionaryType` is a type that represents an object
+ * with string keys and values of type `ValueType`.
  * This type is used to define a dictionary-like structure
  * where each key maps to a value of various types.
- * @typedef {Record<string, valueTypes>} dictionaryType
+ * @typedef {Record<string, ValueType>} dictionaryType
  * @internal
+ * @category Types
  */
-type dictionaryType = { [key: string]: valueTypes };
+type DictionaryType = { [key: string]: ValueType };
 
-export type { Options, KeyPath, valueTypes, Types, dictionaryType };
+/**
+ * `Values` is a type that represents an object with string keys
+ * and values of type `T`, where `T` is a subtype of `ValueType`.
+ * This type is used to define the structure of key-value pairs.
+ * @typedef {Record<string, T>} Types
+ *
+ * @category Types
+ */
+type Values<T extends ValueType> = Record<string, T>;
+
+export type { Options, KeyPath, ValueType, Values, DictionaryType };
