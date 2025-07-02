@@ -1,20 +1,20 @@
-/**
- * @module JsonFileHelper
- * @description This module provides a helper class for managing JSON files in a key-value store.
- * It includes methods for loading, saving, and ensuring the existence of JSON files and directories.
- * It is designed to work with a customizable directory and file name for storing key-value pairs.
- * @author Heliomar Marques
- */
-
 import fs from "node:fs";
 import path from "node:path";
 import writeFileAtomic from "write-file-atomic";
 
-import type { Options, valueTypes } from "./types";
+import type { Options, ValueType } from "@/core/types/types";
+import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME } from "./constants";
 
-export const DEFAULT_DIR_NAME = "localdb";
-export const DEFAULT_FILE_NAME = "keyvalues.json";
-
+/**
+ * This module provides a helper class for managing JSON files in a key-value store.
+ * It includes methods for loading, saving, and ensuring the existence of JSON files and directories.
+ * It is designed to work with a customizable directory and file name for storing key-value pairs.
+ *
+ * @module JsonFileHelper
+ * @author Heliomar Marques
+ * @internal
+ * @ignore
+ */
 export class JsonFileHelper {
 	/**
 	 * The options for the JsonFileHelper.
@@ -27,7 +27,6 @@ export class JsonFileHelper {
 	 * Creates an instance of JsonFileHelper.
 	 *
 	 * @param {@link Options} options - The options for the JsonFileHelper.
-	 * @constructor
 	 */
 	constructor(options: Options) {
 		this.options = options;
@@ -39,7 +38,6 @@ export class JsonFileHelper {
 	 * `configure()`.
 	 *
 	 * @returns The path to the keyvalues directory.
-	 * @internal
 	 */
 	private getJsonDirPath(): string {
 		const dir = (this.options.dir ?? path.resolve(DEFAULT_DIR_NAME)).trim();
@@ -51,7 +49,6 @@ export class JsonFileHelper {
 	 * may be customized by the developer using `configure()`.
 	 *
 	 * @returns The path to the keyvalues file.
-	 * @internal
 	 */
 	public getJsonFilePath(): string {
 		const dir = this.getJsonDirPath();
@@ -66,7 +63,6 @@ export class JsonFileHelper {
 	 * exist, then it is created.
 	 *
 	 * @returns A promise which resolves when the keyvalues file exists.
-	 * @internal
 	 */
 	private async ensureJsonFile(): Promise<void> {
 		const filePath = this.getJsonFilePath();
@@ -87,7 +83,7 @@ export class JsonFileHelper {
 	 * Ensures that the keyvalues file exists. If it does not
 	 * exist, then it is created.
 	 *
-	 * @internal
+	 * @returns {void}
 	 */
 	private ensureJsonFileSync(): void {
 		const filePath = this.getJsonFilePath();
@@ -109,7 +105,6 @@ export class JsonFileHelper {
 	 * not exist, then it is created.
 	 *
 	 * @returns A promise which resolves when the keyvalues dir exists.
-	 * @internal
 	 */
 	private async ensureJsonDir(): Promise<void> {
 		const dirPath = this.getJsonDirPath();
@@ -131,7 +126,6 @@ export class JsonFileHelper {
 	 * then it is created.
 	 *
 	 * @returns {void}
-	 * @internal
 	 */
 	private ensureJsonDirSync(): void {
 		const dirPath = this.getJsonDirPath();
@@ -154,9 +148,8 @@ export class JsonFileHelper {
 	 *
 	 * @template T - The type of the key-value pairs.
 	 * @return {Promise<T>} A promise that resolves with the key-value pairs.
-	 * @internal
 	 */
-	public async loadKeyValues<T extends valueTypes>(): Promise<T> {
+	public async loadKeyValues<T extends ValueType>(): Promise<T> {
 		await this.ensureJsonFile();
 
 		const filePath = this.getJsonFilePath();
@@ -172,9 +165,8 @@ export class JsonFileHelper {
 	 *
 	 * @template T - The type of the key-value pairs.
 	 * @returns {T} - The loaded key-value pairs.
-	 * @internal
 	 */
-	public loadKeyValuesSync<T extends valueTypes>(): T {
+	public loadKeyValuesSync<T extends ValueType>(): T {
 		this.ensureJsonFileSync();
 		const filePath = this.getJsonFilePath();
 		const data = fs.readFileSync(filePath, "utf-8");
@@ -187,7 +179,6 @@ export class JsonFileHelper {
 	 *
 	 * @param {T} obj - The keyvalues object to save.
 	 * @return {Promise<void>} A promise that resolves when the keyvalues have been saved.
-	 * @internal
 	 */
 	public async saveKeyValues<T>(obj: T): Promise<void> {
 		const filePath = this.getJsonFilePath();
@@ -207,7 +198,6 @@ export class JsonFileHelper {
 	 *
 	 * @param {T} obj - The keyvalues object to save.
 	 * @return {void} This function does not return anything.
-	 * @internal
 	 */
 	public saveKeyValuesSync<T>(obj: T): void {
 		const filePath = this.getJsonFilePath();

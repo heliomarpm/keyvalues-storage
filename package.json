@@ -65,6 +65,9 @@
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.3",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^24.0.8",
+    "@types/write-file-atomic": "^4.0.3",
     "@vitest/coverage-v8": "^3.2.4",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
@@ -76,10 +79,6 @@
     "typedoc-vitepress-theme": "^1.1.2",
     "vitepress": "^1.6.3",
     "vitest": "^3.2.4"
-  },
-  "peerDependencies": {
-    "@types/lodash": "^4.17.16",
-    "@types/write-file-atomic": "^4.0.3"
   },
   "lint-staged": {
     "*.{ts,js,mts,json,jsonc,yml}": [

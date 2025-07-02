@@ -3,7 +3,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import writeFileAtomic from "write-file-atomic";
 
-import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "../src/internal/JsonFileHelper";
+import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "../src/core/utils";
 
 // Mock da dependência para testar o comportamento de 'atomicSave' de forma isolada.
 vi.mock("write-file-atomic", () => {

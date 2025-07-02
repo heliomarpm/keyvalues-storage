@@ -82,7 +82,7 @@ describe("KeyValues Default Test", () => {
 
 	it("should reset options object to defaultOptions", () => {
 		const keyValues = new KeyValues(options);
-		keyValues.reset();
+		keyValues.resetOptions();
 		// biome-ignore lint/complexity/useLiteralKeys: intentional use of string key for test
 		expect(keyValues["options"]).toEqual(defaultOptions);
 	});

@@ -1,5 +1,6 @@
 {
   "entryPoints": ["./src/*"],
+  "entryPointStrategy": "resolve",
   "out": "./.docs/app",
   "docsRoot": "./.docs",
   "readme": "./docs/INDEX-DOCS.md",
