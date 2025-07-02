@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: "KeyValues Storage"
-  text: ""
+  name: "KeyValues"
+  text: "Storage"
   tagline: A lightweight, file-based utility for managing key-value pairs using JSON. It offers intuitive methods for reading, writing, checking, and deleting values
   
   actions:
@@ -20,7 +20,7 @@ features:
   - icon: 
       src: https://raw.githubusercontent.com/heliomarpm/hybrid-webcache/refs/heads/main/logo.png
     title: Hybrid WebCache
-    details: A library that combines `localStorage`, `IndexedDB`, `SessionStorage` and `Memory` to provide a high-performance hybrid cache with multi-instance synchronization support
+    details: A library for efficient cache management in web applications, with support for multiple storage engines and automatic time-to-live (TTL) management.
     link: https://www.npmjs.com/package/hybrid-webcache
     
   - icon: 

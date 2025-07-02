@@ -84,6 +84,8 @@ yarn add @heliomarpm/kvs
 ```
 
 ```typescript
+import { KeyValues } from '@heliomarpm/kvs';
+
 // Create a new instance of KeyValues with or without custom options
 const kvs = new KeyValues()
 //or 
@@ -184,7 +186,7 @@ See the [API documentation](https://heliomarpm.github.io/keyvalues-storage) for 
 |--------|-----------|
  `constructor(options?)` | Initializes a new instance of the `KeyValues` class with optional custom options.
  `file(): string` | Returns the path to the JSON file.
- `reset(): void` | Resets the configuration of the `KeyValues` instance to default options.
+ `resetOptions(): void` | Resets the configuration of the `KeyValues` instance to default options.
  `has(keyPath): Promise<boolean>` | Checks if a key path exists asynchronously.
  `hasSync(keyPath): boolean` | Checks if a key path exists synchronously.
  `get<T>(keyPath?): Promise<T>` | Gets the value at a specific key path asynchronously.
