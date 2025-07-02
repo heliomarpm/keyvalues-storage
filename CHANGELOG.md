@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/heliomarpm/keyvalues-storage/compare/v1.2.1...v1.3.0) (2025-07-02)
+
+
+### Features
+
+* **core:** ✨ implement key-value storage system with JSON file support ([bd502c2](https://github.com/heliomarpm/keyvalues-storage/commit/bd502c2376c012b024ecf594b0534fe220129c75))
+
 ## [1.2.1](https://github.com/heliomarpm/keyvalues-storage/compare/v1.2.0...v1.2.1) (2025-06-23)
 
 
