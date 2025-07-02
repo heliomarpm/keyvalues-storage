@@ -225,10 +225,10 @@ We welcome contributions! Please read:
 Thank you to everyone who has already contributed to the project!
 
 <a href="https://github.com/heliomarpm/keyvalues-storage/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=heliomarpm/keyvalues-storage" />
+  <img src="https://contrib.nn.ci/api?repo=heliomarpm/keyvalues-storage&no_bot=true" />
 </a>
 
-###### Made with [contrib.rocks](https://contrib.rocks).
+###### Made with [contrib.nn](https://contrib.nn.ci/?repo=heliomarpm/keyvalues-storage).
 
 
 ### ❤️ Support this project
