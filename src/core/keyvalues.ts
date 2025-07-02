@@ -1,6 +1,7 @@
 import { get as _get, has as _has, set as _set, unset as _unset } from "lodash";
-import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "./internal/JsonFileHelper";
-import type { KeyPath, Options, Values, ValueType } from "./types";
+
+import type { KeyPath, Options, RecordType, ValueType } from "./types";
+import { DEFAULT_DIR_NAME, DEFAULT_FILE_NAME, JsonFileHelper } from "./utils";
 
 /** @internal */
 const defaultOptions: Options = {
@@ -28,8 +29,9 @@ const defaultOptions: Options = {
  *
  * // Create a new instance of KeyValues with custom options
  * const keyValues = new KeyValues({
- *   fileName: 'config.json',
- *   prettify: true
+ * 	fileName: 'config.json',
+ * 	prettify: true,
+ * 	numSpaces: 4
  * });
  *
  * // Set a key-value pair
@@ -37,6 +39,15 @@ const defaultOptions: Options = {
  *
  * // Get the value at a specific key path
  * const value = await keyValues.get('color.name');
+ * // output: 'sapphire'
+ *
+ * // Get the nested key
+ * const value = await keyValues.get('color');
+ * // output: { name: 'sapphire' }
+ *
+ * // Get all
+ * const value = await keyValues.get();
+ * // output: { color: { name: 'sapphire' } }
  *
  * // Check if a key path exists
  * const exists = await keyValues.has('color.name');
@@ -60,27 +71,26 @@ export class KeyValues {
 	private jsonHelper: JsonFileHelper;
 
 	/**
-	 * Sets the configuration for KeyValues Storage's. To reset
-	 * to defaults, use [[reset|reset()]].
-	 *```js
+	 * Sets the configuration for KeyValues Storage's.
+	 *
+	 * To reset to defaults, use [`reset()`].
+	 *
+	 * ```js
 	 * Defaults:
-	 *     {
-	 *       atomicSave: true,
-	 *       fileName: 'keyvalues.json',
-	 *       numSpaces: 2,
-	 *       prettify: false
-	 *     }
-	 *```
+	 * {
+	 *	atomicSave: true,
+	 * 	dir: 'localdb',
+	 *	fileName: 'keyvalues.json',
+	 * 	numSpaces: 2,
+	 * 	prettify: false
+	 * }
+	 * ```
 	 * @param options {@link Options} The custom configuration to use.
 	 * @example
 	 *
-	 * Update the filename to `config.json` and prettify
-	 * the output.
-	 *```js
-	 *     new KeyValues({
-	 *       fileName: 'config.json',
-	 *       prettify: true
-	 *     });
+	 * Update the filename to `config.json` and prettify the output.
+	 * ```js
+	 * new KeyValues({ fileName: 'config.json', prettify: true });
 	 * ```
 	 */
 	constructor(options?: Partial<Options>) {
@@ -111,12 +121,12 @@ export class KeyValues {
 	 * @example
 	 *
 	 * Get the path to the keyvalues file.
-	 *```js
-	 *     keyValues.file();
-	 *     // => c:/users/<userprofile>/appdata/local/programs/<AppName>/keyvalues.json
+	 * ```js
+	 * keyValues.file();
+	 * // => c:/users/<userprofile>/appdata/local/programs/<AppName>/keyvalues.json
 	 * ```
 	 *
-	 * @category Auxiliary
+	 * @category Auxiliary Methods
 	 */
 	file(): string {
 		return this.jsonHelper.getJsonFilePath();
@@ -128,36 +138,39 @@ export class KeyValues {
 	 * @example
 	 *
 	 * Reset configuration to defaults.
-	 *```js
-	 *     keyValues.reset();
+	 * ```js
+	 * keyValues.resetOptions();
 	 * ```
 	 *
-	 * @category Auxiliary
+	 * @category Auxiliary Methods
+	 * @see {@link Options}
 	 */
-	reset(): void {
+	resetOptions(): void {
 		this.options = { ...defaultOptions };
 	}
 
 	/**
 	 * Sets all key values.
-	 * For sync method, use [`setSync()`].
+	 *
+	 * _For sync method, use_ [`setSync()`].
 	 *
 	 * @param obj The new key value.
 	 * @returns A promise which resolves when the value have been set.
 	 * @example
 	 *
 	 * Set all key values.
-	 *```js
-	 *     await keyValues.set({ aqpw: 'nice' });
+	 * ```js
+	 * await keyValues.set({ aqpw: 'nice' });
 	 * ```
 	 *
-	 * @category Set Method
+	 * @category Set Methods
 	 */
-	async set<T extends ValueType>(obj: Values<T>): Promise<void>;
+	async set<T extends ValueType>(obj: RecordType<T>): Promise<void>;
 
 	/**
 	 * Sets the value at the given key path.
-	 * For sync method, use [`setSync()`].
+	 *
+	 * _For sync method, use_ [`setSync()`].
 	 *
 	 * @param keyPath The key path of the property.
 	 * @param value The value to set.
@@ -166,42 +179,38 @@ export class KeyValues {
 	 * @example
 	 *
 	 * Change the value at `color.name` to `sapphire`.
-	 *```js
-	 *     // Given:
-	 *     //
-	 *     // {
-	 *     //   "color": {
-	 *     //     "name": "cerulean",
-	 *     //     "code": {
-	 *     //       "rgb": [0, 179, 230],
-	 *     //       "hex": "#003BE6"
-	 *     //     }
-	 *     //   }
-	 *     // }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     await keyValues.set('color.name', 'sapphire');
-	 *```
+	 * await keyValues.set('color.name', 'sapphire');
+	 * ```
 	 * @example
 	 *
-	 * Set the value of `color.hue` to `blue-ish`.
-	 *```js
-	 *     await keyValues.set(['color', 'hue'], 'blue-ish);
-	 *```
+	 * Set the value of `color.hue` to `bluish`.
+	 * ```js
+	 * await keyValues.set(['color', 'hue'], 'bluish');
+	 * ```
 	 * @example
 	 *
 	 * Change the value of `color.code`.
-	 *```js
-	 *     await keyValues.set('color.code', {
-	 *       rgb: [16, 31, 134],
-	 *       hex: '#101F86'
-	 *     });
+	 * ```js
+	 * await keyValues.set('color.code', { rgb: [16, 31, 134], hex: '#101F86' });
 	 * ```
 	 *
-	 * @category Set Method
+	 * @category Set Methods
 	 */
 	async set<T extends ValueType>(keyPath: KeyPath, value: T): Promise<void>;
 
-	async set<T extends ValueType>(...args: [Values<T>] | [KeyPath, T]): Promise<void> {
+	async set<T extends ValueType>(...args: [RecordType<T>] | [KeyPath, T]): Promise<void> {
 		if (args.length === 1) {
 			const [value] = args;
 
@@ -218,65 +227,63 @@ export class KeyValues {
 
 	/**
 	 * Sets all key values.
-	 * For async method, use [`set()`].
+	 *
+	 * _For async method, use_ [`set()`].
 	 *
 	 * @param obj The new key values.
 	 * @example
 	 *
 	 * Set all key values.
-	 *```js
-	 *     keyValues.setSync({ aqpw: 'nice' });
+	 * ```js
+	 * keyValues.setSync({ aqpw: 'nice' });
 	 * ```
 	 *
 	 * @category Set Methods
 	 */
-	setSync<T extends ValueType>(obj: Values<T>): void;
+	setSync<T extends ValueType>(obj: RecordType<T>): void;
 
 	/**
 	 * Sets the value at the given key path.
-	 * For async method, use [`set()`].
+	 *
+	 * _For async method, use_ [`set()`].
 	 *
 	 * @param keyPath The key path of the property.
 	 * @param value The value to set.
 	 * @example
 	 *
 	 * Change the value at `color.name` to `sapphire`.
-	 *```js
-	 *     // Given:
-	 *     //
-	 *     // {
-	 *     //   "color": {
-	 *     //     "name": "cerulean",
-	 *     //     "code": {
-	 *     //       "rgb": [0, 179, 230],
-	 *     //       "hex": "#003BE6"
-	 *     //     }
-	 *     //   }
-	 *     // }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     keyValues.setSync('color.name', 'sapphire');
-	 *```
+	 * keyValues.setSync('color.name', 'sapphire');
+	 * ```
 	 * @example
 	 *
-	 * Set the value of `color.hue` to `blue-ish`.
-	 *```js
-	 *     keyValues.setSync(['color', 'hue'], 'blue-ish);
-	 *```
+	 * Set the value of `color.hue` to `bluish`.
+	 * ```js
+	 * keyValues.setSync(['color', 'hue'], 'bluish);
+	 * ```
 	 * @example
 	 *
 	 * Change the value of `color.code`.
-	 *```js
-	 *     keyValues.setSync('color.code', {
-	 *       rgb: [16, 31, 134],
-	 *       hex: '#101F86'
-	 *     });
+	 * ```js
+	 * keyValues.setSync('color.code', { rgb: [16, 31, 134], hex: '#101F86' });
 	 * ```
 	 *
 	 * @category Set Methods
 	 */
 	setSync<T extends ValueType>(keyPath: KeyPath, value: T): void;
 
-	setSync<T extends ValueType>(...args: [Values<T>] | [KeyPath, T]): void {
+	setSync<T extends ValueType>(...args: [RecordType<T>] | [KeyPath, T]): void {
 		if (args.length === 1) {
 			const [value] = args;
 
@@ -293,14 +300,15 @@ export class KeyValues {
 
 	/**
 	 * Gets all key values.
-	 * For sync method, use [`getSync()`].
+	 *
+	 * _For sync method, use_ [`getSync()`].
 	 *
 	 * @returns A promise which resolves with all key values.
 	 * @example
 	 *
 	 * Gets all key values.
-	 *```js
-	 *     const obj = await get();
+	 * ```js
+	 * const obj = await get();
 	 * ```
 	 *
 	 * @category Get Methods
@@ -309,48 +317,49 @@ export class KeyValues {
 
 	/**
 	 * Gets the value at the given key path.
-	 * For sync method, use [`getSync()`].
+	 *
+	 * _For sync method, use_ [`getSync()`].
 	 *
 	 * @param keyPath The key path of the property.
 	 * @returns A promise which resolves with the value at the given key path.
 	 * @example
 	 *
 	 * Get the value at `color.name`.
-	 *```js
-	 *     // Given:
-	 *     {
-	 *        "color": {
-	 *          "name": "cerulean",
-	 *          "code": {
-	 *            "rgb": [0, 179, 230],
-	 *            "hex": "#003BE6"
-	 *          }
-	 *        }
-	 *     }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 * 		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     const value = await keyValues.get('color.name');
-	 *     // => "cerulean"
-	 *```
+	 * const value = await keyValues.get('color.name');
+	 * // => "cerulean"
+	 * ```
 	 * @example
 	 *
 	 * Get the value at `color.code.hex`.
-	 *```js
-	 *     const hex = await keyValues.get('color.color.hex');
-	 *     // => "#003BE6"
-	 *```
+	 * ```js
+	 * const hex = await keyValues.get('color.color.hex');
+	 * // => "#003BE6"
+	 * ```
 	 * @example
 	 *
 	 * Get the value not existent at `color.hue`.
-	 *```js
-	 *     const value = await keyValues.get(['color', 'hue']);
-	 *     // => undefined
-	 *```
+	 * ```js
+	 * const value = await keyValues.get(['color', 'hue']);
+	 * // => undefined
+	 * ```
 	 * @example
 	 *
 	 * Get the value at `color.code.rgb[1]`.
-	 *```js
-	 *     const value = await keyValues.get('color.code.rgb[1]');
-	 *     // => 179
+	 * ```js
+	 * const value = await keyValues.get('color.code.rgb[1]');
+	 * // => 179
 	 * ```
 	 *
 	 * @category Get Methods
@@ -376,14 +385,15 @@ export class KeyValues {
 
 	/**
 	 * Gets all key values.
-	 * For async method, use [`get()`].
+	 *
+	 * _For async method, use_ [`get()`].
 	 *
 	 * @returns All key values.
 	 * @example
 	 *
 	 * Gets all key values.
-	 *```js
-	 *     const obj = getSync();
+	 * ```js
+	 * const obj = getSync();
 	 * ```
 	 *
 	 * @category Get Methods
@@ -392,56 +402,57 @@ export class KeyValues {
 
 	/**
 	 * Gets the value at the given key path.
-	 * For async method, use [`get()`].
+	 *
+	 * _For async method, use_ [`get()`].
 	 *
 	 * @param keyPath The key path of the property.
 	 * @returns The value at the given key path.
 	 * @example
 	 *
 	 * Get the value at `color.name`.
-	 *```js
-	 *	// Given:
-	 *	{
-	 *		"color": {
-	 *			"name": "cerulean",
-	 *			"code": {
-	 *				"rgb": [0, 179, 230],
-	 *				"hex": "#003BE6"
-	 *			}
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
 	 *		}
 	 *	}
+	 * }
 	 *
-	 *	const value = keyValues.getSync('color.name');
-	 *	// => "cerulean"
-	 *```
+	 * const value = keyValues.getSync('color.name');
+	 * // => "cerulean"
+	 * ```
 	 * @example
 	 *
 	 * Get the value at `color.code.hex`.
-	 *```js
-	 *	const hex = keyValues.getSync('color.color.hex');
-	 *	// => "#003BE6"
-	 *```
+	 * ```js
+	 * const hex = keyValues.getSync('color.color.hex');
+	 * // => "#003BE6"
+	 * ```
 	 * @example
 	 *
 	 * Get the value at `color.hue`.
-	 *```js
-	 *	const h = 'hue';
-	 *	const value = keyValues.getSync(['color', h]);
-	 *	// => undefined
-	 *```
+	 * ```js
+	 * const h = 'hue';
+	 * const value = keyValues.getSync(['color', h]);
+	 * // => undefined
+	 * ```
 	 * @example
 	 *
 	 * Get the value at `color.code.rgb[1]`.
-	 *```js
-	 *	const h = 'hue';
-	 *	const value = keyValues.getSync('color.code.rgb[1]');
-	 *	// => 179
+	 * ```js
+	 * const h = 'hue';
+	 * const value = keyValues.getSync('color.code.rgb[1]');
+	 * // => 179
 	 * ```
 	 *
 	 * @example
 	 * Get all values
 	 * ```js
-	 * 	const values = keyValues.getSync();
+	 *  const values = keyValues.getSync();
 	 * ```
 	 *
 	 * @category Get Methods
@@ -460,42 +471,42 @@ export class KeyValues {
 
 	/**
 	 * Checks if the given key path exists.
-	 * For sync method, use [`hasSync()`].
+	 *
+	 * _For sync method, use_ [`hasSync()`].
 	 *
 	 * @param keyPath The key path to check.
 	 * @returns A promise which resolves to `true` if the `keyPath` exists, else `false`.
 	 * @example
 	 *
 	 * Check if the value at `color.name` exists.
-	 *```js
-	 *     // Given:
-	 *     //
-	 *     // {
-	 *     //   "color": {
-	 *     //     "name": "cerulean",
-	 *     //     "code": {
-	 *     //       "rgb": [0, 179, 230],
-	 *     //       "hex": "#003BE6"
-	 *     //     }
-	 *     //   }
-	 *     // }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     const exists = await keyValues.has('color.name');
-	 *     // => true
-	 *```
+	 * const exists = await keyValues.has('color.name');
+	 * // => true
+	 * ```
 	 * @example
 	 *
 	 * Check if the value at `color.hue` exists.
-	 *```js
-	 *     const exists = await keyValues.has(['color', 'hue']);
-	 *     // => false
-	 *```
+	 * ```js
+	 * const exists = await keyValues.has(['color', 'hue']);
+	 * // => false
+	 * ```
 	 *  @example
 	 *
 	 * Check if the value at `color.code.rgb[1]` exists.
-	 *```js
-	 *     const exists = await keyValues.has(color.code.rgb[1]);
-	 *     // => true
+	 * ```js
+	 * const exists = await keyValues.has(color.code.rgb[1]);
+	 * // => true
 	 * ```
 	 *
 	 * @category Has Methods
@@ -507,42 +518,42 @@ export class KeyValues {
 
 	/**
 	 * Checks if the given key path exists.
-	 * For async method, use [`has()`].
+	 *
+	 * _For async method, use_ [`has()`].
 	 *
 	 * @param keyPath The key path to check.
 	 * @returns `true` if the `keyPath` exists, else `false`.
 	 * @example
 	 *
 	 * Check if the value at `color.name` exists.
-	 *```js
-	 *     // Given:
-	 *     //
-	 *     // {
-	 *     //   "color": {
-	 *     //     "name": "cerulean",
-	 *     //     "code": {
-	 *     //       "rgb": [0, 179, 230],
-	 *     //       "hex": "#003BE6"
-	 *     //     }
-	 *     //   }
-	 *     // }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     const exists = keyValues.hasSync('color.name');
-	 *     // => true
-	 *```
+	 * const exists = keyValues.hasSync('color.name');
+	 * // => true
+	 * ```
 	 * @example
 	 *
 	 * Check if the value at `color.hue` exists.
-	 *```js
-	 *     const exists = keyValues.hasSync(['color', 'hue']);
-	 *     // => false
-	 *```
+	 * ```js
+	 * const exists = keyValues.hasSync(['color', 'hue']);
+	 * // => false
+	 * ```
 	 * @example
 	 *
 	 * Check if the value at `color.code.rgb[1]` exists.
-	 *```js
-	 *     const exists = keyValues.hasSync(color.code.rgb[1]);
-	 *     // => true
+	 * ```js
+	 * const exists = keyValues.hasSync(color.code.rgb[1]);
+	 * // => true
 	 * ```
 	 *
 	 * @category Has Methods
@@ -554,16 +565,17 @@ export class KeyValues {
 
 	/**
 	 * Unsets all key values.
-	 * For sync method, use [`unsetSync()`].
+	 *
+	 * _For sync method, use_ [`unsetSync()`].
 	 *
 	 * @returns A promise which resolves when the key values have been unset.
 	 * @example
 	 *
 	 * Unsets all key values.
-	 *```js
-	 *     await keyValues.unset();
-	 *     await keyValues.get();
-	 *     // => undefined
+	 * ```js
+	 * await keyValues.unset();
+	 * await keyValues.get();
+	 * // => undefined
 	 * ```
 	 *
 	 * @category Unset Methods
@@ -572,37 +584,37 @@ export class KeyValues {
 
 	/**
 	 * Unsets the property at the given key path.
-	 * For sync method, use [`unsetSync()`].
+	 *
+	 * _For sync method, use_ [`unsetSync()`].
 	 *
 	 * @param keyPath The key path of the property.
 	 * @returns A promise which resolves when the setting has been unset.
 	 * @example
 	 *
 	 * Unset the property `color.name`.
-	 *```js
-	 *     // Given:
-	 *     //
-	 *     // {
-	 *     //   "color": {
-	 *     //     "name": "cerulean",
-	 *     //     "code": {
-	 *     //       "rgb": [0, 179, 230],
-	 *     //       "hex": "#003BE6"
-	 *     //     }
-	 *     //   }
-	 *     // }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     await keyValues.unset('color.name');
-	 *     await keyValues.get('color.name');
-	 *     // => undefined
-	 *```
+	 * await keyValues.unset('color.name');
+	 * await keyValues.get('color.name');
+	 * // => undefined
+	 * ```
 	 * @example
 	 *
 	 * Unset the property `color.code.rgba[1]`.
-	 *```js
-	 *     await keyValues.unset('color.code.rgba[1]');
-	 *     await keyValues.get('color.code.rgb');
-	 *     // => [0, null, 230]
+	 * ```js
+	 * await keyValues.unset('color.code.rgba[1]');
+	 * await keyValues.get('color.code.rgb');
+	 * // => [0, null, 230]
 	 * ```
 	 *
 	 * @category Unset Methods
@@ -626,13 +638,14 @@ export class KeyValues {
 
 	/**
 	 * Unsets all key values.
-	 * For async method, use [`unset()`].
+	 *
+	 * _For async method, use_ [`unset()`].
 	 *
 	 * @example
 	 *
 	 * Unsets all key values.
-	 *```js
-	 *     keyValues.unsetSync();
+	 * ```js
+	 * keyValues.unsetSync();
 	 * ```
 	 *
 	 * @category Unset Methods
@@ -641,38 +654,36 @@ export class KeyValues {
 
 	/**
 	 * Unsets the property at the given key path.
-	 * For async method, use [`unset()`].
+	 *
+	 * _For async method, use_ [`unset()`].
 	 *
 	 * @param keyPath The key path of the property.
 	 * @example
 	 *
 	 * Unset the property `color.name`.
-	 *```js
-	 *     // Given:
-	 *     //
-	 *     // {
-	 *     //   "color": {
-	 *     //     "name": "cerulean",
-	 *     //     "code": {
-	 *     //       "rgb": [0, 179, 230],
-	 *     //       "hex": "#003BE6"
-	 *     //     }
-	 *     //   }
-	 *     // }
+	 * ```js
+	 * // Given:
+	 * {
+	 * 	"color": {
+	 *		"name": "cerulean",
+	 *		"code": {
+	 *			"rgb": [0, 179, 230],
+	 *			"hex": "#003BE6"
+	 *		}
+	 *	}
+	 * }
 	 *
-	 *     keyValues.unsetSync('color.name');
-	 *
-	 *     keyValues.getSync('color.name');
-	 *     // => undefined
-	 *```
+	 * keyValues.unsetSync('color.name');
+	 * keyValues.getSync('color.name');
+	 * // => undefined
+	 * ```
 	 * @example
 	 *
 	 * Unset the property `color.code.rgba[1]`.
-	 *```js
-	 *     keyValues.unsetSync('color.code.rgba[1]');
-	 *
-	 *     keyValues.getSync('color.code.rgb');
-	 *     // => [0, null, 230]
+	 * ```js
+	 * keyValues.unsetSync('color.code.rgba[1]');
+	 * keyValues.getSync('color.code.rgb');
+	 * // => [0, null, 230]
 	 * ```
 	 *
 	 * @category Unset Methods
