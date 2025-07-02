@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { KeyValues } from "../src/keyvalues";
+import { KeyValues } from "../src";
 
 const TEST_DIR = path.resolve(__dirname, "test-data");
 
@@ -32,12 +32,25 @@ describe("KeyValues", () => {
 			kvs = new KeyValues({ dir: TEST_DIR, fileName: "sync-test.json" });
 		});
 
+		it("should set and get a nested value", () => {
+			kvs.setSync("color.name", "sapphire");
+			expect(kvs.getSync("color.name")).toBe("sapphire");
+			expect(kvs.getSync("color")).toEqual({ name: "sapphire" });
+			expect(kvs.getSync()).toEqual({ color: { name: "sapphire" } });
+		});
+
 		it("should set and get a value", () => {
 			kvs.setSync("foo", "bar");
 			expect(kvs.getSync("foo")).toBe("bar");
 		});
 
 		it("should set and get a nested value", () => {
+			kvs.setSync("a.b.c", 123);
+			expect(kvs.getSync("a.b.c")).toBe(123);
+			expect(kvs.getSync("a.b")).toEqual({ c: 123 });
+		});
+		it("should set and get a array value", () => {
+			const data = [""]
 			kvs.setSync("a.b.c", 123);
 			expect(kvs.getSync("a.b.c")).toBe(123);
 			expect(kvs.getSync("a.b")).toEqual({ c: 123 });

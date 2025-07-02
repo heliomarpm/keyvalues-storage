@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { JsonFileHelper } from "../src/internal/JsonFileHelper";
-import { KeyValues } from "../src/keyvalues";
+import { JsonFileHelper } from "../src/core/utils";
+import { KeyValues } from "../src";
 
 describe("Codium Complex Test", () => {
 	// Tests that the set method sets the value of a nested key
