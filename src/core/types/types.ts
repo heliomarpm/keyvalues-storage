@@ -10,7 +10,7 @@
  *
  * @category Types
  */
-type Options = {
+export type Options = {
 	/**
 	 * Whether or not to save the settings file atomically.
 	 *
@@ -63,11 +63,10 @@ type Options = {
  * const keyPath: KeyPath = "user.name";
  * const keyPathArray: KeyPath = ["user", "name"]; // This type is used to access nested properties in an object.
  * ```
- * @typedef {string | Array<string>} KeyPath
  *
  * @category Types
  **/
-type KeyPath = string | Array<string>;
+export type KeyPath = string | Array<string>;
 
 /**
  * `ValueType` is a type that represents the possible values that can be stored in a key-value pair.
@@ -89,17 +88,15 @@ type KeyPath = string | Array<string>;
  * 	]
  * }
  * ```
- * @typedef {null | string | number | boolean | object | DictionaryType | Array<ValueType>}
  *
  * @category Types
  */
-type ValueType = null | string | number | boolean | object | DictionaryType | Array<ValueType>;
+export type ValueType = null | string | number | boolean | object | DictionaryType | Array<ValueType>;
 
 /**
  * `RecordType` is a type that represents an object with string keys and values of type `T`, where `T` is a subtype of `ValueType`.
  *
  * This type is used to define the structure of key-value pairs.
- * @typedef {Record<string, T>} Types
  * @example
  * ```js *
  * await keyValues.set({ createdAt: "2023-04-16" });
@@ -118,17 +115,14 @@ type ValueType = null | string | number | boolean | object | DictionaryType | Ar
  * ```
  * @category Types
  */
-type RecordType<T extends ValueType> = Record<string, T>;
+export type RecordType<T extends ValueType> = Record<string, T>;
 
 /**
  * `DictionaryType` is a type that represents an object with string keys and values of type `ValueType`.
  *
  * This type is used to define a dictionary-like structure where each key maps to a value of various types.
- * @typedef {Record<string, ValueType>} dictionaryType
  * @category Types
  * @internal
  * @ignore
  */
 type DictionaryType = { [key: string]: ValueType };
-
-export type { Options, KeyPath, ValueType, RecordType, DictionaryType };
