@@ -286,7 +286,7 @@ Help us maintain and improve this template:
 <!-- other badges -->
 [url-npm-badge]: https://img.shields.io/npm/v/@heliomarpm/kvs.svg
 [url-npm]: https://www.npmjs.com/package/@heliomarpm/kvs
-[url-downloads-badge]: https://img.shields.io/npm/dm/@heliomarpm/kvs.svg
+[url-downloads-badge]: https://img.shields.io/npm/dy/@heliomarpm/kvs.svg
 [url-downloads]: http://badge.fury.io/js/@heliomarpm/kvs.svg
 [url-deepscan-badge]: https://deepscan.io/api/teams/19612/projects/25344/branches/791226/badge/grade.svg
 [url-deepscan]: https://deepscan.io/dashboard#view=project&tid=19612&pid=25344&bid=791226
